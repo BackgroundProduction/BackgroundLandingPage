@@ -19,6 +19,9 @@ export function useSectionTrigger(
   useGSAP(
     () => {
       if (!ref.current) return;
+      // reduced motion: no reveal tweens, no scroll-driven state — content
+      // renders plainly and the static backdrop replaces the 3D layer
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const setSectionProgress = useScrollStore.getState().setSectionProgress;
 
       triggerRef.current = ScrollTrigger.create({

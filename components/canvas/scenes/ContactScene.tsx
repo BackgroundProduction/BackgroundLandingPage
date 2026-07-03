@@ -16,6 +16,11 @@ export default function ContactScene() {
       <VelvetCurtain side={-1} position={[0, 0.6, Z - 2]} />
       <VelvetCurtain side={1} position={[0, 0.6, Z - 2]} />
       <StageSpotlight position={[0, 5.5, Z - 5]} tilt={0} sway={false} />
+      {/* pool of light where the beam lands */}
+      <mesh position={[0, -2.38, Z - 5]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[2.1, 40]} />
+        <meshBasicMaterial color="#ffd9a0" transparent opacity={0.16} toneMapped={false} />
+      </mesh>
       {/* stage floor + back wall behind the parted curtains */}
       <mesh position={[0, 1, Z - 6]}>
         <planeGeometry args={[30, 18]} />

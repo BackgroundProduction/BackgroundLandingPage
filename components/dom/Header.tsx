@@ -12,7 +12,7 @@ export default function Header() {
         >
           Background<span className="text-gold-bright">.</span>
         </a>
-        <nav aria-label="Main navigation">
+        <nav aria-label="Main navigation" className="hidden sm:block">
           <ul className="flex gap-6 md:gap-10">
             {site.nav.map((item) => (
               <li key={item.href}>

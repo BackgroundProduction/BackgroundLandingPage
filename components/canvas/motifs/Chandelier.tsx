@@ -32,10 +32,10 @@ export default function Chandelier(props: ThreeElements["group"]) {
         drops.push({
           position: [
             Math.cos(a) * tier.radius,
-            tier.y - 0.32 - (i % 3) * 0.09,
+            tier.y - 0.14 - (i % 3) * 0.05,
             Math.sin(a) * tier.radius,
           ],
-          scale: 0.06 + (i % 3) * 0.02,
+          scale: 0.035 + (i % 3) * 0.012,
         });
       }
     }

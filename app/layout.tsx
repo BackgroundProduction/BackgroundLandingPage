@@ -6,6 +6,12 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: `${site.name} — Event Production & Management`,
   description: site.description,
+  openGraph: {
+    title: `${site.name} — Event Production & Management`,
+    description: site.description,
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
