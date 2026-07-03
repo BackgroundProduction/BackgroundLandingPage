@@ -6,6 +6,7 @@ import * as THREE from "three";
 import ChandelierModel from "@/components/canvas/motifs/ChandelierModel";
 import StageSpotlight from "@/components/canvas/motifs/StageSpotlight";
 import DustMotes from "@/components/canvas/motifs/DustMotes";
+import RoomReveal from "@/components/canvas/RoomReveal";
 import { useScrollStore } from "@/lib/scroll-store";
 
 /** Hero room at z=0: chandelier centerpiece, flanking beams, drifting dust. */
@@ -28,12 +29,14 @@ export default function HeroScene() {
 
   return (
     <group>
-      <group ref={chandelierGroup} position={[2.55, 3.3, -3]}>
-        <ChandelierModel />
-      </group>
-      <StageSpotlight position={[-5, 4.5, -1]} tilt={-0.5} />
-      <StageSpotlight position={[5, 4.5, -1]} tilt={0.5} beamColor="#e9c873" />
-      <DustMotes center={[0, 1, 0]} />
+      <RoomReveal section="hero" rise={0.6} from={0.5}>
+        <group ref={chandelierGroup} position={[2.55, 3.3, -3]}>
+          <ChandelierModel />
+        </group>
+        <StageSpotlight position={[-5, 4.5, -1]} tilt={-0.5} />
+        <StageSpotlight position={[5, 4.5, -1]} tilt={0.5} beamColor="#e9c873" />
+        <DustMotes center={[0, 1, 0]} />
+      </RoomReveal>
       {/* backdrop + floor catch the light and give the room depth */}
       <mesh position={[0, 1, -9]} receiveShadow>
         <planeGeometry args={[40, 22]} />

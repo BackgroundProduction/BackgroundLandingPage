@@ -8,6 +8,7 @@ import BrassHorn from "@/components/canvas/motifs/BrassHorn";
 import Podium from "@/components/canvas/motifs/Podium";
 import Medal from "@/components/canvas/motifs/Medal";
 import { roomZ } from "@/components/canvas/CameraRig";
+import RoomReveal from "@/components/canvas/RoomReveal";
 import { useScrollStore } from "@/lib/scroll-store";
 
 const Z = roomZ(2); // -28
@@ -28,7 +29,7 @@ export default function ServicesScene() {
   });
 
   useFrame((state, delta) => {
-    const { activeServiceIndex, progress } = useScrollStore.getState();
+    const { activeServiceIndex } = useScrollStore.getState();
     if (ring.current) {
       // slow idle orbit + scroll-scrubbed rotation bringing the active motif forward
       const target =
@@ -39,7 +40,6 @@ export default function ServicesScene() {
         target,
         1 - Math.exp(-delta * 2.5)
       );
-      ring.current.visible = progress.services > 0 || progress.about > 0.5;
     }
     motifRefs.current.forEach((g, i) => {
       if (!g) return;
@@ -51,6 +51,7 @@ export default function ServicesScene() {
 
   return (
     <group>
+      <RoomReveal section="services" rise={1.2} from={0.25}>
       <group ref={ring} position={[3.4, 0.3, Z - 4]}>
         <group ref={(el) => void (motifRefs.current[0] = el)} position={slots[0]}>
           <FilmReel />
@@ -65,6 +66,7 @@ export default function ServicesScene() {
           <Medal spinOffset={2} />
         </group>
       </group>
+      </RoomReveal>
       <mesh position={[0, 1, Z - 8]}>
         <planeGeometry args={[34, 20]} />
         <meshStandardMaterial color="#120e0a" roughness={1} />

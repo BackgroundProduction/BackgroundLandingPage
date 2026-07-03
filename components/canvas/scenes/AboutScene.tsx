@@ -6,6 +6,7 @@ import * as THREE from "three";
 import LaurelWreath from "@/components/canvas/motifs/LaurelWreath";
 import Podium from "@/components/canvas/motifs/Podium";
 import DustMotes from "@/components/canvas/motifs/DustMotes";
+import RoomReveal from "@/components/canvas/RoomReveal";
 import { roomZ } from "@/components/canvas/CameraRig";
 import { useScrollStore } from "@/lib/scroll-store";
 
@@ -30,11 +31,13 @@ export default function AboutScene() {
 
   return (
     <group>
-      <group ref={wreathGroup} position={[2.6, 1.3, Z - 5]}>
-        <LaurelWreath />
-      </group>
-      <Podium position={[-3.2, -2.2, Z - 6]} rotation={[0, 0.4, 0]} />
-      <DustMotes count={60} center={[0, 0.5, Z]} bounds={[12, 7, 6]} />
+      <RoomReveal section="about" rise={1.0} from={0.3}>
+        <group ref={wreathGroup} position={[2.6, 1.3, Z - 5]}>
+          <LaurelWreath />
+        </group>
+        <Podium position={[-3.2, -2.2, Z - 6]} rotation={[0, 0.4, 0]} />
+        <DustMotes count={60} center={[0, 0.5, Z]} bounds={[12, 7, 6]} />
+      </RoomReveal>
       {/* portrait-wall backdrop */}
       <mesh position={[0, 1, Z - 7]}>
         <planeGeometry args={[34, 20]} />

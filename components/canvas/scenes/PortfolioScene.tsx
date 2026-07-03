@@ -5,6 +5,7 @@ import * as THREE from "three";
 import Medal from "@/components/canvas/motifs/Medal";
 import StageSpotlight from "@/components/canvas/motifs/StageSpotlight";
 import DustMotes from "@/components/canvas/motifs/DustMotes";
+import RoomReveal from "@/components/canvas/RoomReveal";
 import { roomZ } from "@/components/canvas/CameraRig";
 import { createVelvetMaterial } from "@/components/canvas/materials/materials";
 
@@ -47,12 +48,14 @@ export default function PortfolioScene() {
           <meshBasicMaterial color="#c9a24b" toneMapped={false} />
         </mesh>
       ))}
-      {medals.map((m, i) => (
-        <Medal key={i} position={m.position} spinOffset={m.spinOffset} />
-      ))}
-      <StageSpotlight position={[-4.5, 5, Z - 2]} tilt={-0.45} />
-      <StageSpotlight position={[4.5, 5, Z - 8]} tilt={0.45} beamColor="#e9c873" />
-      <DustMotes count={80} center={[0, 0.5, Z - 3]} bounds={[12, 8, 16]} />
+      <RoomReveal section="portfolio" rise={1.2} from={0.25}>
+        {medals.map((m, i) => (
+          <Medal key={i} position={m.position} spinOffset={m.spinOffset} />
+        ))}
+        <StageSpotlight position={[-4.5, 5, Z - 2]} tilt={-0.45} />
+        <StageSpotlight position={[4.5, 5, Z - 8]} tilt={0.45} beamColor="#e9c873" />
+        <DustMotes count={80} center={[0, 0.5, Z - 3]} bounds={[12, 8, 16]} />
+      </RoomReveal>
       <mesh position={[0, -2.4, Z - 4]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[36, 34]} />
         <meshStandardMaterial color="#0c0906" roughness={0.55} />
