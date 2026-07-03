@@ -13,6 +13,9 @@ const SmoothScrollProvider = dynamic(
   () => import("@/components/dom/SmoothScrollProvider"),
   { ssr: false }
 );
+const CanvasStage = dynamic(() => import("@/components/dom/CanvasStage"), {
+  ssr: false,
+});
 
 export default function Home() {
   return (
@@ -20,6 +23,7 @@ export default function Home() {
       <a href="#about" className="skip-link">
         Skip to content
       </a>
+      <CanvasStage />
       <Header />
       <main className="relative z-10">
         <HeroSection />
