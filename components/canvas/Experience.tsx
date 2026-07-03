@@ -5,6 +5,10 @@ import CameraRig from "@/components/canvas/CameraRig";
 import Lights from "@/components/canvas/Lights";
 import PostFX from "@/components/canvas/PostFX";
 import HeroScene from "@/components/canvas/scenes/HeroScene";
+import AboutScene from "@/components/canvas/scenes/AboutScene";
+import ServicesScene from "@/components/canvas/scenes/ServicesScene";
+import PortfolioScene from "@/components/canvas/scenes/PortfolioScene";
+import ContactScene from "@/components/canvas/scenes/ContactScene";
 
 export default function Experience({ postFX = true }: { postFX?: boolean }) {
   return (
@@ -32,6 +36,10 @@ export default function Experience({ postFX = true }: { postFX?: boolean }) {
         />
       </Environment>
       <HeroScene />
+      <AboutScene />
+      <ServicesScene />
+      <PortfolioScene />
+      <ContactScene />
       <PostFX enabled={postFX} />
     </>
   );

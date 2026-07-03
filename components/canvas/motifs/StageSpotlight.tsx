@@ -31,7 +31,7 @@ export default function StageSpotlight({
       new THREE.MeshBasicMaterial({
         color: beamColor,
         transparent: true,
-        opacity: 0.10,
+        opacity: 0.07,
         blending: THREE.AdditiveBlending,
         side: THREE.DoubleSide,
         depthWrite: false,
