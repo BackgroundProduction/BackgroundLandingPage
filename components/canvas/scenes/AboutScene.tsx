@@ -1,41 +1,28 @@
 "use client";
 
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
-import LaurelWreath from "@/components/canvas/motifs/LaurelWreath";
-import Podium from "@/components/canvas/motifs/Podium";
+import GLBModel from "@/components/canvas/motifs/GLBModel";
 import DustMotes from "@/components/canvas/motifs/DustMotes";
 import RoomReveal from "@/components/canvas/RoomReveal";
 import { roomZ } from "@/components/canvas/CameraRig";
-import { useScrollStore } from "@/lib/scroll-store";
 
 const Z = roomZ(1); // -14
 
-/** About room: rotating laurel wreath, podium silhouette — intimate framing. */
+/**
+ * About room: a modern event-lounge vignette — designer sofa, coffee table,
+ * warm spot — intimate "who we are" framing beside the copy.
+ */
 export default function AboutScene() {
-  const wreathGroup = useRef<THREE.Group>(null);
-
-  useFrame((_, delta) => {
-    if (!wreathGroup.current) return;
-    const p = useScrollStore.getState().progress.about;
-    const damp = 1 - Math.exp(-delta * 4);
-    // drift in from the right as the section enters, exit past camera on leave
-    const enter = Math.min(p * 2.5, 1);
-    const exit = Math.max(0, p - 0.75) * 4;
-    wreathGroup.current.position.lerp(
-      new THREE.Vector3(2.6 - enter * 1.0 + exit * 2, 1.3, Z - 5 + exit * 4),
-      damp
-    );
-  });
-
   return (
     <group>
       <RoomReveal section="about" rise={1.0} from={0.3}>
-        <group ref={wreathGroup} position={[2.6, 1.3, Z - 5]}>
-          <LaurelWreath />
+        <group position={[2.9, -2.38, Z - 5]} rotation={[0, -0.5, 0]}>
+          <GLBModel url="/models/sofa.glb" modelScale={1.2} />
+          <GLBModel
+            url="/models/coffee-table.glb"
+            modelScale={1.2}
+            position={[0.1, 0, 1.35]}
+          />
         </group>
-        <Podium position={[-3.2, -2.2, Z - 6]} rotation={[0, 0.4, 0]} />
         <DustMotes count={60} center={[0, 0.5, Z]} bounds={[12, 7, 6]} />
       </RoomReveal>
       {/* portrait-wall backdrop */}

@@ -3,10 +3,7 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import FilmReel from "@/components/canvas/motifs/FilmReel";
-import BrassHorn from "@/components/canvas/motifs/BrassHorn";
-import Podium from "@/components/canvas/motifs/Podium";
-import Medal from "@/components/canvas/motifs/Medal";
+import GLBModel from "@/components/canvas/motifs/GLBModel";
 import { roomZ } from "@/components/canvas/CameraRig";
 import RoomReveal from "@/components/canvas/RoomReveal";
 import { useScrollStore } from "@/lib/scroll-store";
@@ -53,17 +50,19 @@ export default function ServicesScene() {
     <group>
       <RoomReveal section="services" rise={1.2} from={0.25}>
       <group ref={ring} position={[3.4, 0.3, Z - 4]}>
+        {/* one modern object per service: film camera, boombox,
+            projector screen, marble bust — matching content/services.ts order */}
         <group ref={(el) => void (motifRefs.current[0] = el)} position={slots[0]}>
-          <FilmReel />
+          <GLBModel url="/models/camera.glb" modelScale={4} modelOffset={[0.1, -0.2, -0.3]} spin={0.3} float={0.08} />
         </group>
         <group ref={(el) => void (motifRefs.current[1] = el)} position={slots[1]}>
-          <BrassHorn />
+          <GLBModel url="/models/boombox.glb" modelScale={2} modelOffset={[0, -0.45, 0]} spin={0.25} float={0.08} phase={2} />
         </group>
         <group ref={(el) => void (motifRefs.current[2] = el)} position={slots[2]}>
-          <Podium position={[0, -1, 0]} />
+          <GLBModel url="/models/projector-screen.glb" modelScale={1.3} modelOffset={[0, -1.2, 0]} spin={0.2} phase={4} />
         </group>
         <group ref={(el) => void (motifRefs.current[3] = el)} position={slots[3]}>
-          <Medal spinOffset={2} />
+          <GLBModel url="/models/marble-bust.glb" modelScale={2.2} modelOffset={[0, -0.55, 0]} spin={0.3} float={0.06} phase={6} />
         </group>
       </group>
       </RoomReveal>

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import ChandelierModel from "@/components/canvas/motifs/ChandelierModel";
+import PendantLamp from "@/components/canvas/motifs/PendantLamp";
 import StageSpotlight from "@/components/canvas/motifs/StageSpotlight";
 import DustMotes from "@/components/canvas/motifs/DustMotes";
 import RoomReveal from "@/components/canvas/RoomReveal";
@@ -20,7 +20,7 @@ export default function HeroScene() {
     const p = useScrollStore.getState().progress.hero;
     const damp = 1 - Math.exp(-delta * 4);
     chandelierGroup.current.position.lerp(
-      new THREE.Vector3(2.55 - p * 7, 3.3 + p * 2.5, -3 - p * 2),
+      new THREE.Vector3(3.4 - p * 7, 3.5 + p * 2.5, -3 - p * 2),
       damp
     );
     const s = 1 - p * 0.35;
@@ -30,8 +30,8 @@ export default function HeroScene() {
   return (
     <group>
       <RoomReveal section="hero" rise={0.6} from={0.5}>
-        <group ref={chandelierGroup} position={[2.55, 3.3, -3]}>
-          <ChandelierModel />
+        <group ref={chandelierGroup} position={[3.4, 3.5, -3]}>
+          <PendantLamp />
         </group>
         <StageSpotlight position={[-5, 4.5, -1]} tilt={-0.5} />
         <StageSpotlight position={[5, 4.5, -1]} tilt={0.5} beamColor="#e9c873" />

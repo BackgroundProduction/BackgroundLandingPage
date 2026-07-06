@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import * as THREE from "three";
-import Medal from "@/components/canvas/motifs/Medal";
+import GLBModel from "@/components/canvas/motifs/GLBModel";
 import StageSpotlight from "@/components/canvas/motifs/StageSpotlight";
 import DustMotes from "@/components/canvas/motifs/DustMotes";
 import RoomReveal from "@/components/canvas/RoomReveal";
@@ -18,16 +18,21 @@ const Z = roomZ(3); // -42
 export default function PortfolioScene() {
   const velvetMat = useMemo(() => createVelvetMaterial(), []);
 
-  const medals = useMemo(
+  // floating picture frames — a gallery of past events flanking the carpet
+  const frames = useMemo(
     () =>
-      [0, 1, 2, 3, 4, 5].map((i) => ({
-        position: [
-          (i % 2 === 0 ? -1 : 1) * (2.6 + (i % 3) * 0.5),
-          0.6 + (i % 3) * 0.9,
-          Z - i * 2.8,
-        ] as [number, number, number],
-        spinOffset: i * 1.7,
-      })),
+      [0, 1, 2, 3, 4, 5].map((i) => {
+        const side = i % 2 === 0 ? -1 : 1;
+        return {
+          position: [
+            side * (2.7 + (i % 3) * 0.5),
+            0.5 + (i % 3) * 0.9,
+            Z - i * 2.8,
+          ] as [number, number, number],
+          rotation: [0, side * -0.5, 0] as [number, number, number],
+          phase: i * 1.7,
+        };
+      }),
     []
   );
 
@@ -49,8 +54,16 @@ export default function PortfolioScene() {
         </mesh>
       ))}
       <RoomReveal section="portfolio" rise={1.2} from={0.25}>
-        {medals.map((m, i) => (
-          <Medal key={i} position={m.position} spinOffset={m.spinOffset} />
+        {frames.map((f, i) => (
+          <GLBModel
+            key={i}
+            url="/models/picture-frame.glb"
+            modelScale={2.4}
+            position={f.position}
+            rotation={f.rotation}
+            float={0.1}
+            phase={f.phase}
+          />
         ))}
         <StageSpotlight position={[-4.5, 5, Z - 2]} tilt={-0.45} />
         <StageSpotlight position={[4.5, 5, Z - 8]} tilt={0.45} beamColor="#e9c873" />
