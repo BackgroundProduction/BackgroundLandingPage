@@ -65,7 +65,7 @@ export default function CameraRig() {
       initialized.current = true;
     }
 
-    const damp = 1 - Math.exp(-delta * 3.2);
+    const damp = 1 - Math.exp(-delta * 4.5);
     state.camera.position.lerp(targetPos.current, damp);
     currentLook.current.lerp(targetLook.current, damp);
     state.camera.lookAt(currentLook.current);

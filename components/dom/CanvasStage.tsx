@@ -17,7 +17,7 @@ export default function CanvasStage({ tier = "high" }: { tier?: "high" | "low" }
     <div className="fixed inset-0 z-0" aria-hidden="true">
       <Canvas
         camera={{ fov: 42, near: 0.1, far: 80, position: [0, -1.4, 11] }}
-        dpr={low ? [1, 1.5] : [1, 2]}
+        dpr={low ? [1, 1.25] : [1, 1.5]}
         gl={{ antialias: false, powerPreference: "high-performance" }}
       >
         <Suspense fallback={null}>

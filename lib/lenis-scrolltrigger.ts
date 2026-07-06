@@ -10,7 +10,7 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 export function createSmoothScroll(): { lenis: Lenis; destroy: () => void } {
   const lenis = new Lenis({
     autoRaf: false,
-    duration: 1.2,
+    duration: 0.9,
     smoothWheel: true,
     // keep native touch scrolling — Lenis synthetic touch fights iOS overscroll
     syncTouch: false,

@@ -2,6 +2,7 @@
 
 import { Environment, Lightformer } from "@react-three/drei";
 import CameraRig from "@/components/canvas/CameraRig";
+import Room from "@/components/canvas/Room";
 import Lights from "@/components/canvas/Lights";
 import PostFX from "@/components/canvas/PostFX";
 import HeroScene from "@/components/canvas/scenes/HeroScene";
@@ -35,11 +36,21 @@ export default function Experience({ postFX = true }: { postFX?: boolean }) {
           color="#3a4a6b"
         />
       </Environment>
-      <HeroScene />
-      <AboutScene />
-      <ServicesScene />
-      <PortfolioScene />
-      <ContactScene />
+      <Room index={0}>
+        <HeroScene />
+      </Room>
+      <Room index={1}>
+        <AboutScene />
+      </Room>
+      <Room index={2}>
+        <ServicesScene />
+      </Room>
+      <Room index={3}>
+        <PortfolioScene />
+      </Room>
+      <Room index={4}>
+        <ContactScene />
+      </Room>
       <PostFX enabled={postFX} />
     </>
   );
