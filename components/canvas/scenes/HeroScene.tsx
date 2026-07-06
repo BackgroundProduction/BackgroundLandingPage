@@ -35,7 +35,7 @@ export default function HeroScene() {
         </group>
         <StageSpotlight position={[-5, 4.5, -1]} tilt={-0.5} />
         <StageSpotlight position={[5, 4.5, -1]} tilt={0.5} beamColor="#e9c873" />
-        <DustMotes center={[0, 1, 0]} />
+        <DustMotes count={70} center={[0, 1, 0]} />
       </RoomReveal>
       {/* backdrop + floor catch the light and give the room depth */}
       <mesh position={[0, 1, -9]} receiveShadow>
