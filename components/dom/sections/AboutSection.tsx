@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { site } from "@/content/site";
-import SectionHeading from "@/components/dom/ui/SectionHeading";
 import { useSectionTrigger } from "./useSectionTrigger";
 
 export default function AboutSection() {
@@ -14,29 +13,61 @@ export default function AboutSection() {
       ref={ref}
       id="about"
       aria-labelledby="about-heading"
-      className="relative min-h-screen px-6 md:px-12 lg:px-24 py-[var(--space-section-y)]"
+      className="relative px-[var(--gutter)] py-[var(--space-section-y)]"
     >
-      <div className="mx-auto max-w-6xl">
-        <div data-reveal>
-          <SectionHeading eyebrow="Who we are" id="about-heading">
-            The magic behind the scene
-          </SectionHeading>
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-6 md:grid-cols-[auto_1fr] md:gap-24">
+          <p data-reveal className="text-eyebrow text-accent">
+            01 — Who we are
+          </p>
+          <div>
+            <h2
+              id="about-heading"
+              data-reveal
+              className="font-display font-medium text-display-lg max-w-[24ch]"
+            >
+              Event planning is all about the behind-scene{" "}
+              <em className="not-italic text-accent">magic</em>.
+            </h2>
+            <p
+              data-reveal
+              className="mt-8 max-w-2xl text-[length:var(--text-body-lg)] leading-relaxed text-text-dim"
+            >
+              It’s about tiny details, logistics and emotions — carefully
+              thought and mapped out to create a memorable experience.
+            </p>
+          </div>
         </div>
 
-        <blockquote
+        {/* tagline words as an editorial value grid */}
+        <div
           data-reveal
-          className="mt-16 md:mt-24 max-w-4xl font-display text-display-md text-cream/90 italic leading-snug"
+          className="mt-24 grid grid-cols-2 border-t md:grid-cols-4"
+          style={{ borderColor: "var(--color-line)" }}
         >
-          “{site.philosophy}”
-        </blockquote>
+          {site.taglineWords.map((word, i) => (
+            <div
+              key={word}
+              className="group border-b px-2 py-10 md:py-14"
+              style={{ borderColor: "var(--color-line)" }}
+            >
+              <p className="text-eyebrow text-text-dim">
+                {String(i + 1).padStart(2, "0")}
+              </p>
+              <p className="font-display mt-4 text-xl md:text-2xl font-medium transition-colors group-hover:text-accent">
+                {word}
+              </p>
+            </div>
+          ))}
+        </div>
 
-        <div className="mt-16 md:mt-24 grid gap-10 md:grid-cols-2 md:gap-16">
+        <div className="mt-24 grid gap-12 md:grid-cols-2 md:gap-24">
           <div className="space-y-6">
             {site.about.paragraphs.map((p, i) => (
               <p
                 key={i}
                 data-reveal
-                className="text-[length:var(--text-body-lg)] text-cream-dim leading-relaxed"
+                className="text-[length:var(--text-body-lg)] leading-relaxed text-text-dim"
               >
                 {p}
               </p>
@@ -45,13 +76,14 @@ export default function AboutSection() {
           <div className="flex flex-col justify-between gap-12">
             <p
               data-reveal
-              className="font-display text-display-lg text-gold leading-none"
+              className="font-display text-display-md font-medium text-accent"
             >
               {site.about.aside}
             </p>
             <p
               data-reveal
-              className="text-[length:var(--text-body-lg)] text-cream/85 leading-relaxed border-l-2 border-gold-dim pl-6"
+              className="border-l-2 pl-6 text-[length:var(--text-body-lg)] leading-relaxed"
+              style={{ borderColor: "var(--color-accent)" }}
             >
               {site.vision}
             </p>

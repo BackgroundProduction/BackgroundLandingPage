@@ -1,9 +1,8 @@
-import { Fraunces, Inter } from "next/font/google";
+import { Space_Grotesk, Inter } from "next/font/google";
 
-export const fraunces = Fraunces({
+export const grotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-fraunces",
-  axes: ["opsz", "SOFT", "WONK"],
+  variable: "--font-grotesk",
   weight: "variable",
   display: "swap",
 });

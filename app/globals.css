@@ -1,92 +1,78 @@
 @import "tailwindcss";
 
 :root {
-  /* Palette — warm near-black + aged gold + oxblood velvet + cream.
-     Never pure #000/#fff: warmed values read as gallery/canvas, not dark-mode app. */
-  --color-bg-base: #0b0908;
-  --color-bg-elevated: #14100d;
-  --color-gold: #c9a24b;
-  --color-gold-bright: #e9c873;
-  --color-gold-dim: #7a6230;
-  --color-oxblood: #5c1a1f;
-  --color-oxblood-deep: #3a0f12;
-  --color-cream: #ede4d3;
-  --color-cream-dim: #a89c88;
-  --color-ink: #1a1512;
-  --color-fog: #0a0806;
+  /* Editorial dark palette — neutral near-black, off-white, single amber accent */
+  --color-bg: #0a0a0a;
+  --color-surface: #131312;
+  --color-line: rgba(240, 238, 233, 0.14);
+  --color-line-soft: rgba(240, 238, 233, 0.07);
+  --color-text: #f0eee9;
+  --color-text-dim: #908d86;
+  --color-accent: #e0a938;
+  --color-accent-soft: rgba(224, 169, 56, 0.14);
+  --color-ink: #0a0a0a;
 
-  /* Typography */
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-grotesk);
   --font-body: var(--font-inter);
 
-  --text-display-xl: clamp(3.5rem, 9vw, 9rem);
-  --text-display-lg: clamp(2.5rem, 6vw, 6rem);
-  --text-display-md: clamp(1.75rem, 3.5vw, 3rem);
-  --text-body-lg: clamp(1.125rem, 1.5vw, 1.375rem);
-  --text-body: 1rem;
-  --text-eyebrow: 0.8125rem;
+  --text-display-xl: clamp(3.25rem, 9.5vw, 9.5rem);
+  --text-display-lg: clamp(2.25rem, 5.5vw, 5.5rem);
+  --text-display-md: clamp(1.5rem, 3vw, 2.75rem);
+  --text-body-lg: clamp(1.0625rem, 1.4vw, 1.3125rem);
+  --text-eyebrow: 0.75rem;
 
-  --space-section-y: clamp(6rem, 12vw, 12rem);
+  --space-section-y: clamp(6rem, 11vw, 11rem);
+  --gutter: clamp(1.25rem, 4vw, 4rem);
 }
 
 @theme inline {
-  --color-bg-base: var(--color-bg-base);
-  --color-bg-elevated: var(--color-bg-elevated);
-  --color-gold: var(--color-gold);
-  --color-gold-bright: var(--color-gold-bright);
-  --color-gold-dim: var(--color-gold-dim);
-  --color-oxblood: var(--color-oxblood);
-  --color-oxblood-deep: var(--color-oxblood-deep);
-  --color-cream: var(--color-cream);
-  --color-cream-dim: var(--color-cream-dim);
-  --font-display: var(--font-fraunces);
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-line: var(--color-line);
+  --color-text: var(--color-text);
+  --color-text-dim: var(--color-text-dim);
+  --color-accent: var(--color-accent);
+  --color-ink: var(--color-ink);
+  --font-display: var(--font-grotesk);
   --font-body: var(--font-inter);
 }
 
 html {
-  background: var(--color-bg-base);
+  background: var(--color-bg);
 }
 
 body {
-  background: var(--color-bg-base);
-  color: var(--color-cream);
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--font-body), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: var(--color-gold);
+  background: var(--color-accent);
   color: var(--color-ink);
 }
 
 /* Lenis recommended styles */
-html.lenis, html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
 
 .font-display {
-  font-family: var(--font-display), Georgia, serif;
+  font-family: var(--font-display), system-ui, sans-serif;
 }
 
 .text-display-xl {
   font-size: var(--text-display-xl);
-  line-height: 0.95;
-  letter-spacing: -0.02em;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
 }
 .text-display-lg {
   font-size: var(--text-display-lg);
-  line-height: 1;
-  letter-spacing: -0.015em;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
 }
 .text-display-md {
   font-size: var(--text-display-md);
@@ -95,8 +81,63 @@ html.lenis, html.lenis body {
 }
 .text-eyebrow {
   font-size: var(--text-eyebrow);
-  letter-spacing: 0.22em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
+}
+
+/* Film grain — fixed overlay, pure CSS, zero runtime cost */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -100%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 9s steps(6) infinite;
+}
+@keyframes grain-shift {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-6%, 4%); }
+  40% { transform: translate(4%, -7%); }
+  60% { transform: translate(-3%, 6%); }
+  80% { transform: translate(6%, -3%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .grain::after { animation: none; }
+}
+
+/* Ambient glow blobs */
+.glow-amber {
+  background: radial-gradient(closest-side, rgba(224, 169, 56, 0.13), transparent 70%);
+}
+.glow-warm {
+  background: radial-gradient(closest-side, rgba(214, 120, 40, 0.08), transparent 70%);
+}
+
+/* Infinite marquee */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 36s linear infinite;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* Portfolio index row hover thumb */
+.index-row .row-thumb {
+  opacity: 0;
+  transform: scale(0.96) rotate(-1.5deg);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.index-row:hover .row-thumb {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
 }
 
 /* Skip link — visible on keyboard focus only */
@@ -106,7 +147,7 @@ html.lenis, html.lenis body {
   left: 0.75rem;
   z-index: 100;
   padding: 0.5rem 1rem;
-  background: var(--color-gold);
+  background: var(--color-accent);
   color: var(--color-ink);
   border-radius: 2px;
   transform: translateY(-200%);

@@ -1,75 +1,61 @@
 "use client";
 
 import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
 import { services } from "@/content/services";
-import { ScrollTrigger } from "@/lib/gsap";
-import { useScrollStore } from "@/lib/scroll-store";
-import SectionHeading from "@/components/dom/ui/SectionHeading";
 import { useSectionTrigger } from "./useSectionTrigger";
 
 export default function ServicesSection() {
   const ref = useRef<HTMLElement>(null);
   useSectionTrigger("services", ref);
 
-  // each card marks itself active as it crosses the viewport center,
-  // driving the matching 3D motif highlight
-  useGSAP(
-    () => {
-      if (!ref.current) return;
-      const setActiveServiceIndex =
-        useScrollStore.getState().setActiveServiceIndex;
-      const cards = ref.current.querySelectorAll("[data-service-index]");
-      cards.forEach((card) => {
-        const index = Number(card.getAttribute("data-service-index"));
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top 55%",
-          end: "bottom 45%",
-          onToggle: (self) => {
-            if (self.isActive) setActiveServiceIndex(index);
-          },
-        });
-      });
-    },
-    { scope: ref }
-  );
-
   return (
     <section
       ref={ref}
       id="services"
       aria-labelledby="services-heading"
-      className="relative px-6 md:px-12 lg:px-24 py-[var(--space-section-y)]"
+      className="relative px-[var(--gutter)] py-[var(--space-section-y)]"
     >
-      <div className="mx-auto max-w-6xl">
-        <div data-reveal>
-          <SectionHeading eyebrow="What we do" id="services-heading">
-            Every stage, every scale
-          </SectionHeading>
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-6 md:grid-cols-[auto_1fr] md:gap-24">
+          <p data-reveal className="text-eyebrow text-accent">
+            02 — What we do
+          </p>
+          <h2
+            id="services-heading"
+            data-reveal
+            className="font-display font-medium text-display-lg"
+          >
+            Every stage, every scale<span className="text-accent">.</span>
+          </h2>
         </div>
 
-        <ol className="mt-20 md:mt-32 space-y-24 md:space-y-40 list-none">
+        <ol
+          className="mt-20 list-none border-t"
+          style={{ borderColor: "var(--color-line)" }}
+        >
           {services.map((service, i) => (
             <li
               key={service.slug}
-              data-service-index={i}
               data-reveal
-              className="grid gap-6 md:grid-cols-[auto_1fr] md:gap-16 items-baseline"
+              className="group border-b transition-colors hover:bg-surface"
+              style={{ borderColor: "var(--color-line)" }}
             >
-              <span
-                aria-hidden="true"
-                className="font-display text-display-lg text-gold-dim leading-none select-none"
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div className="max-w-2xl">
-                <h3 className="font-display font-semibold text-display-md text-cream">
+              <div className="grid gap-3 px-2 py-10 md:grid-cols-[6rem_1fr_1.2fr_auto] md:items-center md:gap-10 md:py-12">
+                <span className="font-display text-lg text-text-dim transition-colors group-hover:text-accent">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="font-display text-display-md font-medium">
                   {service.title}
                 </h3>
-                <p className="mt-5 text-[length:var(--text-body-lg)] text-cream-dim leading-relaxed">
+                <p className="max-w-md text-base leading-relaxed text-text-dim">
                   {service.description}
                 </p>
+                <span
+                  aria-hidden="true"
+                  className="hidden text-2xl text-text-dim transition-all group-hover:translate-x-2 group-hover:text-accent md:block"
+                >
+                  →
+                </span>
               </div>
             </li>
           ))}

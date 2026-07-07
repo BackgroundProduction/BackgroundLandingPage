@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { fraunces, inter } from "@/lib/fonts";
+import { grotesk, inter } from "@/lib/fonts";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -20,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable} h-full antialiased`}>
-      <body className="min-h-full">{children}</body>
+    <html lang="en" className={`${grotesk.variable} ${inter.variable} h-full antialiased`}>
+      <body className="min-h-full grain">{children}</body>
     </html>
   );
 }

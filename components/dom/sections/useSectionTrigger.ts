@@ -33,14 +33,13 @@ export function useSectionTrigger(
 
       const revealTargets = ref.current.querySelectorAll("[data-reveal]");
       if (revealTargets.length) {
-        const from = { opacity: 0, y: 48, filter: "blur(6px)" };
+        const from = { opacity: 0, y: 40 };
         const to = {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
-          duration: 1.1,
+          duration: 0.9,
           ease: "power3.out" as const,
-          stagger: 0.12,
+          stagger: 0.1,
         };
         if (section === "hero") {
           // above the fold — entrance plays on load, not on scroll

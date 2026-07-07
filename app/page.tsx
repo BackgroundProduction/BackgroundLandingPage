@@ -9,12 +9,11 @@ import ServicesSection from "@/components/dom/sections/ServicesSection";
 import PortfolioSection from "@/components/dom/sections/PortfolioSection";
 import ContactSection from "@/components/dom/sections/ContactSection";
 
-// Scroll system and WebGL canvas both touch window — client-only.
+// Scroll system touches window — client-only.
 const SmoothScrollProvider = dynamic(
   () => import("@/components/dom/SmoothScrollProvider"),
   { ssr: false }
 );
-const Stage = dynamic(() => import("@/components/dom/Stage"), { ssr: false });
 
 export default function Home() {
   return (
@@ -22,10 +21,9 @@ export default function Home() {
       <a href="#about" className="skip-link">
         Skip to content
       </a>
-      <Stage />
       <Header />
       <ScrollProgress />
-      <main className="relative z-10">
+      <main className="relative">
         <HeroSection />
         <AboutSection />
         <ServicesSection />
