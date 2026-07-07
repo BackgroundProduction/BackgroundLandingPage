@@ -1,20 +1,24 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useScrollStore, SECTION_ORDER } from "@/lib/scroll-store";
 
-/** Thin accent progress line along the right edge — written imperatively from
- * store subscription so 60fps scroll never re-renders React. */
+/** Thin accent progress line along the right edge — rAF-driven transform,
+ * never re-renders React. */
 export default function ScrollProgress() {
   const bar = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    return useScrollStore.subscribe((state) => {
-      if (!bar.current) return;
-      let t = 0;
-      for (const id of SECTION_ORDER) t += state.progress[id];
-      bar.current.style.transform = `scaleY(${t / SECTION_ORDER.length})`;
-    });
+    let raf = 0;
+    const update = () => {
+      if (bar.current) {
+        const max = document.body.scrollHeight - window.innerHeight;
+        const p = max > 0 ? window.scrollY / max : 0;
+        bar.current.style.transform = `scaleY(${Math.min(Math.max(p, 0), 1)})`;
+      }
+      raf = requestAnimationFrame(update);
+    };
+    raf = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   return (

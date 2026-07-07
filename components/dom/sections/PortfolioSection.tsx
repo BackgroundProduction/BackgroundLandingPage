@@ -3,80 +3,83 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { portfolio } from "@/content/portfolio";
-import { useSectionTrigger } from "./useSectionTrigger";
-
-const ROMAN = [
-  "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X",
-  "XI", "XII", "XIII", "XIV", "XV", "XVI",
-];
+import { useReveal } from "./useReveal";
 
 export default function PortfolioSection() {
   const ref = useRef<HTMLElement>(null);
-  useSectionTrigger("portfolio", ref);
+  useReveal(ref);
 
   return (
     <section
       ref={ref}
-      id="portfolio"
-      aria-labelledby="portfolio-heading"
-      className="relative px-[var(--gutter)] py-[var(--space-section-y)]"
+      id="work"
+      aria-labelledby="work-heading"
+      className="py-[var(--space-section-y)]"
     >
-      <div className="mx-auto max-w-7xl">
-        <div className="grid gap-6 md:grid-cols-[auto_1fr] md:gap-24">
+      <div className="px-[var(--gutter)]">
+        <div className="mx-auto max-w-6xl">
           <p data-reveal className="text-eyebrow text-accent">
-            03 — Selected work
+            Selected work
           </p>
-          <h2
-            id="portfolio-heading"
-            data-reveal
-            className="font-display font-medium text-display-lg max-w-[16ch]"
-          >
-            An index of moments<span className="text-accent">.</span>
-          </h2>
-        </div>
-
-        <ol
-          className="mt-20 list-none border-t"
-          style={{ borderColor: "var(--color-line)" }}
-        >
-          {portfolio.map((entry, i) => (
-            <li
-              key={entry.slug}
+          <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
+            <h2
+              id="work-heading"
               data-reveal
-              className="index-row group relative border-b transition-colors hover:bg-surface"
-              style={{ borderColor: "var(--color-line)" }}
+              className="font-display font-medium text-display-lg max-w-[18ch]"
             >
-              <div className="grid grid-cols-[3.5rem_1fr] items-baseline gap-4 px-2 py-8 md:grid-cols-[5rem_1.6fr_1fr_1fr] md:items-center md:gap-8 md:py-9">
-                <span className="font-display text-lg text-text-dim transition-colors group-hover:text-accent">
-                  {ROMAN[i]}
-                </span>
-                <h3 className="font-display text-xl font-medium leading-snug md:text-2xl">
+              Moments we made unforgettable<span className="text-accent">.</span>
+            </h2>
+            <p data-reveal className="text-sm text-text-dim">
+              Drag / scroll sideways →
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* horizontal carousel — full-bleed, snap-scrolls */}
+      <div data-reveal className="work-track mt-14 px-[var(--gutter)]">
+        {portfolio.map((entry, i) => (
+          <article
+            key={entry.slug}
+            className="work-card group w-[78vw] shrink-0 sm:w-[46vw] lg:w-[30vw]"
+          >
+            <div
+              className="relative aspect-[4/3] overflow-hidden rounded-sm"
+              style={{ border: "1px solid var(--color-line-soft)" }}
+            >
+              <Image
+                src={entry.image.src}
+                alt={entry.image.alt}
+                fill
+                sizes="(max-width: 640px) 78vw, (max-width: 1024px) 46vw, 30vw"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+              <span
+                className="absolute left-4 top-4 rounded-full px-3 py-1 text-eyebrow"
+                style={{
+                  background: "rgba(12, 11, 10, 0.65)",
+                  color: "var(--color-dark-text)",
+                }}
+              >
+                {entry.category}
+              </span>
+            </div>
+            <div className="mt-4 flex items-baseline gap-4">
+              <span className="font-display text-sm text-text-dim">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h3 className="font-display text-xl font-medium leading-snug">
                   {entry.title}
                 </h3>
-                <p className="col-start-2 text-sm text-text-dim md:col-start-3">
-                  {entry.category}
-                </p>
-                <p className="col-start-2 text-sm text-text-dim md:col-start-4 md:text-right">
+                <p className="mt-1 text-sm text-text-dim">
                   {entry.location}
                   {entry.date ? ` · ${entry.date}` : ""}
                 </p>
               </div>
-              {/* hover preview — swaps to real photography when images land */}
-              <div
-                aria-hidden="true"
-                className="row-thumb pointer-events-none absolute right-[8%] top-1/2 z-10 hidden h-40 w-56 -translate-y-1/2 overflow-hidden rounded-sm lg:block"
-              >
-                <Image
-                  src={entry.image.src}
-                  alt=""
-                  fill
-                  sizes="224px"
-                  className="object-cover"
-                />
-              </div>
-            </li>
-          ))}
-        </ol>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );

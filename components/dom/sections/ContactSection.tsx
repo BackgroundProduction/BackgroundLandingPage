@@ -2,85 +2,122 @@
 
 import { useRef } from "react";
 import { site } from "@/content/site";
-import { useSectionTrigger } from "./useSectionTrigger";
+import { useReveal } from "./useReveal";
 
 export default function ContactSection() {
   const ref = useRef<HTMLElement>(null);
-  useSectionTrigger("contact", ref);
+  useReveal(ref);
 
   return (
     <section
       ref={ref}
       id="contact"
       aria-labelledby="contact-heading"
-      className="relative flex min-h-screen flex-col justify-between px-[var(--gutter)] pt-[var(--space-section-y)] pb-10"
+      className="theme-dark"
     >
-      {/* ambient glow behind the closing statement */}
-      <div
-        aria-hidden="true"
-        className="glow-amber pointer-events-none absolute left-1/2 top-1/3 h-[40rem] w-[40rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
-      />
-
-      <div className="mx-auto w-full max-w-7xl">
+      {/* final CTA */}
+      <div className="px-[var(--gutter)] py-[var(--space-section-y)] text-center">
         <p data-reveal className="text-eyebrow text-accent">
-          04 — Contact
+          Contact
         </p>
         <h2
           id="contact-heading"
           data-reveal
-          className="font-display font-medium text-display-xl mt-10 max-w-[12ch]"
+          className="font-display font-medium text-display-xl mx-auto mt-8 max-w-[16ch]"
         >
-          Let’s raise the curtain<span className="text-accent">.</span>
+          Ready to raise the curtain<span className="text-accent">?</span>
         </h2>
-        <p
-          data-reveal
-          className="mt-10 max-w-md text-[length:var(--text-body-lg)] leading-relaxed text-text-dim"
-        >
-          Tell us about your next event — we’ll turn it into something unique,
-          distinctive, one of a kind.
+        <p data-reveal className="dim mx-auto mt-8 max-w-md text-[length:var(--text-body-lg)] leading-relaxed">
+          Tell us the occasion, the date and the ambition — we take it from
+          there.
         </p>
-
-        <div data-reveal className="mt-14 flex flex-wrap items-center gap-4">
+        <div data-reveal className="mt-12 flex flex-wrap items-center justify-center gap-4">
           <a
             href={site.contact.emailHref}
-            className="rounded-full bg-accent px-8 py-4 font-medium transition-transform hover:scale-[1.03]"
-            style={{ color: "var(--color-ink)" }}
+            className="rounded-full px-8 py-4 font-medium transition-transform hover:scale-[1.03]"
+            style={{ background: "var(--color-accent)", color: "#fff" }}
           >
             {site.contact.email}
           </a>
           <a
             href={site.contact.phoneHref}
-            className="rounded-full border border-line px-8 py-4 font-medium text-text transition-colors hover:border-accent hover:text-accent"
+            className="rounded-full border px-8 py-4 font-medium transition-colors hover:text-accent"
+            style={{ borderColor: "rgba(240, 238, 233, 0.25)" }}
           >
             {site.contact.phone}
           </a>
-          <span className="text-sm text-text-dim">{site.contact.location}</span>
         </div>
       </div>
 
+      {/* footer */}
       <footer
-        className="mx-auto mt-28 w-full max-w-7xl border-t pt-8"
-        style={{ borderColor: "var(--color-line)" }}
+        className="px-[var(--gutter)] pb-10 pt-14"
+        style={{ borderTop: "1px solid rgba(240, 238, 233, 0.12)" }}
       >
-        <div className="flex flex-col items-start justify-between gap-4 text-sm text-text-dim sm:flex-row sm:items-center">
-          <p>
-            © {new Date().getFullYear()} {site.name}
-          </p>
-          <ul className="flex gap-6">
-            {site.social.map((s) => (
-              <li key={s.label}>
+        <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-4">
+          <div>
+            <p className="font-display text-lg font-medium">
+              Background<span className="text-accent">.</span>
+            </p>
+            <p className="dim mt-3 text-sm leading-relaxed">
+              Full-service event production — physical, hybrid and virtual.
+            </p>
+          </div>
+          <nav aria-label="Footer navigation">
+            <p className="text-eyebrow dim">Menu</p>
+            <ul className="mt-4 space-y-2 text-sm">
+              {site.nav.map((item) => (
+                <li key={item.href}>
+                  <a href={item.href} className="transition-colors hover:text-accent">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <div>
+            <p className="text-eyebrow dim">Studio</p>
+            <ul className="mt-4 space-y-2 text-sm">
+              <li>{site.contact.location}</li>
+              <li>
                 <a
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={site.contact.emailHref}
                   className="transition-colors hover:text-accent"
                 >
-                  {s.label}
+                  {site.contact.email}
                 </a>
               </li>
-            ))}
-          </ul>
+              <li>
+                <a
+                  href={site.contact.phoneHref}
+                  className="transition-colors hover:text-accent"
+                >
+                  {site.contact.phone}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-eyebrow dim">Follow</p>
+            <ul className="mt-4 space-y-2 text-sm">
+              {site.social.map((s) => (
+                <li key={s.label}>
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-colors hover:text-accent"
+                  >
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
+        <p className="dim mx-auto mt-14 max-w-6xl text-xs">
+          © {new Date().getFullYear()} {site.name}
+        </p>
       </footer>
     </section>
   );

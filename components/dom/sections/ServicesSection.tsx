@@ -2,35 +2,32 @@
 
 import { useRef } from "react";
 import { services } from "@/content/services";
-import { useSectionTrigger } from "./useSectionTrigger";
+import { useReveal } from "./useReveal";
 
 export default function ServicesSection() {
   const ref = useRef<HTMLElement>(null);
-  useSectionTrigger("services", ref);
+  useReveal(ref);
 
   return (
     <section
       ref={ref}
       id="services"
       aria-labelledby="services-heading"
-      className="relative px-[var(--gutter)] py-[var(--space-section-y)]"
+      className="px-[var(--gutter)] py-[var(--space-section-y)]"
     >
-      <div className="mx-auto max-w-7xl">
-        <div className="grid gap-6 md:grid-cols-[auto_1fr] md:gap-24">
-          <p data-reveal className="text-eyebrow text-accent">
-            02 — What we do
-          </p>
-          <h2
-            id="services-heading"
-            data-reveal
-            className="font-display font-medium text-display-lg"
-          >
-            Every stage, every scale<span className="text-accent">.</span>
-          </h2>
-        </div>
-
+      <div className="mx-auto max-w-6xl">
+        <p data-reveal className="text-eyebrow text-accent">
+          What we do
+        </p>
+        <h2
+          id="services-heading"
+          data-reveal
+          className="font-display font-medium text-display-lg mt-6"
+        >
+          Every stage, every scale<span className="text-accent">.</span>
+        </h2>
         <ol
-          className="mt-20 list-none border-t"
+          className="mt-16 list-none border-t"
           style={{ borderColor: "var(--color-line)" }}
         >
           {services.map((service, i) => (
@@ -40,19 +37,19 @@ export default function ServicesSection() {
               className="group border-b transition-colors hover:bg-surface"
               style={{ borderColor: "var(--color-line)" }}
             >
-              <div className="grid gap-3 px-2 py-10 md:grid-cols-[6rem_1fr_1.2fr_auto] md:items-center md:gap-10 md:py-12">
-                <span className="font-display text-lg text-text-dim transition-colors group-hover:text-accent">
+              <div className="grid gap-2 px-2 py-8 md:grid-cols-[5rem_1fr_1.2fr_auto] md:items-center md:gap-8 md:py-10">
+                <span className="font-display text-base text-text-dim transition-colors group-hover:text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <h3 className="font-display text-display-md font-medium">
                   {service.title}
                 </h3>
-                <p className="max-w-md text-base leading-relaxed text-text-dim">
+                <p className="max-w-md text-sm leading-relaxed text-text-dim">
                   {service.description}
                 </p>
                 <span
                   aria-hidden="true"
-                  className="hidden text-2xl text-text-dim transition-all group-hover:translate-x-2 group-hover:text-accent md:block"
+                  className="hidden text-xl text-text-dim transition-all group-hover:translate-x-1.5 group-hover:text-accent md:block"
                 >
                   →
                 </span>

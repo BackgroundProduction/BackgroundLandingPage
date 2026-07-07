@@ -15,6 +15,71 @@ export const site = {
     ],
     aside: "We love details!",
   },
+  /* derived from the portfolio — keep in sync with content/portfolio.ts */
+  stats: [
+    { value: "13+", label: "Landmark events produced" },
+    { value: "3", label: "Continental championships staged" },
+    { value: "3", label: "Regions — Armenia · CIS · Europe" },
+  ],
+  clients: [
+    "EBRD",
+    "Junior Eurovision",
+    "Yerevan Municipality",
+    "Khazer Music Awards",
+    "European Karate Federation",
+    "Altezza",
+    "Gyumri Beer Factory",
+  ],
+  principles: [
+    {
+      title: "Professional",
+      text: "Protocol-grade delivery, from government ceremonies to continental sport. No detail unowned, no deadline missed.",
+    },
+    {
+      title: "Creative",
+      text: "We translate a brief into ideas the room has never seen before — then engineer them until they work.",
+    },
+    {
+      title: "Innovative",
+      text: "Physical, hybrid or fully virtual — we build the format around the audience, not the other way round.",
+    },
+    {
+      title: "Experienced",
+      text: "Years of productions across Armenia, the CIS and Europe, carried by reputation rather than promises.",
+    },
+  ],
+  process: [
+    {
+      title: "Listen & translate",
+      text: "We start with your goals, audience and budget — and translate them into a concept worth remembering.",
+    },
+    {
+      title: "Design & plan",
+      text: "Every tiny detail, logistic and emotion is mapped out in advance. This is the behind-scene magic.",
+    },
+    {
+      title: "Produce & deliver",
+      text: "On show day you are a guest at your own event. We run the room, end to end, stress-free.",
+    },
+  ],
+  faqs: [
+    {
+      q: "What kinds of events do you produce?",
+      a: "Corporate events, dinner galas, concerts, grand openings, anniversaries, conferences, international forums, sports championships, private and government events — plus music and film production.",
+    },
+    {
+      q: "Do you work outside Armenia?",
+      a: "Yes. We operate locally and across the CIS and European regions, and have produced continental-scale events end to end.",
+    },
+    {
+      q: "Can an event be hybrid or virtual?",
+      a: "All three formats — physical, hybrid and virtual. We design the format around your audience and goals.",
+    },
+    {
+      q: "How do we start?",
+      a: "Write to info@background.am or call +374 55 605070. Tell us the occasion, the date and the ambition — we take it from there.",
+    },
+  ],
   contact: {
     email: "info@background.am",
     emailHref: "mailto:info@background.am",
@@ -30,8 +95,9 @@ export const site = {
   ],
   nav: [
     { label: "About", href: "#about" },
+    { label: "Work", href: "#work" },
+    { label: "Process", href: "#process" },
     { label: "Services", href: "#services" },
-    { label: "Portfolio", href: "#portfolio" },
     { label: "Contact", href: "#contact" },
   ],
 } as const;
