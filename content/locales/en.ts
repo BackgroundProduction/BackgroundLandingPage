@@ -26,6 +26,7 @@ export const en = {
     photoLabel: "Production still — photography coming",
     stepLabel: "Step",
     skipToContent: "Skip to content",
+    clientStories: "Real client stories",
   },
   hero: {
     eyebrow: "Event production — Yerevan, Armenia",
@@ -135,6 +136,29 @@ export const en = {
       },
     ],
   },
+  /* Client testimonials shown beside the services list. PLACEHOLDER quotes —
+     replace `quote`, `author`, `role` with real client statements you are
+     authorised to publish. */
+  testimonials: [
+    {
+      quote:
+        "Background handled a continental championship as if it were routine — every ceremony, every broadcast cue, flawless. They carry the pressure so you don't feel it.",
+      author: "Federation Partner",
+      role: "Sports Championship, Yerevan",
+    },
+    {
+      quote:
+        "They translated a vague brief into a room nobody wanted to leave. Details we'd never have thought of were already handled before we asked.",
+      author: "Corporate Client",
+      role: "Business Forum, Yerevan",
+    },
+    {
+      quote:
+        "From concept to the final broadcast, it was one seamless production. Professional, calm, and genuinely creative — exactly the partner a high-stakes event needs.",
+      author: "Broadcast Partner",
+      role: "Music Awards, Yerevan",
+    },
+  ],
   services: {
     eyebrow: "What we can help with",
     heading: "Every stage, every scale",
@@ -160,7 +184,7 @@ export const en = {
         title: "Conferences & Forums",
         description:
           "Corporate events, dinner galas, conferences and international forums — physical, hybrid and virtual — executed flawlessly end to end.",
-        image: "/images/portfolio/placeholder-conference.svg",
+        image: "/images/portfolio/ebrd.jpg",
       },
       {
         slug: "government-private-events",
