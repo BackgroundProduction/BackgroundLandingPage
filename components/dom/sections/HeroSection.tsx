@@ -72,7 +72,7 @@ export default function HeroSection() {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(to bottom, rgba(246,244,240,0.22) 0%, rgba(246,244,240,0.45) 55%, rgba(246,244,240,0.72) 100%)",
+                "linear-gradient(to bottom, rgba(10,10,10,0.35) 0%, rgba(10,10,10,0.55) 55%, rgba(10,10,10,0.8) 100%)",
             }}
           />
         </div>
@@ -80,7 +80,7 @@ export default function HeroSection() {
           className="absolute inset-x-0 bottom-0 h-40 sm:h-52"
           style={{
             background:
-              "linear-gradient(to bottom, transparent 0%, #f6f4f0 88%)",
+              "linear-gradient(to bottom, transparent 0%, #0a0a0a 88%)",
           }}
         />
       </div>
@@ -107,8 +107,8 @@ export default function HeroSection() {
         >
           <a
             href={t.contact.emailHref}
-            className="rounded-full px-8 py-4 font-medium text-white transition-transform hover:scale-[1.03]"
-            style={{ background: "var(--color-ink)" }}
+            className="rounded-full px-8 py-4 font-medium transition-transform hover:scale-[1.03]"
+            style={{ background: "var(--color-paper)", color: "var(--color-ink)" }}
           >
             {t.ui.startProject}
           </a>

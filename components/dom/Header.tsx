@@ -41,7 +41,7 @@ export default function Header() {
               className="rounded-full px-2.5 py-1.5 transition-colors"
               style={
                 locale === "hy"
-                  ? { background: "var(--color-ink)", color: "#fff" }
+                  ? { background: "var(--color-paper)", color: "var(--color-ink)" }
                   : { color: "var(--color-text-dim)" }
               }
             >
@@ -53,7 +53,7 @@ export default function Header() {
               className="rounded-full px-2.5 py-1.5 transition-colors"
               style={
                 locale === "en"
-                  ? { background: "var(--color-ink)", color: "#fff" }
+                  ? { background: "var(--color-paper)", color: "var(--color-ink)" }
                   : { color: "var(--color-text-dim)" }
               }
             >
@@ -65,8 +65,8 @@ export default function Header() {
           </div>
           <a
             href={t.contact.emailHref}
-            className="hidden rounded-full px-5 py-2 text-sm font-medium text-white transition-transform hover:scale-[1.03] md:block"
-            style={{ background: "var(--color-ink)" }}
+            className="hidden rounded-full px-5 py-2 text-sm font-medium transition-transform hover:scale-[1.03] md:block"
+            style={{ background: "var(--color-paper)", color: "var(--color-ink)" }}
           >
             {t.ui.startProject}
           </a>

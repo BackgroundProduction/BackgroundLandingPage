@@ -34,7 +34,7 @@ export default function AboutSection() {
               className="mt-10 hidden aspect-[4/3] items-end rounded-sm p-6 md:flex"
               style={{
                 background:
-                  "linear-gradient(135deg, var(--color-accent-soft), rgba(17,16,14,0.06))",
+                  "linear-gradient(135deg, var(--color-accent-soft), rgba(240,238,233,0.04))",
                 border: "1px dashed var(--color-line)",
               }}
             >

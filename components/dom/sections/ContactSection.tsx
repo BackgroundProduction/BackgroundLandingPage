@@ -41,7 +41,7 @@ export default function ContactSection() {
           <a
             href={t.contact.emailHref}
             className="rounded-full px-8 py-4 font-medium transition-transform hover:scale-[1.03]"
-            style={{ background: "var(--color-accent)", color: "#fff" }}
+            style={{ background: "var(--color-accent)", color: "var(--color-ink)" }}
           >
             {t.contact.email}
           </a>

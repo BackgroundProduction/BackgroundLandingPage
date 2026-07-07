@@ -56,7 +56,7 @@ export default function SuccessStoriesSection() {
       aria-labelledby="stories-heading"
       className="px-[var(--gutter)] py-[var(--space-section-y)]"
     >
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-12xl">
         <p data-reveal className="text-eyebrow text-accent">
           {t.success.eyebrow}
         </p>

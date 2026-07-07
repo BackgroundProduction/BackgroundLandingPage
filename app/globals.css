@@ -1,19 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  /* Light editorial palette — warm paper white, ink text, amber accent.
-     Footer/CTA flip to dark via .theme-dark scope. */
-  --color-bg: #f6f4f0;
-  --color-surface: #ffffff;
-  --color-line: rgba(17, 16, 14, 0.14);
-  --color-line-soft: rgba(17, 16, 14, 0.07);
-  --color-text: #11100e;
-  --color-text-dim: #6f6b63;
-  --color-accent: #b9852f;
-  --color-accent-soft: rgba(185, 133, 47, 0.12);
-  --color-ink: #11100e;
-  --color-paper: #f6f4f0;
-  --color-dark: #0c0b0a;
+  /* Dark editorial palette — modern neutral black, off-white type, amber
+     accent. Sections that were dark-scoped (.theme-dark) become elevated
+     panels one step lighter than the page. */
+  --color-bg: #0a0a0a;
+  --color-surface: #141413;
+  --color-line: rgba(240, 238, 233, 0.14);
+  --color-line-soft: rgba(240, 238, 233, 0.07);
+  --color-text: #f0eee9;
+  --color-text-dim: #8f8c86;
+  --color-accent: #e0a938;
+  --color-accent-soft: rgba(224, 169, 56, 0.14);
+  --color-ink: #0a0a0a;
+  --color-paper: #f0eee9;
+  --color-dark: #121110;
   --color-dark-text: #f0eee9;
   --color-dark-dim: #8f8c86;
 
@@ -57,7 +58,7 @@ body {
 
 ::selection {
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-ink);
 }
 
 /* Dark-scoped blocks (footer, final CTA) */
@@ -98,14 +99,14 @@ html.lenis, html.lenis body { height: auto; }
   text-transform: uppercase;
 }
 
-/* Subtle paper grain */
+/* Subtle film grain */
 .grain::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 60;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.05;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
