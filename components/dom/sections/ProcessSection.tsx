@@ -1,11 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import { site } from "@/content/site";
+import { useContent } from "@/components/dom/LocaleProvider";
 import { useReveal } from "./useReveal";
 
 export default function ProcessSection() {
   const ref = useRef<HTMLElement>(null);
+  const { t } = useContent();
   useReveal(ref);
 
   return (
@@ -17,20 +18,19 @@ export default function ProcessSection() {
     >
       <div className="mx-auto max-w-6xl">
         <p data-reveal className="text-eyebrow text-accent">
-          How it works
+          {t.process.eyebrow}
         </p>
         <h2
           id="process-heading"
           data-reveal
-          className="font-display font-medium text-display-lg mt-6 max-w-[20ch]"
+          className="font-display font-medium text-display-lg mt-6 max-w-[22ch]"
         >
-          Three steps between a brief and a memory
+          {t.process.heading}
           <span className="text-accent">.</span>
         </h2>
 
-        {/* vertical timeline */}
         <ol className="mt-16 list-none">
-          {site.process.map((step, i) => (
+          {t.process.steps.map((step, i) => (
             <li
               key={step.title}
               data-reveal
@@ -46,7 +46,7 @@ export default function ProcessSection() {
                 }}
               />
               <p className="text-eyebrow text-text-dim">
-                Step {String(i + 1).padStart(2, "0")}
+                {t.ui.stepLabel} {String(i + 1).padStart(2, "0")}
               </p>
               <div>
                 <h3 className="font-display text-display-md font-medium">

@@ -1,11 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import { services } from "@/content/services";
+import { useContent } from "@/components/dom/LocaleProvider";
 import { useReveal } from "./useReveal";
 
 export default function ServicesSection() {
   const ref = useRef<HTMLElement>(null);
+  const { t } = useContent();
   useReveal(ref);
 
   return (
@@ -17,20 +18,21 @@ export default function ServicesSection() {
     >
       <div className="mx-auto max-w-6xl">
         <p data-reveal className="text-eyebrow text-accent">
-          What we do
+          {t.services.eyebrow}
         </p>
         <h2
           id="services-heading"
           data-reveal
           className="font-display font-medium text-display-lg mt-6"
         >
-          Every stage, every scale<span className="text-accent">.</span>
+          {t.services.heading}
+          <span className="text-accent">.</span>
         </h2>
         <ol
           className="mt-16 list-none border-t"
           style={{ borderColor: "var(--color-line)" }}
         >
-          {services.map((service, i) => (
+          {t.services.items.map((service, i) => (
             <li
               key={service.slug}
               data-reveal

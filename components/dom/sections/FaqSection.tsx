@@ -1,11 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import { site } from "@/content/site";
+import { useContent } from "@/components/dom/LocaleProvider";
 import { useReveal } from "./useReveal";
 
 export default function FaqSection() {
   const ref = useRef<HTMLElement>(null);
+  const { t } = useContent();
   useReveal(ref);
 
   return (
@@ -18,21 +19,19 @@ export default function FaqSection() {
         <div className="grid gap-10 md:grid-cols-[1fr_1.6fr] md:gap-20">
           <div>
             <p data-reveal className="text-eyebrow text-accent">
-              Questions
+              {t.faq.eyebrow}
             </p>
             <h2
               id="faq-heading"
               data-reveal
               className="font-display font-medium text-display-lg mt-6"
             >
-              Before you ask<span className="text-accent">.</span>
+              {t.faq.heading}
+              <span className="text-accent">.</span>
             </h2>
           </div>
-          <div
-            className="border-t"
-            style={{ borderColor: "var(--color-line)" }}
-          >
-            {site.faqs.map((faq) => (
+          <div className="border-t" style={{ borderColor: "var(--color-line)" }}>
+            {t.faq.items.map((faq) => (
               <details
                 key={faq.q}
                 data-reveal

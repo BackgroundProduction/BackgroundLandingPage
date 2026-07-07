@@ -50,7 +50,7 @@ html {
 body {
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-body), var(--font-armenian), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -74,7 +74,7 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-stopped { overflow: hidden; }
 
 .font-display {
-  font-family: var(--font-display), system-ui, sans-serif;
+  font-family: var(--font-display), var(--font-armenian), system-ui, sans-serif;
 }
 
 .text-display-xl {

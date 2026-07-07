@@ -1,11 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import { site } from "@/content/site";
+import { useContent } from "@/components/dom/LocaleProvider";
 import { useReveal } from "./useReveal";
 
 export default function AboutSection() {
   const ref = useRef<HTMLElement>(null);
+  const { t } = useContent();
   useReveal(ref);
 
   return (
@@ -19,12 +20,13 @@ export default function AboutSection() {
         {/* studio intro — two columns */}
         <div className="grid items-start gap-10 md:grid-cols-2 md:gap-20">
           <div data-reveal>
-            <p className="text-eyebrow text-accent">Who we are</p>
+            <p className="text-eyebrow text-accent">{t.about.eyebrow}</p>
             <h2
               id="about-heading"
               className="font-display font-medium text-display-lg mt-6"
             >
-              The magic is behind the scene<span className="text-accent">.</span>
+              {t.about.heading}
+              <span className="text-accent">.</span>
             </h2>
             {/* photo slot — swap for real team/production photography */}
             <div
@@ -33,11 +35,11 @@ export default function AboutSection() {
               style={{
                 background:
                   "linear-gradient(135deg, var(--color-accent-soft), rgba(17,16,14,0.06))",
-                border: "1px solid var(--color-line-soft)",
+                border: "1px dashed var(--color-line)",
               }}
             >
               <span className="text-eyebrow text-text-dim">
-                Production still — photography coming
+                {t.ui.photoLabel}
               </span>
             </div>
           </div>
@@ -46,9 +48,9 @@ export default function AboutSection() {
               data-reveal
               className="font-display text-display-md font-medium leading-snug"
             >
-              “{site.philosophy}”
+              “{t.about.philosophy}”
             </p>
-            {site.about.paragraphs.map((p, i) => (
+            {t.about.paragraphs.map((p, i) => (
               <p
                 key={i}
                 data-reveal
@@ -58,14 +60,14 @@ export default function AboutSection() {
               </p>
             ))}
             <p data-reveal className="font-display text-xl font-medium text-accent">
-              {site.about.aside}
+              {t.about.aside}
             </p>
           </div>
         </div>
 
-        {/* key metrics — three stat cards */}
+        {/* key metrics */}
         <div className="mt-24 grid gap-4 sm:grid-cols-3">
-          {site.stats.map((stat) => (
+          {t.stats.map((stat) => (
             <div
               key={stat.label}
               data-reveal
@@ -82,15 +84,15 @@ export default function AboutSection() {
           ))}
         </div>
 
-        {/* client strip — text-based logo row */}
+        {/* client strip */}
         <div
           data-reveal
           className="mt-16 border-t pt-10"
           style={{ borderColor: "var(--color-line-soft)" }}
         >
-          <p className="text-eyebrow text-text-dim">Trusted for</p>
+          <p className="text-eyebrow text-text-dim">{t.ui.trustedFor}</p>
           <ul className="mt-6 flex flex-wrap gap-x-10 gap-y-4">
-            {site.clients.map((client) => (
+            {t.clients.map((client) => (
               <li
                 key={client}
                 className="font-display text-lg font-medium text-text-dim transition-colors hover:text-text"

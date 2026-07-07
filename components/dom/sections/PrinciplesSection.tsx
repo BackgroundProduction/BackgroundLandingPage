@@ -1,11 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import { site } from "@/content/site";
+import { useContent } from "@/components/dom/LocaleProvider";
 import { useReveal } from "./useReveal";
 
 export default function PrinciplesSection() {
   const ref = useRef<HTMLElement>(null);
+  const { t } = useContent();
   useReveal(ref);
 
   return (
@@ -16,17 +17,18 @@ export default function PrinciplesSection() {
     >
       <div className="mx-auto max-w-6xl">
         <p data-reveal className="text-eyebrow text-accent">
-          How we operate
+          {t.principles.eyebrow}
         </p>
         <h2
           id="principles-heading"
           data-reveal
           className="font-display font-medium text-display-lg mt-6 max-w-[20ch]"
         >
-          Four words we actually mean<span className="text-accent">.</span>
+          {t.principles.heading}
+          <span className="text-accent">.</span>
         </h2>
         <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {site.principles.map((principle, i) => (
+          {t.principles.items.map((principle, i) => (
             <div
               key={principle.title}
               data-reveal

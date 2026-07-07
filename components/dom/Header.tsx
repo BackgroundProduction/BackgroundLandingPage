@@ -1,9 +1,11 @@
 "use client";
 
-import { site } from "@/content/site";
+import { useContent } from "@/components/dom/LocaleProvider";
 import SoundToggle from "@/components/dom/SoundToggle";
 
 export default function Header() {
+  const { t, locale } = useContent();
+
   return (
     <header className="fixed top-0 inset-x-0 z-50">
       <div
@@ -18,7 +20,7 @@ export default function Header() {
         </a>
         <nav aria-label="Main navigation" className="hidden lg:block">
           <ul className="flex gap-8">
-            {site.nav.map((item) => (
+            {t.nav.map((item) => (
               <li key={item.href}>
                 <a
                   href={item.href}
@@ -31,13 +33,42 @@ export default function Header() {
           </ul>
         </nav>
         <div className="flex items-center gap-3">
-          <SoundToggle />
+          {/* language switcher — Armenian lives at /, English at /en */}
+          <nav aria-label="Language" className="flex items-center gap-1 text-xs font-medium">
+            <a
+              href="/"
+              aria-current={locale === "hy" ? "page" : undefined}
+              className="rounded-full px-2.5 py-1.5 transition-colors"
+              style={
+                locale === "hy"
+                  ? { background: "var(--color-ink)", color: "#fff" }
+                  : { color: "var(--color-text-dim)" }
+              }
+            >
+              ՀԱՅ
+            </a>
+            <a
+              href="/en"
+              aria-current={locale === "en" ? "page" : undefined}
+              className="rounded-full px-2.5 py-1.5 transition-colors"
+              style={
+                locale === "en"
+                  ? { background: "var(--color-ink)", color: "#fff" }
+                  : { color: "var(--color-text-dim)" }
+              }
+            >
+              ENG
+            </a>
+          </nav>
+          <div className="hidden sm:block">
+            <SoundToggle />
+          </div>
           <a
-            href={site.contact.emailHref}
-            className="rounded-full px-5 py-2 text-sm font-medium text-white transition-transform hover:scale-[1.03]"
+            href={t.contact.emailHref}
+            className="hidden rounded-full px-5 py-2 text-sm font-medium text-white transition-transform hover:scale-[1.03] md:block"
             style={{ background: "var(--color-ink)" }}
           >
-            Start a project
+            {t.ui.startProject}
           </a>
         </div>
       </div>

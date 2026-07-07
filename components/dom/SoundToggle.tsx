@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { sound } from "@/lib/sound";
+import { useContent } from "@/components/dom/LocaleProvider";
 
 /**
  * Sound on/off pill. Off by default (autoplay policy requires a gesture).
@@ -10,6 +11,7 @@ import { sound } from "@/lib/sound";
  */
 export default function SoundToggle() {
   const [on, setOn] = useState(false);
+  const { t } = useContent();
 
   useEffect(() => {
     if (!on) return;
@@ -56,7 +58,7 @@ export default function SoundToggle() {
         className="inline-block h-1.5 w-1.5 rounded-full transition-colors"
         style={{ background: on ? "var(--color-accent)" : "var(--color-line)" }}
       />
-      Sound {on ? "on" : "off"}
+      {t.ui.sound} {on ? t.ui.soundOn : t.ui.soundOff}
     </button>
   );
 }

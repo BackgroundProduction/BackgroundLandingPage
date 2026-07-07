@@ -2,11 +2,12 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { portfolio } from "@/content/portfolio";
+import { useContent } from "@/components/dom/LocaleProvider";
 import { useReveal } from "./useReveal";
 
 export default function PortfolioSection() {
   const ref = useRef<HTMLElement>(null);
+  const { t } = useContent();
   useReveal(ref);
 
   return (
@@ -19,7 +20,7 @@ export default function PortfolioSection() {
       <div className="px-[var(--gutter)]">
         <div className="mx-auto max-w-6xl">
           <p data-reveal className="text-eyebrow text-accent">
-            Selected work
+            {t.work.eyebrow}
           </p>
           <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
             <h2
@@ -27,10 +28,11 @@ export default function PortfolioSection() {
               data-reveal
               className="font-display font-medium text-display-lg max-w-[18ch]"
             >
-              Moments we made unforgettable<span className="text-accent">.</span>
+              {t.work.heading}
+              <span className="text-accent">.</span>
             </h2>
             <p data-reveal className="text-sm text-text-dim">
-              Drag / scroll sideways →
+              {t.ui.dragSideways}
             </p>
           </div>
         </div>
@@ -38,7 +40,7 @@ export default function PortfolioSection() {
 
       {/* horizontal carousel — full-bleed, snap-scrolls */}
       <div data-reveal className="work-track mt-14 px-[var(--gutter)]">
-        {portfolio.map((entry, i) => (
+        {t.portfolio.map((entry, i) => (
           <article
             key={entry.slug}
             className="work-card group w-[78vw] shrink-0 sm:w-[46vw] lg:w-[30vw]"
