@@ -136,32 +136,38 @@ export const en = {
     ],
   },
   services: {
-    eyebrow: "What we do",
+    eyebrow: "What we can help with",
     heading: "Every stage, every scale",
+    /* `image`: shown in the right-hand panel on hover. Swap these paths for
+       real photography/video posters per service when you have them. */
     items: [
       {
         slug: "music-film-production",
         title: "Music & Film Production",
         description:
           "Professional music and movie producing — from concept and score to final cut, crafted with cinematic precision.",
+        image: "/images/portfolio/placeholder-concert.svg",
       },
       {
         slug: "concerts-grand-openings",
         title: "Concerts & Grand Openings",
         description:
           "Concerts, grand openings and anniversaries staged as unforgettable spectacles — lighting, sound and emotion in perfect sync.",
+        image: "/images/portfolio/placeholder-ceremony.svg",
       },
       {
         slug: "conferences-forums",
         title: "Conferences & Forums",
         description:
           "Corporate events, dinner galas, conferences and international forums — physical, hybrid and virtual — executed flawlessly end to end.",
+        image: "/images/portfolio/placeholder-conference.svg",
       },
       {
         slug: "government-private-events",
         title: "Government & Private Events",
         description:
           "State ceremonies, official inaugurations and private celebrations handled with discretion, protocol and grandeur.",
+        image: "/images/portfolio/placeholder-corporate.svg",
       },
     ],
   },

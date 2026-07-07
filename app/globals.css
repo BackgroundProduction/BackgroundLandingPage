@@ -99,6 +99,18 @@ html.lenis, html.lenis body { height: auto; }
   text-transform: uppercase;
 }
 
+/* Soft cross-fade used when swapping the active service media / description */
+.fade-in {
+  animation: fade-in 0.4s ease both;
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { animation: none; }
+}
+
 /* Subtle film grain */
 .grain::after {
   content: "";

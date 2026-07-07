@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import { useContent } from "@/components/dom/LocaleProvider";
 import { useReveal } from "./useReveal";
 
-const DIM = "rgba(240, 238, 233, 0.2)";
+const DIM = "rgba(240, 238, 233, 0.28)";
 
 export default function ServicesSection() {
   const ref = useRef<HTMLElement>(null);
@@ -13,86 +14,84 @@ export default function ServicesSection() {
   useReveal(ref);
 
   const items = t.services.items;
-  const current = items[active];
-  const cycle = (dir: -1 | 1) =>
-    setActive((a) => (a + dir + items.length) % items.length);
 
   return (
     <section
       ref={ref}
       id="services"
       aria-labelledby="services-heading"
-      className="theme-dark px-[var(--gutter)] py-[var(--space-section-y)]"
+      className="theme-dark relative px-[var(--gutter)] py-[var(--space-section-y)]"
     >
-      <div className="mx-auto grid max-w-7xl gap-14 md:grid-cols-[1fr_2.2fr] md:gap-20">
-        {/* left column — eyebrow, pager, active service description */}
-        <div className="flex flex-col md:pt-2">
-          <p data-reveal className="flex items-center gap-3 text-eyebrow text-accent">
-            <span aria-hidden="true">●</span>
-            {t.services.eyebrow}
-          </p>
+      <div className="mx-auto max-w-7xl">
+        <p
+          data-reveal
+          className="flex items-center gap-3 text-eyebrow text-text-dim"
+        >
+          <span aria-hidden="true" className="text-accent">
+            ●
+          </span>
+          {t.services.eyebrow}
+        </p>
 
-          <div data-reveal className="mt-10 md:mt-16">
+        <div className="relative mt-12 md:mt-16">
+          {/* giant full-width stacked titles — active lights up */}
+          <ol data-reveal className="list-none">
+            {items.map((service, i) => (
+              <li key={service.slug}>
+                <button
+                  type="button"
+                  onMouseEnter={() => setActive(i)}
+                  onFocus={() => setActive(i)}
+                  onClick={() => setActive(i)}
+                  aria-pressed={i === active}
+                  aria-describedby={i === active ? "service-desc" : undefined}
+                  className="font-display block w-full text-left font-medium leading-[1.04] transition-colors duration-300"
+                  style={{
+                    fontSize: "clamp(2.5rem, 8vw, 8rem)",
+                    letterSpacing: "-0.03em",
+                    color: i === active ? "var(--color-dark-text)" : DIM,
+                  }}
+                >
+                  {i === 0 && (
+                    <span className="sr-only" id="services-heading">
+                      {t.services.heading}.{" "}
+                    </span>
+                  )}
+                  {service.title}
+                </button>
+              </li>
+            ))}
+          </ol>
+
+          {/* hover media panel — floats top-right over the titles on desktop */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute right-0 top-2 hidden w-[clamp(16rem,26vw,26rem)] lg:block"
+          >
             <div
-              className="flex items-center justify-between border-t pt-4"
-              style={{ borderColor: "rgba(240, 238, 233, 0.2)" }}
+              key={active}
+              className="fade-in relative aspect-[4/3] overflow-hidden rounded-sm"
+              style={{ border: "1px solid var(--color-line-soft)" }}
             >
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => cycle(-1)}
-                  aria-label="Previous service"
-                  className="text-xl transition-colors hover:text-accent"
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  onClick={() => cycle(1)}
-                  aria-label="Next service"
-                  className="text-xl transition-colors hover:text-accent"
-                >
-                  →
-                </button>
-              </div>
-              <p className="dim font-mono text-xs tracking-widest">
-                {String(active + 1).padStart(2, "0")}/{String(items.length).padStart(2, "0")}
-              </p>
-            </div>
-
-            <div key={active} className="fade-in mt-8">
-              <h3 id="services-heading" className="font-display text-xl font-medium">
-                {current.title}
-              </h3>
-              <p className="dim mt-4 max-w-sm text-[0.95rem] leading-relaxed">
-                {current.description}
-              </p>
+              <Image
+                src={items[active].image}
+                alt=""
+                fill
+                sizes="26vw"
+                className="object-cover"
+              />
             </div>
           </div>
         </div>
 
-        {/* giant stacked service titles — active lights up */}
-        <ol data-reveal className="list-none">
-          {items.map((service, i) => (
-            <li key={service.slug}>
-              <button
-                type="button"
-                onMouseEnter={() => setActive(i)}
-                onFocus={() => setActive(i)}
-                onClick={() => setActive(i)}
-                aria-pressed={i === active}
-                className="font-display block w-full text-left font-medium leading-[1.06] transition-colors duration-300"
-                style={{
-                  fontSize: "clamp(2rem, 5.2vw, 4.75rem)",
-                  letterSpacing: "-0.02em",
-                  color: i === active ? "var(--color-dark-text)" : DIM,
-                }}
-              >
-                {service.title}
-              </button>
-            </li>
-          ))}
-        </ol>
+        {/* active service description */}
+        <p
+          id="service-desc"
+          key={active}
+          className="fade-in dim mt-12 max-w-xl text-[length:var(--text-body-lg)] leading-relaxed"
+        >
+          {items[active].description}
+        </p>
       </div>
     </section>
   );

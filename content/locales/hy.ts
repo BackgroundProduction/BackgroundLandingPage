@@ -136,7 +136,7 @@ export const hy: Content = {
     ],
   },
   services: {
-    eyebrow: "Ինչ ենք անում",
+    eyebrow: "Ինչում կարող ենք օգնել",
     heading: "Ցանկացած բեմ, ցանկացած մասշտաբ",
     items: [
       {
@@ -144,24 +144,28 @@ export const hy: Content = {
         title: "Երաժշտության և կինոյի արտադրություն",
         description:
           "Պրոֆեսիոնալ երաժշտական և կինոարտադրություն՝ գաղափարից ու պարտիտուրայից մինչև վերջնական մոնտաժ՝ կինեմատոգրաֆիկ ճշգրտությամբ։",
+        image: "/images/portfolio/placeholder-concert.svg",
       },
       {
         slug: "concerts-grand-openings",
         title: "Համերգներ և շքեղ բացումներ",
         description:
           "Համերգներ, բացումներ և հոբելյաններ՝ բեմադրված որպես անմոռանալի տեսարաններ. լույս, ձայն և հույզ՝ կատարյալ համաժամանակության մեջ։",
+        image: "/images/portfolio/placeholder-ceremony.svg",
       },
       {
         slug: "conferences-forums",
         title: "Կոնֆերանսներ և ֆորումներ",
         description:
           "Կորպորատիվ միջոցառումներ, գալա ընթրիքներ, կոնֆերանսներ և միջազգային ֆորումներ՝ ֆիզիկական, հիբրիդ և վիրտուալ, կատարված անթերի՝ սկզբից մինչև վերջ։",
+        image: "/images/portfolio/placeholder-conference.svg",
       },
       {
         slug: "government-private-events",
         title: "Պետական և մասնավոր միջոցառումներ",
         description:
           "Պետական արարողություններ, պաշտոնական երդմնակալություններ և մասնավոր տոնակատարություններ՝ զսպվածությամբ, արարողակարգով և վեհությամբ։",
+        image: "/images/portfolio/placeholder-corporate.svg",
       },
     ],
   },
