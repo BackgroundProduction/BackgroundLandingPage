@@ -181,7 +181,7 @@ export const hy: Content = {
         title: "Կոնֆերանսներ և ֆորումներ",
         description:
           "Կորպորատիվ միջոցառումներ, գալա ընթրիքներ, կոնֆերանսներ և միջազգային ֆորումներ՝ ֆիզիկական, հիբրիդ և վիրտուալ, կատարված անթերի՝ սկզբից մինչև վերջ։",
-        image: "/images/portfolio/placeholder-conference.svg",
+        image: "/images/portfolio/ebrd.jpg",
       },
       {
         slug: "government-private-events",
@@ -310,9 +310,9 @@ export const hy: Content = {
       location: "Երևան, Հայաստան",
       date: "2024",
       image: {
-        src: "/images/portfolio/placeholder-conference.svg",
+        src: "/images/portfolio/ebrd.jpg",
         alt: "ՎԶԵԲ 2024 տարեկան ժողով և գործարար ֆորում",
-        isPlaceholder: true,
+        isPlaceholder: false,
       },
     },
     {

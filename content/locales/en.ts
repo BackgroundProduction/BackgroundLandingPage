@@ -313,9 +313,9 @@ export const en = {
       location: "Yerevan, Armenia",
       date: "2024",
       image: {
-        src: "/images/portfolio/placeholder-conference.svg",
+        src: "/images/portfolio/ebrd.jpg",
         alt: "EBRD 2024 Annual Meeting and Business Forum",
-        isPlaceholder: true,
+        isPlaceholder: false,
       },
     },
     {
