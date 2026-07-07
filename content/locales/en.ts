@@ -84,43 +84,54 @@ export const en = {
     eyebrow: "Selected work",
     heading: "Moments we made unforgettable",
   },
-  /* Success stories — featured carousel. `slug` must match a portfolio entry
-     (image/title/meta come from there). NOTE: `result` lines are editorial
-     placeholders — replace with your verified figures (attendance, countries,
-     broadcast reach) when you have them. */
+  /* Success stories — stacked column rows. `slug` must match a portfolio
+     entry (image/title come from there). `video`: set a path (e.g.
+     "/assets/stories/ebrd.mp4") to show a looping video instead of the image.
+     NOTE: `badge` + `result` lines are editorial placeholders — replace with
+     your verified figures (attendance, countries, broadcast reach). */
   success: {
     eyebrow: "Success stories",
     heading: "Proof, not promises",
     items: [
       {
         slug: "ebrd-2024-annual-meeting",
+        badge: "2024",
         result: "Armenia’s largest international business gathering of the year",
         detail:
           "The EBRD Annual Meeting & Business Forum brought delegations from across the Bank’s regions to Yerevan — produced end to end.",
+        video: null as string | null,
       },
       {
         slug: "junior-eurovision-20th",
+        badge: "20th edition",
         result: "A pan-European broadcast moment",
         detail:
           "The 20th anniversary of the Junior Eurovision Song Contest, staged for an international television audience.",
+        video: null as string | null,
       },
       {
         slug: "european-weightlifting-championships",
+        badge: "3 events in 1",
         result: "A full continental championship cycle",
         detail:
           "Opening ceremony, every competition day and the Federation Congress — one production, zero missed cues.",
+        video: null as string | null,
       },
       {
         slug: "asian-regional-forum-2025",
+        badge: "3 days",
         result: "Central banks of the region at one table",
         detail:
           "A three-day investment-management forum in Dilijan for monetary institutions across Asia.",
+        video: null as string | null,
       },
       {
         slug: "khazer-music-awards-2025",
+        badge: "Live broadcast",
         result: "The national music scene on one stage",
         detail:
           "The “Khazer” Armenian Music Awards — ceremony, show and broadcast treated as one continuous piece.",
+        video: null as string | null,
       },
     ],
   },
