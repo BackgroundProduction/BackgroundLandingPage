@@ -162,22 +162,41 @@ html.lenis, html.lenis body { height: auto; }
 .work-track::-webkit-scrollbar { display: none; }
 .work-card { scroll-snap-align: start; }
 
-/* Native accordion */
+/* Native accordion — full-width rows, hover state, inverted open bar */
+.faq-item {
+  border-bottom: 1px dotted var(--color-line);
+}
 .faq-item summary {
   cursor: pointer;
   list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.15rem 1rem;
+  border-radius: 4px;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 .faq-item summary::-webkit-details-marker { display: none; }
-.faq-item summary::after {
-  content: "+";
-  font-size: 1.5rem;
-  line-height: 1;
-  color: var(--color-text-dim);
-  transition: transform 0.25s ease;
+.faq-item summary:hover {
+  background: rgba(240, 238, 233, 0.05);
 }
-.faq-item[open] summary::after {
-  transform: rotate(45deg);
-  color: var(--color-accent);
+.faq-item summary::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--color-text-dim);
+  transition: background 0.2s ease, transform 0.25s ease;
+}
+.faq-item[open] > summary {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+.faq-item[open] > summary::after {
+  background: var(--color-ink);
+  transform: scale(1.4);
 }
 
 /* Skip link — visible on keyboard focus only */

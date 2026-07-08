@@ -241,8 +241,11 @@ export const en = {
     ],
   },
   faq: {
-    eyebrow: "Questions",
-    heading: "Before you ask",
+    eyebrow: "FAQs",
+    heading: "What to know before we begin",
+    moreTitle: "Got more questions?",
+    moreText: "Tell us about your event.",
+    bookCall: "Book a call",
     items: [
       {
         q: "What kinds of events do you produce?",
