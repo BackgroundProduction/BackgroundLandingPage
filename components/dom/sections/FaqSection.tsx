@@ -15,7 +15,8 @@ export default function FaqSection() {
       aria-labelledby="faq-heading"
       className="theme-dark px-[var(--gutter)] py-[var(--space-section-y)]"
     >
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_2.3fr] lg:gap-16">
+      {/* full-bleed: narrow left column, accordion stretches to the right edge */}
+      <div className="grid gap-12 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-16">
         {/* LEFT — eyebrow (top) + "more questions" CTA (bottom) */}
         <div className="flex flex-col justify-between gap-16">
           <p
@@ -32,7 +33,7 @@ export default function FaqSection() {
             {/* photo slot — swap for a team headshot */}
             <div
               aria-hidden="true"
-              className="mb-5 flex aspect-square w-40 items-end rounded-sm p-4"
+              className="mb-5 flex aspect-square w-44 items-end rounded-sm p-4"
               style={{
                 background:
                   "linear-gradient(135deg, var(--color-accent-soft), rgba(240,238,233,0.04))",
@@ -41,7 +42,7 @@ export default function FaqSection() {
             >
               <span className="text-eyebrow text-text-dim">{t.ui.photoLabel}</span>
             </div>
-            <p className="font-display text-xl font-medium leading-snug">
+            <p className="font-display text-lg font-medium leading-snug">
               {t.faq.moreTitle}
             </p>
             <p className="dim mt-1 text-sm">{t.faq.moreText}</p>
@@ -56,12 +57,13 @@ export default function FaqSection() {
           </div>
         </div>
 
-        {/* RIGHT — heading + full-width accordion */}
+        {/* RIGHT — big heading + full-width accordion */}
         <div>
           <h2
             id="faq-heading"
             data-reveal
-            className="font-display font-medium text-display-lg max-w-[16ch]"
+            className="font-display font-medium max-w-[20ch]"
+            style={{ fontSize: "clamp(2rem, 4vw, 4rem)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
           >
             {t.faq.heading}
             <span className="text-accent">.</span>
@@ -69,7 +71,7 @@ export default function FaqSection() {
 
           <div
             data-reveal
-            className="mt-12 border-t"
+            className="mt-14 border-t"
             style={{ borderColor: "var(--color-line)" }}
           >
             {t.faq.items.map((faq) => (
@@ -79,7 +81,7 @@ export default function FaqSection() {
                     {faq.q}
                   </span>
                 </summary>
-                <p className="dim max-w-2xl px-1 pb-6 pt-1 text-[length:var(--text-body-lg)] leading-relaxed">
+                <p className="dim max-w-3xl px-1 pb-6 pt-1 text-[length:var(--text-body-lg)] leading-relaxed">
                   {faq.a}
                 </p>
               </details>
