@@ -56,7 +56,11 @@ export default function ProcessSection() {
               className="relative min-h-[56vw] w-full overflow-hidden sm:min-h-[42vw] md:min-h-[36vw] md:border-l"
               style={{ borderColor: BORDER }}
             >
-              <StepVideo src={step.video} poster={step.poster} />
+              {step.youtube ? (
+                <StepYouTube id={step.youtube} />
+              ) : (
+                <StepVideo src={step.video} poster={step.poster} />
+              )}
             </div>
           </li>
         ))}
@@ -95,5 +99,50 @@ function StepVideo({ src, poster }: { src: string; poster: string }) {
       playsInline
       preload="metadata"
     />
+  );
+}
+
+/**
+ * Clean background YouTube embed: muted autoplay, looped, no controls / no
+ * related videos / minimal branding. The iframe is oversized to cover the
+ * cell and made non-interactive; a transparent layer on top blocks any
+ * click/hover chrome so it reads as a silent background clip.
+ * (A small YouTube logo can still flash briefly — the embed API does not
+ * allow removing it entirely.)
+ */
+function StepYouTube({ id }: { id: string }) {
+  const params = new URLSearchParams({
+    autoplay: "1",
+    mute: "1",
+    controls: "0",
+    loop: "1",
+    playlist: id, // required for loop of a single video
+    modestbranding: "1",
+    rel: "0",
+    playsinline: "1",
+    disablekb: "1",
+    fs: "0",
+    iv_load_policy: "3",
+  });
+
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      <iframe
+        title=""
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        style={{
+          width: "100vw",
+          height: "56.25vw",
+          minWidth: "177.78vh",
+          minHeight: "100%",
+          border: "none",
+        }}
+        src={`https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`}
+        allow="autoplay; encrypted-media"
+      />
+      {/* transparent blocker — no pause on click, no hover chrome */}
+      <div className="absolute inset-0" />
+    </div>
   );
 }
