@@ -194,19 +194,26 @@ export const hy: Content = {
   },
   process: {
     eyebrow: "Ինչպես է աշխատում",
+    bigTitle: "Նախագծի ճանապարհ",
     heading: "Երեք քայլ բրիֆից մինչև հիշողություն",
     steps: [
       {
         title: "Լսել և թարգմանել",
         text: "Սկսում ենք ձեր նպատակներից, լսարանից և բյուջեից՝ դրանք վերածելով հիշվելու արժանի գաղափարի։",
+        video: "/assets/journey/step-1.mp4",
+        poster: "/images/portfolio/ebrd.jpg",
       },
       {
         title: "Նախագծել և պլանավորել",
         text: "Ամեն մանր դետալ, լոգիստիկա և հույզ քարտեզագրվում է նախապես։ Սա է կուլիսների հետևի կախարդանքը։",
+        video: "/assets/journey/step-2.mp4",
+        poster: "/images/portfolio/ebrd.jpg",
       },
       {
         title: "Արտադրել և հանձնել",
         text: "Շոուի օրը դուք հյուր եք ձեր սեփական միջոցառմանը։ Դահլիճը վարում ենք մենք՝ սկզբից մինչև վերջ, առանց սթրեսի։",
+        video: "/assets/journey/step-3.mp4",
+        poster: "/images/portfolio/ebrd.jpg",
       },
     ],
   },

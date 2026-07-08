@@ -197,19 +197,29 @@ export const en = {
   },
   process: {
     eyebrow: "How it works",
+    bigTitle: "Project Journey",
     heading: "Three steps between a brief and a memory",
+    /* `video`: drop your clip at the path (e.g. "/assets/journey/step-1.mp4")
+       and it plays in the sticky media panel. `poster` shows until the video
+       loads (or if the file isn't there yet). */
     steps: [
       {
         title: "Listen & translate",
         text: "We start with your goals, audience and budget — and translate them into a concept worth remembering.",
+        video: "/assets/journey/step-1.mp4",
+        poster: "/images/portfolio/ebrd.jpg",
       },
       {
         title: "Design & plan",
         text: "Every tiny detail, logistic and emotion is mapped out in advance. This is the behind-scene magic.",
+        video: "/assets/journey/step-2.mp4",
+        poster: "/images/portfolio/ebrd.jpg",
       },
       {
         title: "Produce & deliver",
         text: "On show day you are a guest at your own event. We run the room, end to end, stress-free.",
+        video: "/assets/journey/step-3.mp4",
+        poster: "/images/portfolio/ebrd.jpg",
       },
     ],
   },

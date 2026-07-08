@@ -68,22 +68,24 @@ export default function HeroSection() {
             playsInline
             preload="auto"
           />
+          {/* dark wash so the light headline stays legible over the footage */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(to bottom, rgba(10,10,10,0.35) 0%, rgba(10,10,10,0.55) 55%, rgba(10,10,10,0.8) 100%)",
+                "linear-gradient(to bottom, rgba(10,10,10,0.35) 0%, rgba(10,10,10,0.55) 55%, rgba(10,10,10,0.82) 100%)",
             }}
           />
         </div>
+        {/* fade the video into the page background at the bottom edge */}
         <div
           className="absolute inset-x-0 bottom-0 h-40 sm:h-52"
           style={{
-            background:
-              "linear-gradient(to bottom, transparent 0%, #0a0a0a 88%)",
+            background: "linear-gradient(to bottom, transparent 0%, #0a0a0a 92%)",
           }}
         />
       </div>
+
       <div className="relative z-10">
         <p data-reveal className="text-eyebrow text-text-dim">
           {t.hero.eyebrow}
