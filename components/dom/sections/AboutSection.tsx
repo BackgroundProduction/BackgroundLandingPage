@@ -1,22 +1,63 @@
 "use client";
 
 import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "@/lib/gsap";
 import { useContent } from "@/components/dom/LocaleProvider";
 import { useReveal } from "./useReveal";
 
 export default function AboutSection() {
   const ref = useRef<HTMLElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
   const { t } = useContent();
   useReveal(ref);
+
+  // giant background logo drifts up and slowly rotates as the section scrolls
+  useGSAP(
+    () => {
+      if (!logoRef.current || !ref.current) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      gsap.fromTo(
+        logoRef.current,
+        { yPercent: 18, rotate: -8 },
+        {
+          yPercent: -18,
+          rotate: 8,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+    },
+    { scope: ref }
+  );
 
   return (
     <section
       ref={ref}
       id="about"
       aria-labelledby="about-heading"
-      className="px-[var(--gutter)] py-[var(--space-section-y)]"
+      className="relative overflow-hidden px-[var(--gutter)] py-[var(--space-section-y)]"
     >
-      <div className="mx-auto max-w-6xl">
+      {/* animated background logo watermark */}
+      <div
+        ref={logoRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-[6vw] top-1/2 z-0 -translate-y-1/2 will-change-transform"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/assets/logo.svg"
+          alt=""
+          className="h-[70vh] w-auto max-w-none opacity-[0.05]"
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-6xl">
         {/* studio intro — two columns */}
         <div className="grid items-start gap-10 md:grid-cols-2 md:gap-20">
           <div data-reveal>

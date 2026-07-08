@@ -15,7 +15,12 @@ export default function Header() {
           borderBottom: "1px solid var(--color-line-soft)",
         }}
       >
-        <a href="#top" className="font-display text-lg font-medium tracking-tight">
+        <a
+          href="#top"
+          className="flex items-center gap-2.5 font-display text-lg font-medium tracking-tight"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/assets/logo.svg" alt="" aria-hidden="true" className="h-5 w-auto" />
           Background<span className="text-accent">.</span>
         </a>
         <nav aria-label="Main navigation" className="hidden lg:block">
