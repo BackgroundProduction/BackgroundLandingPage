@@ -65,7 +65,7 @@ export const en = {
     // split statement for the expanding-image reveal (left ▪ image ▪ right)
     splitLeft: "We make",
     splitRight: "moments",
-    image: "/images/portfolio/ebrd.jpg",
+    image: "/assets/logo-emblem.svg",
     items: [
       {
         title: "Professional",

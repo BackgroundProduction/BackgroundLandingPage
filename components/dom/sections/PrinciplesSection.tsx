@@ -84,12 +84,14 @@ export default function PrinciplesSection() {
             {t.principles.splitLeft}
           </span>
 
+          {/* square logo emblem — its baked-in background matches
+              --color-dark (#121110) so it blends seamlessly with the page */}
           <div
             ref={centerRef}
-            className="relative z-0 aspect-[3/4] w-[9vw] min-w-[70px] shrink-0 overflow-hidden rounded-sm will-change-transform"
-            style={{ border: "1px solid var(--color-line-soft)" }}
+            className="relative z-0 aspect-square w-[10vw] min-w-[80px] shrink-0 overflow-hidden will-change-transform"
+            style={{ background: "var(--color-dark)" }}
           >
-            <Image src={t.principles.image} alt="" fill sizes="100vw" className="object-cover" />
+            <Image src={t.principles.image} alt="" fill sizes="100vw" className="object-contain" />
           </div>
 
           <span

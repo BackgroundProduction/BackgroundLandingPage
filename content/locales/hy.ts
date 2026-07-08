@@ -69,7 +69,7 @@ export const hy: Content = {
     heading: "Չորս բառ, որոնց տակ կանգնած ենք",
     splitLeft: "Ստեղծում ենք",
     splitRight: "պահեր",
-    image: "/images/portfolio/ebrd.jpg",
+    image: "/assets/logo-emblem.svg",
     items: [
       {
         title: "Պրոֆեսիոնալ",
