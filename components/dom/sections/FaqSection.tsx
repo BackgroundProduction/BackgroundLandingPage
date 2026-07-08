@@ -77,7 +77,7 @@ export default function FaqSection() {
             {t.faq.items.map((faq) => (
               <details key={faq.q} className="faq-item">
                 <summary>
-                  <span className="font-display text-base font-medium md:text-lg">
+                  <span className="font-display text-xl font-medium md:text-2xl">
                     {faq.q}
                   </span>
                 </summary>

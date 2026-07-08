@@ -173,7 +173,7 @@ html.lenis, html.lenis body { height: auto; }
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  padding: 1.15rem 1rem;
+  padding: 1.85rem 1.5rem;
   border-radius: 4px;
   transition: background 0.2s ease, color 0.2s ease;
 }
