@@ -46,6 +46,7 @@ export default function PortfolioSection() {
             className="work-card group w-[78vw] shrink-0 sm:w-[46vw] lg:w-[30vw]"
           >
             <div
+              data-clip
               className="relative aspect-[4/3] overflow-hidden rounded-sm"
               style={{ border: "1px solid var(--color-line-soft)" }}
             >

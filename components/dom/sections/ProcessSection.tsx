@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "@/lib/gsap";
 import { useContent } from "@/components/dom/LocaleProvider";
 import { useReveal } from "./useReveal";
 
@@ -8,8 +10,33 @@ const BORDER = "rgba(240, 238, 233, 0.16)";
 
 export default function ProcessSection() {
   const ref = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const { t } = useContent();
   useReveal(ref);
+
+  // giant title drifts sideways as the section scrolls (scrubbed) — the
+  // oversized-headline parallax those editorial sites use
+  useGSAP(
+    () => {
+      if (!titleRef.current) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      gsap.fromTo(
+        titleRef.current,
+        { xPercent: 0 },
+        {
+          xPercent: -12,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top bottom",
+            end: "top top",
+            scrub: true,
+          },
+        }
+      );
+    },
+    { scope: ref }
+  );
 
   const steps = t.process.steps;
 
@@ -22,6 +49,7 @@ export default function ProcessSection() {
     >
       {/* giant full-bleed title */}
       <h2
+        ref={titleRef}
         id="process-heading"
         data-reveal
         className="font-display whitespace-nowrap px-[var(--gutter)] pt-[var(--space-section-y)] pb-10 font-bold uppercase leading-[0.85]"

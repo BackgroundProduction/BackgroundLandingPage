@@ -10,6 +10,7 @@ import ScrollProgress from "@/components/dom/ui/ScrollProgress";
 import HeroSection from "@/components/dom/sections/HeroSection";
 import AboutSection from "@/components/dom/sections/AboutSection";
 import PrinciplesSection from "@/components/dom/sections/PrinciplesSection";
+import MarqueeStrip from "@/components/dom/sections/MarqueeStrip";
 import SuccessStoriesSection from "@/components/dom/sections/SuccessStoriesSection";
 import PortfolioSection from "@/components/dom/sections/PortfolioSection";
 import ServicesSection from "@/components/dom/sections/ServicesSection";
@@ -37,6 +38,7 @@ export default function HomePage({ locale }: { locale: Locale }) {
           <HeroSection />
           <AboutSection />
           <PrinciplesSection />
+          <MarqueeStrip />
           <SuccessStoriesSection />
           <PortfolioSection />
           <ServicesSection />

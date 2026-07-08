@@ -85,6 +85,16 @@ export const en = {
     eyebrow: "Selected work",
     heading: "Moments we made unforgettable",
   },
+  marquee: [
+    "Corporate Events",
+    "Concerts",
+    "Government Ceremonies",
+    "Championships",
+    "International Forums",
+    "Grand Openings",
+    "Dinner Galas",
+    "Music & Film Production",
+  ],
   /* Success stories — stacked column rows. `slug` must match a portfolio
      entry (image/title come from there). `video`: set a path (e.g.
      "/assets/stories/ebrd.mp4") to show a looping video instead of the image.

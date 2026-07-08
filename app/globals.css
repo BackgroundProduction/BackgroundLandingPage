@@ -111,6 +111,34 @@ html.lenis, html.lenis body { height: auto; }
   .fade-in { animation: none; }
 }
 
+/* Infinite marquee strip */
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+.marquee-reverse {
+  animation-direction: reverse;
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Motion primitives set their own resting state; JS animates from a hidden
+   start. Before hydration they must be visible (no-JS / SSR safe), so the
+   hidden start is applied by GSAP, not CSS. */
+.magnetic {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee { animation: none; }
+}
+
 /* Subtle film grain */
 .grain::after {
   content: "";

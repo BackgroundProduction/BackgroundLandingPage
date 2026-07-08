@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { useContent } from "@/components/dom/LocaleProvider";
+import MagneticButton from "@/components/dom/ui/MagneticButton";
 import { useReveal } from "./useReveal";
 
 export default function ContactSection() {
@@ -38,20 +39,20 @@ export default function ContactSection() {
           data-reveal
           className="mt-12 flex flex-wrap items-center justify-center gap-4"
         >
-          <a
+          <MagneticButton
             href={t.contact.emailHref}
-            className="rounded-full px-8 py-4 font-medium transition-transform hover:scale-[1.03]"
+            className="rounded-full px-8 py-4 font-medium"
             style={{ background: "var(--color-accent)", color: "var(--color-ink)" }}
           >
             {t.contact.email}
-          </a>
-          <a
+          </MagneticButton>
+          <MagneticButton
             href={t.contact.phoneHref}
             className="rounded-full border px-8 py-4 font-medium transition-colors hover:text-accent"
             style={{ borderColor: "rgba(240, 238, 233, 0.25)" }}
           >
             {t.contact.phone}
-          </a>
+          </MagneticButton>
         </div>
       </div>
 

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { useContent } from "@/components/dom/LocaleProvider";
+import MagneticButton from "@/components/dom/ui/MagneticButton";
 import { useReveal } from "./useReveal";
 
 export default function HeroSection() {
@@ -107,19 +108,19 @@ export default function HeroSection() {
           data-reveal
           className="mt-12 flex flex-wrap items-center justify-center gap-4"
         >
-          <a
+          <MagneticButton
             href={t.contact.emailHref}
-            className="rounded-full px-8 py-4 font-medium transition-transform hover:scale-[1.03]"
+            className="rounded-full px-8 py-4 font-medium"
             style={{ background: "var(--color-paper)", color: "var(--color-ink)" }}
           >
             {t.ui.startProject}
-          </a>
-          <a
+          </MagneticButton>
+          <MagneticButton
             href="#work"
             className="rounded-full border border-line px-8 py-4 font-medium transition-colors hover:border-accent hover:text-accent"
           >
             {t.ui.seeWork}
-          </a>
+          </MagneticButton>
         </div>
       </div>
     </section>
