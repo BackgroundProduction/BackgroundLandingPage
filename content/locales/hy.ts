@@ -67,6 +67,9 @@ export const hy: Content = {
   principles: {
     eyebrow: "Ինչպես ենք գործում",
     heading: "Չորս բառ, որոնց տակ կանգնած ենք",
+    splitLeft: "Ստեղծում ենք",
+    splitRight: "պահեր",
+    image: "/images/portfolio/ebrd.jpg",
     items: [
       {
         title: "Պրոֆեսիոնալ",

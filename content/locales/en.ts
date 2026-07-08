@@ -62,6 +62,10 @@ export const en = {
   principles: {
     eyebrow: "How we operate",
     heading: "Four words we actually mean",
+    // split statement for the expanding-image reveal (left ▪ image ▪ right)
+    splitLeft: "We make",
+    splitRight: "moments",
+    image: "/images/portfolio/ebrd.jpg",
     items: [
       {
         title: "Professional",
