@@ -32,6 +32,8 @@ export const en = {
     eyebrow: "Event production — Yerevan, Armenia",
     title: "We produce events that move people — and make brands unforgettable",
     sub: "For institutions and brands whose occasions deserve more than an agenda — from state ceremonies to continental championships, produced end to end.",
+    // stage-manager cue lines for the hero boot sequence
+    cues: ["CUE 01 — SOUND CHECK ✓", "CUE 02 — LIGHTS ✓", "CUE 03 — DOORS OPEN ✓", "SHOWTIME"],
   },
   about: {
     eyebrow: "Who we are",
