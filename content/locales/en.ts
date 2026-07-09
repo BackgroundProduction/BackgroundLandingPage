@@ -227,9 +227,10 @@ export const en = {
       {
         title: "Design & plan",
         text: "Every tiny detail, logistic and emotion is mapped out in advance. This is the behind-scene magic.",
+        // Pexels video 18069235 (Pexels license — free commercial use)
         video: "/assets/journey/step-2.mp4",
         poster: "/images/portfolio/ebrd.jpg",
-        youtube: "UV8y80Zyrmw" as string | null,
+        youtube: null as string | null,
       },
       {
         title: "Produce & deliver",

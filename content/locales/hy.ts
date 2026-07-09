@@ -222,7 +222,7 @@ export const hy: Content = {
         text: "Ամեն մանր դետալ, լոգիստիկա և հույզ քարտեզագրվում է նախապես։ Սա է կուլիսների հետևի կախարդանքը։",
         video: "/assets/journey/step-2.mp4",
         poster: "/images/portfolio/ebrd.jpg",
-        youtube: "UV8y80Zyrmw",
+        youtube: null,
       },
       {
         title: "Արտադրել և հանձնել",
