@@ -114,6 +114,7 @@ export const hy: Content = {
         detail:
           "ՎԶԵԲ-ի տարեկան ժողովն ու գործարար ֆորումը Երևան բերեցին պատվիրակություններ բանկի բոլոր տարածաշրջաններից՝ կազմակերպված սկզբից մինչև վերջ։",
         video: null,
+        youtube: "t_RVnYgDibo",
       },
       {
         slug: "junior-eurovision-20th",
@@ -122,6 +123,7 @@ export const hy: Content = {
         detail:
           "«Մանկական Եվրատեսիլ» երգի մրցույթի 20-ամյակը՝ բեմադրված միջազգային հեռուստալսարանի համար։",
         video: null,
+        youtube: null,
       },
       {
         slug: "european-weightlifting-championships",
@@ -130,6 +132,7 @@ export const hy: Content = {
         detail:
           "Բացման արարողություն, մրցումային բոլոր օրերը և ֆեդերացիայի կոնգրեսը՝ մեկ արտադրություն, զրո վրիպում։",
         video: null,
+        youtube: null,
       },
       {
         slug: "asian-regional-forum-2025",
@@ -138,6 +141,7 @@ export const hy: Content = {
         detail:
           "Երեքօրյա ֆորում Դիլիջանում՝ Ասիայի դրամավարկային հաստատությունների արժութային պահուստների կառավարման թեմայով։",
         video: null,
+        youtube: null,
       },
       {
         slug: "khazer-music-awards-2025",
@@ -146,6 +150,7 @@ export const hy: Content = {
         detail:
           "«Խազեր» երաժշտական մրցանակաբաշխությունը՝ արարողություն, շոու և հեռարձակում որպես մեկ ամբողջություն։",
         video: null,
+        youtube: null,
       },
     ],
   },

@@ -115,6 +115,7 @@ export const en = {
         detail:
           "The EBRD Annual Meeting & Business Forum brought delegations from across the Bank’s regions to Yerevan — produced end to end.",
         video: null as string | null,
+        youtube: "t_RVnYgDibo" as string | null,
       },
       {
         slug: "junior-eurovision-20th",
@@ -123,6 +124,7 @@ export const en = {
         detail:
           "The 20th anniversary of the Junior Eurovision Song Contest, staged for an international television audience.",
         video: null as string | null,
+        youtube: null as string | null,
       },
       {
         slug: "european-weightlifting-championships",
@@ -131,6 +133,7 @@ export const en = {
         detail:
           "Opening ceremony, every competition day and the Federation Congress — one production, zero missed cues.",
         video: null as string | null,
+        youtube: null as string | null,
       },
       {
         slug: "asian-regional-forum-2025",
@@ -139,6 +142,7 @@ export const en = {
         detail:
           "A three-day investment-management forum in Dilijan for monetary institutions across Asia.",
         video: null as string | null,
+        youtube: null as string | null,
       },
       {
         slug: "khazer-music-awards-2025",
@@ -147,6 +151,7 @@ export const en = {
         detail:
           "The “Khazer” Armenian Music Awards — ceremony, show and broadcast treated as one continuous piece.",
         video: null as string | null,
+        youtube: null as string | null,
       },
     ],
   },

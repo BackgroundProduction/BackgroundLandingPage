@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { useContent } from "@/components/dom/LocaleProvider";
+import CleanYouTube from "@/components/dom/ui/CleanYouTube";
 import { useReveal } from "./useReveal";
 
 export default function SuccessStoriesSection() {
@@ -83,7 +84,11 @@ export default function SuccessStoriesSection() {
                 style={{ border: "1px solid var(--color-line-soft)" }}
               >
                 <div data-parallax className="absolute inset-x-0 -top-[10%] h-[120%]">
-                  {story.video ? (
+                  {story.youtube ? (
+                    // parallax layer is 120% tall, so the 16:9 iframe needs
+                    // ~134% width to keep covering the frame
+                    <CleanYouTube id={story.youtube} coverWidth="134%" />
+                  ) : story.video ? (
                     <video
                       className="h-full w-full object-cover"
                       src={story.video}
