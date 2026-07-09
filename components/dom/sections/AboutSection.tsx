@@ -42,8 +42,9 @@ export default function AboutSection() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: ref.current,
-          start: "top 85%",
-          end: "center center",
+          // starts once the section is well inside the viewport, not on first peek
+          start: "top 45%",
+          end: "center 40%",
           scrub: 0.4,
         },
       });
