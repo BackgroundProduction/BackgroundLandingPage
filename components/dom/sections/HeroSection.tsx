@@ -1,93 +1,130 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { useContent } from "@/components/dom/LocaleProvider";
 import MagneticButton from "@/components/dom/ui/MagneticButton";
 
+const STROKE = "rgba(240, 238, 233, 0.5)";
+const LABEL = "rgba(240, 238, 233, 0.45)";
+const LAMP_X = [300, 480, 720, 900];
+const EQ_X = [552, 565, 578, 591, 604, 617, 630, 643];
+
 /**
- * "Control room" hero — the moment before showtime, staged as a sequence:
- *  1. stage-manager cue lines check in (sound / lights / doors)
- *  2. the stage screen powers on from a thin line and settles (user's footage)
- *  3. headline + CTAs reveal
- *  4. the three-step process (listen → design → deliver) runs as an endless
- *     cue loop along the bottom, a dot travelling between the steps
- *  5. a followspot tracks the visitor's cursor across the whole hero
- * Reduced motion / no-JS render everything statically.
+ * "The venue draws itself" hero — a technical line drawing of a stage build
+ * assembling on load, the way the team sets a venue: construction marks
+ * (design) → platform → truss towers (rigging) → speaker stacks (sound) →
+ * LED wall → mixing desk → light fixtures — then the rig POWERS ON: beams
+ * light, the desk equalizer pulses, LIVE appears. Pure inline SVG, no assets.
+ * Reduced motion / no-JS render the finished, lit rig statically.
  */
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null);
-  const screenRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
   const spotRef = useRef<HTMLDivElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
   const spotX = useRef<((v: number) => void) | null>(null);
   const spotY = useRef<((v: number) => void) | null>(null);
-  const [activeStep, setActiveStep] = useState(0);
   const { t } = useContent();
 
   useGSAP(
     () => {
-      if (!ref.current) return;
+      if (!ref.current || !svgRef.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      // ——— boot sequence ———
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.fromTo(
-        ref.current.querySelectorAll("[data-cue]"),
-        { opacity: 0, y: 6 },
-        { opacity: 1, y: 0, duration: 0.35, stagger: 0.3 }
-      )
-        .fromTo(
-          screenRef.current,
-          { scaleY: 0.015, opacity: 0 },
-          { scaleY: 1, opacity: 1, duration: 0.9, ease: "power4.inOut" },
-          "-=0.15"
-        )
-        .fromTo(
-          screenRef.current,
-          { filter: "brightness(2.4) saturate(0.4)" },
-          { filter: "brightness(1) saturate(1)", duration: 0.6, ease: "power2.out" },
-          "-=0.25"
-        )
-        .fromTo(
-          ref.current.querySelectorAll("[data-reveal]"),
-          { opacity: 0, y: 36 },
-          { opacity: 1, y: 0, duration: 0.8, stagger: 0.09 },
-          "-=0.35"
-        )
-        .fromTo(
-          ref.current.querySelector("[data-strip]"),
-          { opacity: 0, y: 14 },
-          { opacity: 1, y: 0, duration: 0.6 },
-          "-=0.4"
-        )
-        .to(spotRef.current, { opacity: 1, duration: 0.8 }, "-=0.3");
+      const svg = svgRef.current;
+      const paths = svg.querySelectorAll<SVGPathElement>("[data-draw]");
+      const labels = svg.querySelectorAll<SVGTextElement>("[data-label]");
+      const beams = svg.querySelectorAll<SVGPolygonElement>("[data-beam]");
+      const bars = svg.querySelectorAll<SVGPathElement>("[data-eq]");
+      const live = svg.querySelector<SVGTextElement>("[data-live]");
 
-      // ——— endless process cue loop (dot travels listen → design → deliver) ———
-      const dot = dotRef.current;
-      if (dot) {
-        gsap.fromTo(
-          dot,
-          { left: "0%" },
-          {
-            left: "100%",
-            duration: 8,
-            ease: "none",
-            repeat: -1,
-            onUpdate() {
-              const idx = Math.min(2, Math.floor(this.progress() * 3));
-              setActiveStep((prev) => (prev === idx ? prev : idx));
-            },
-          }
+      // prime: hide everything the sequence will introduce
+      paths.forEach((p) => {
+        const len = p.getTotalLength();
+        p.style.strokeDasharray = `${len}`;
+        p.style.strokeDashoffset = `${len}`;
+      });
+      gsap.set(labels, { opacity: 0 });
+      gsap.set(beams, { opacity: 0 });
+      if (live) gsap.set(live, { opacity: 0 });
+
+      const draw = (group: string, duration: number) => {
+        const els = svg.querySelectorAll(`[data-group="${group}"] [data-draw]`);
+        return els.length
+          ? gsap.to(els, { strokeDashoffset: 0, duration, ease: "power2.inOut", stagger: 0.08 })
+          : null;
+      };
+      const label = (name: string) => {
+        const el = svg.querySelector(`[data-label="${name}"]`);
+        return el ? gsap.to(el, { opacity: 1, duration: 0.3 }) : null;
+      };
+
+      const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+
+      // headline reveals in parallel with the build
+      tl.fromTo(
+        ref.current.querySelectorAll("[data-reveal]"),
+        { opacity: 0, y: 36 },
+        { opacity: 1, y: 0, duration: 0.85, ease: "power3.out", stagger: 0.09 },
+        0.15
+      );
+
+      // ——— the build ———
+      tl.add(draw("marks", 0.4)!, 0.1);
+      tl.add(label("design")!, "<+0.15");
+      tl.add(draw("ground", 0.5)!, ">-0.1");
+      tl.add(draw("platform", 0.55)!, ">-0.15");
+      tl.add(draw("truss", 1.0)!, ">-0.2");
+      tl.add(label("rigging")!, "<+0.3");
+      tl.add(draw("speakers", 0.6)!, ">-0.3");
+      tl.add(label("sound")!, "<+0.2");
+      tl.add(draw("wall", 0.7)!, ">-0.3");
+      tl.add(draw("desk", 0.5)!, ">-0.2");
+      tl.add(draw("fixtures", 0.5)!, ">-0.15");
+      tl.add(label("lights")!, "<+0.2");
+
+      // ——— power on ———
+      tl.to(beams, { opacity: 0.45, duration: 0.7, ease: "power2.out", stagger: 0.12 }, ">+0.1");
+      if (live) {
+        tl.fromTo(
+          live,
+          { opacity: 0, scale: 0.9, transformOrigin: "50% 50%" },
+          { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" },
+          "<+0.3"
         );
       }
+      tl.to(labels, { opacity: 0.35, duration: 0.6 }, "<");
+      tl.to(spotRef.current, { opacity: 1, duration: 0.8 }, "<");
+
+      // ——— alive: beam shimmer + equalizer pulse ———
+      beams.forEach((beam, i) => {
+        gsap.to(beam, {
+          opacity: 0.25,
+          duration: 1.6 + i * 0.35,
+          yoyo: true,
+          repeat: -1,
+          ease: "sine.inOut",
+          delay: 3.6 + i * 0.4,
+        });
+      });
+      bars.forEach((bar, i) => {
+        gsap.fromTo(
+          bar,
+          { scaleY: 0.2, transformOrigin: "50% 100%" },
+          {
+            scaleY: 1,
+            duration: 0.5 + ((i * 29) % 40) / 100,
+            yoyo: true,
+            repeat: -1,
+            ease: "sine.inOut",
+            delay: 3.4 - ((i * 13) % 90) / 100,
+          }
+        );
+      });
 
       // ——— followspot tracks the cursor ———
-      if (
-        spotRef.current &&
-        !window.matchMedia("(pointer: coarse)").matches
-      ) {
+      if (spotRef.current && !window.matchMedia("(pointer: coarse)").matches) {
         spotX.current = gsap.quickTo(spotRef.current, "x", { duration: 0.6, ease: "power3" });
         spotY.current = gsap.quickTo(spotRef.current, "y", { duration: 0.6, ease: "power3" });
       }
@@ -102,17 +139,15 @@ export default function HeroSection() {
     spotY.current?.(e.clientY - r.top);
   };
 
-  const steps = t.process.steps;
-
   return (
     <section
       ref={ref}
       id="top"
       aria-label="Introduction"
       onMouseMove={onMove}
-      className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden px-[var(--gutter)] pt-28 pb-24 text-center"
+      className="relative isolate flex min-h-screen flex-col justify-end overflow-hidden px-[var(--gutter)] pt-28 pb-6"
     >
-      {/* followspot — a warm beam that follows the cursor */}
+      {/* followspot — warm light that follows the cursor */}
       <div
         ref={spotRef}
         aria-hidden="true"
@@ -120,185 +155,191 @@ export default function HeroSection() {
         style={{ opacity: 0 }}
       >
         <div
-          className="h-[72vmin] w-[72vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          className="h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
           style={{
             background:
-              "radial-gradient(circle, rgba(224,169,56,0.12) 0%, rgba(224,169,56,0.05) 35%, transparent 65%)",
+              "radial-gradient(circle, rgba(224,169,56,0.11) 0%, rgba(224,169,56,0.04) 35%, transparent 65%)",
             mixBlendMode: "screen",
           }}
         />
       </div>
 
-      {/* stage-manager cue lines */}
-      <div
-        aria-hidden="true"
-        className="absolute left-[var(--gutter)] top-24 z-20 hidden flex-col gap-1.5 text-left font-mono text-[11px] tracking-widest text-text-dim sm:flex"
-      >
-        {t.hero.cues.map((cue, i) => (
-          <p key={cue} data-cue>
-            <span className={i === t.hero.cues.length - 1 ? "text-accent" : ""}>
-              {cue}
-            </span>
-          </p>
-        ))}
-      </div>
-
-      {/* the stage screen — powers on around the user's footage */}
-      <div
-        ref={screenRef}
-        aria-hidden="true"
-        className="absolute left-1/2 top-1/2 z-0 aspect-video w-[min(86vw,1040px)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-sm will-change-transform"
-        style={{
-          border: "1px solid var(--color-line-soft)",
-          boxShadow: "0 0 120px rgba(224,169,56,0.07)",
-        }}
-      >
-        {/* generative stage — dark hall, sweeping beams, haze, no assets */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to bottom, #0d0c0b 0%, #131211 55%, #0a0a0a 100%)",
-          }}
-        />
-        {/* sweeping light beams */}
-        <div
-          className="stage-beam"
-          style={{
-            left: "6%",
-            background:
-              "linear-gradient(to bottom, rgba(224,169,56,0.5), rgba(224,169,56,0.08) 65%, transparent)",
-            animationDuration: "7.5s",
-          }}
-        />
-        <div
-          className="stage-beam"
-          style={{
-            left: "38%",
-            background:
-              "linear-gradient(to bottom, rgba(240,238,233,0.34), rgba(240,238,233,0.05) 65%, transparent)",
-            animationDuration: "9s",
-            animationDelay: "-3s",
-          }}
-        />
-        <div
-          className="stage-beam"
-          style={{
-            left: "66%",
-            background:
-              "linear-gradient(to bottom, rgba(224,169,56,0.42), rgba(224,169,56,0.07) 65%, transparent)",
-            animationDuration: "6.2s",
-            animationDelay: "-1.5s",
-          }}
-        />
-        {/* floor haze where the beams land */}
-        <div
-          className="absolute inset-x-0 bottom-0 h-[46%]"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 90% at 50% 100%, rgba(224,169,56,0.14), transparent 70%)",
-          }}
-        />
-        {/* equalizer strip — the show's pulse */}
-        <div
-          className="absolute inset-x-10 bottom-5 flex h-[13%] items-end gap-[3px]"
-          style={{ opacity: 0.5 }}
-        >
-          {Array.from({ length: 36 }, (_, i) => (
-            <span
-              key={i}
-              className="eq-bar h-full flex-1 rounded-[1px]"
-              style={{
-                background:
-                  i % 9 === 4 ? "var(--color-accent)" : "rgba(240,238,233,0.35)",
-                animationDuration: `${0.7 + ((i * 37) % 60) / 100}s`,
-                animationDelay: `${-((i * 13) % 90) / 100}s`,
-              }}
-            />
-          ))}
-        </div>
-        {/* scanline sheen over the screen */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "repeating-linear-gradient(to bottom, rgba(240,238,233,0.02) 0px, rgba(240,238,233,0.02) 1px, transparent 2px, transparent 5px)",
-          }}
-        />
-      </div>
-
-      {/* headline */}
-      <div className="relative z-20 mx-auto max-w-5xl">
+      {/* headline — bold, left-aligned */}
+      <div className="relative z-20 mx-auto w-full max-w-7xl">
         <p data-reveal className="text-eyebrow text-text-dim">
           {t.hero.eyebrow}
         </p>
         <h1
           data-reveal
-          className="font-display font-medium text-display-xl mx-auto mt-8 max-w-[18ch]"
+          className="font-display font-medium mt-6 max-w-[16ch]"
+          style={{
+            fontSize: "clamp(2.5rem, 6.2vw, 6rem)",
+            lineHeight: 1.02,
+            letterSpacing: "-0.03em",
+          }}
         >
           {t.hero.title}
           <span className="text-accent">.</span>
         </h1>
-        <p
-          data-reveal
-          className="mx-auto mt-8 max-w-xl text-[length:var(--text-body-lg)] leading-relaxed text-text-dim"
-        >
-          {t.hero.sub}
-        </p>
         <div
           data-reveal
-          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+          className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-5"
         >
-          <MagneticButton
-            href={t.contact.emailHref}
-            className="rounded-full px-8 py-4 font-medium"
-            style={{ background: "var(--color-paper)", color: "var(--color-ink)" }}
-          >
-            {t.ui.startProject}
-          </MagneticButton>
-          <MagneticButton
-            href="#work"
-            className="rounded-full border border-line px-8 py-4 font-medium transition-colors hover:border-accent hover:text-accent"
-          >
-            {t.ui.seeWork}
-          </MagneticButton>
+          <div className="flex flex-wrap items-center gap-4">
+            <MagneticButton
+              href={t.contact.emailHref}
+              className="rounded-full px-7 py-3.5 font-medium"
+              style={{ background: "var(--color-paper)", color: "var(--color-ink)" }}
+            >
+              {t.ui.startProject}
+            </MagneticButton>
+            <MagneticButton
+              href="#work"
+              className="rounded-full border border-line px-7 py-3.5 font-medium transition-colors hover:border-accent hover:text-accent"
+            >
+              {t.ui.seeWork}
+            </MagneticButton>
+          </div>
+          <p className="max-w-md text-sm leading-relaxed text-text-dim">
+            {t.hero.sub}
+          </p>
         </div>
       </div>
 
-      {/* process cue loop — listen → design → deliver, dot travelling */}
-      <div
-        data-strip
+      {/* the venue — draws itself, then powers on */}
+      <svg
+        ref={svgRef}
+        viewBox="0 0 1200 600"
         aria-hidden="true"
-        className="absolute inset-x-[var(--gutter)] bottom-10 z-20 hidden md:block"
+        className="relative z-10 mx-auto mt-6 w-full max-w-7xl"
+        fill="none"
+        style={{ maxHeight: "52vh" }}
       >
-        <div className="relative mx-auto max-w-3xl">
-          <div
-            className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2"
-            style={{ background: "var(--color-line)" }}
+        <defs>
+          <linearGradient id="beam-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(224,169,56,0.55)" />
+            <stop offset="100%" stopColor="rgba(224,169,56,0)" />
+          </linearGradient>
+        </defs>
+
+        {/* construction marks — the design phase */}
+        <g data-group="marks" stroke="var(--color-accent)" strokeWidth="1" opacity="0.6">
+          <path data-draw d="M70,60 H90 M80,50 V70" />
+          <path data-draw d="M1110,60 H1130 M1120,50 V70" />
+          <path data-draw d="M70,470 H90 M80,460 V480" />
+        </g>
+
+        {/* ground */}
+        <g data-group="ground" stroke={STROKE} strokeWidth="1.2">
+          <path data-draw d="M40,560 H1160" />
+        </g>
+
+        {/* stage platform */}
+        <g data-group="platform" stroke={STROKE} strokeWidth="1.2">
+          <path data-draw d="M200,560 V470 H1000 V560" />
+          <path data-draw d="M200,514 H1000" />
+        </g>
+
+        {/* truss towers + top beam — rigging */}
+        <g data-group="truss" stroke={STROKE} strokeWidth="1.1">
+          <path data-draw d="M150,560 V140 M190,560 V140 M150,140 H190" />
+          <path
+            data-draw
+            d="M150,540 L190,500 L150,460 L190,420 L150,380 L190,340 L150,300 L190,260 L150,220 L190,180"
           />
-          <div
-            ref={dotRef}
-            className="absolute top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-            style={{
-              background: "var(--color-accent)",
-              boxShadow: "0 0 12px rgba(224,169,56,0.8)",
-            }}
+          <path data-draw d="M1050,560 V140 M1010,560 V140 M1010,140 H1050" />
+          <path
+            data-draw
+            d="M1050,540 L1010,500 L1050,460 L1010,420 L1050,380 L1010,340 L1050,300 L1010,260 L1050,220 L1010,180"
           />
-          <div className="relative flex justify-between">
-            {steps.map((step, i) => (
-              <span
-                key={step.title}
-                className="-translate-y-6 font-mono text-[11px] tracking-widest transition-colors duration-300"
-                style={{
-                  color: i === activeStep ? "var(--color-accent)" : "var(--color-text-dim)",
-                }}
-              >
-                {String(i + 1).padStart(2, "0")} {step.title}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
+          <path data-draw d="M190,140 H1010 M190,178 H1010" />
+          <path
+            data-draw
+            d="M190,178 L230,140 L270,178 L310,140 L350,178 L390,140 L430,178 L470,140 L510,178 L550,140 L590,178 L630,140 L670,178 L710,140 L750,178 L790,140 L830,178 L870,140 L910,178 L950,140 L990,178"
+          />
+        </g>
+
+        {/* speaker stacks — sound */}
+        <g data-group="speakers" stroke={STROKE} strokeWidth="1.1">
+          <path data-draw d="M235,470 V400 H300 V470" />
+          <path data-draw d="M242,400 V352 H293 V400" />
+          <path data-draw d="M900,470 V400 H965 V470" />
+          <path data-draw d="M907,400 V352 H958 V400" />
+        </g>
+
+        {/* LED wall */}
+        <g data-group="wall" stroke={STROKE} strokeWidth="1.1">
+          <path data-draw d="M450,210 H750 V420 H450 Z" />
+          <path data-draw d="M550,210 V420 M650,210 V420 M450,280 H750 M450,350 H750" opacity="0.5" />
+        </g>
+
+        {/* mixing desk + equalizer — music production */}
+        <g data-group="desk" stroke={STROKE} strokeWidth="1.1">
+          <path data-draw d="M540,470 V430 H660 V470" />
+          {EQ_X.map((x, i) => (
+            <path
+              key={x}
+              data-draw
+              data-eq
+              d={`M${x},466 V${438 + ((i * 7) % 18)}`}
+              stroke="var(--color-accent)"
+              strokeWidth="4"
+              opacity="0.75"
+            />
+          ))}
+        </g>
+
+        {/* light fixtures */}
+        <g data-group="fixtures" stroke={STROKE} strokeWidth="1.1">
+          {LAMP_X.map((x) => (
+            <path key={x} data-draw d={`M${x},178 V198 M${x - 14},198 H${x + 14} L${x + 9},222 H${x - 9} L${x - 14},198`} />
+          ))}
+        </g>
+
+        {/* beams — power on */}
+        {LAMP_X.map((x) => (
+          <polygon
+            key={x}
+            data-beam
+            points={`${x - 9},222 ${x + 9},222 ${x + 95},470 ${x - 95},470`}
+            fill="url(#beam-grad)"
+            opacity="0.45"
+          />
+        ))}
+
+        {/* phase labels */}
+        <g
+          className="font-mono"
+          fontSize="12"
+          letterSpacing="2"
+          fill={LABEL}
+          stroke="none"
+        >
+          <text data-label="design" x="64" y="94">
+            {t.hero.rig.design}
+          </text>
+          <text data-label="rigging" x="1062" y="304">
+            {t.hero.rig.rigging}
+          </text>
+          <text data-label="sound" x="228" y="592">
+            {t.hero.rig.sound}
+          </text>
+          <text data-label="lights" x="762" y="114">
+            {t.hero.rig.lights}
+          </text>
+          <text
+            data-live
+            x="600"
+            y="96"
+            textAnchor="middle"
+            fontSize="15"
+            letterSpacing="8"
+            style={{ fill: "var(--color-accent)" }}
+          >
+            ● {t.hero.rig.live}
+          </text>
+        </g>
+      </svg>
     </section>
   );
 }
