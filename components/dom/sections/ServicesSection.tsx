@@ -57,7 +57,7 @@ export default function ServicesSection() {
       aria-labelledby="services-heading"
       className="theme-dark px-[var(--gutter)] py-[var(--space-section-y)]"
     >
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,2.7fr)] lg:gap-12">
+      <div className="mx-auto grid max-w-12xl gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,2.7fr)] lg:gap-12">
         {/* LEFT — rotating client testimonial */}
         <div data-reveal className="order-2 lg:order-1">
           <div

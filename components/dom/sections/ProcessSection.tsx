@@ -6,7 +6,7 @@ import { gsap } from "@/lib/gsap";
 import { useContent } from "@/components/dom/LocaleProvider";
 import { useReveal } from "./useReveal";
 
-const BORDER = "rgba(240, 238, 233, 0.16)";
+const BORDER = "rgba(240, 238, 233, 0.072)";
 
 export default function ProcessSection() {
   const ref = useRef<HTMLElement>(null);
@@ -156,7 +156,7 @@ function StepYouTube({ id }: { id: string }) {
   return (
     <div className="absolute inset-0 overflow-hidden">
       <iframe
-        title=""
+        title="YouTube video background"
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         style={{
@@ -166,8 +166,10 @@ function StepYouTube({ id }: { id: string }) {
           minHeight: "100%",
           border: "none",
         }}
-        src={`https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`}
+        src={`https://www.youtube.com/embed/${id}?${params.toString()}`}
         allow="autoplay; encrypted-media"
+   
+   
       />
       {/* transparent blocker — no pause on click, no hover chrome */}
       <div className="absolute inset-0" />

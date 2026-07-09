@@ -56,6 +56,54 @@ export default function AboutSection() {
           i * 0.08
         );
       });
+
+      // stat cards: staggered rise, accent-bar sweep and count-up numbers.
+      // SSR renders the final values, so no-JS / reduced-motion stay correct.
+      const statCards = ref.current.querySelectorAll<HTMLElement>("[data-stat-card]");
+      if (statCards.length) {
+        const statsTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: statCards[0].parentElement,
+            start: "top 82%",
+            once: true,
+          },
+        });
+        statsTl.fromTo(
+          statCards,
+          { opacity: 0, y: 48, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out", stagger: 0.12 }
+        );
+        statsTl.fromTo(
+          ref.current.querySelectorAll("[data-stat-bar]"),
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.7, ease: "power2.out", stagger: 0.12, transformOrigin: "left center" },
+          0.15
+        );
+        ref.current
+          .querySelectorAll<HTMLElement>("[data-stat-value]")
+          .forEach((el, i) => {
+            const final = el.dataset.final ?? "";
+            const end = Number(final.replace(/[^\d]/g, ""));
+            if (!end) return;
+            const suffix = final.trimEnd().endsWith("+") ? "+" : "";
+            const grouped = final.includes(",");
+            const counter = { n: 0 };
+            statsTl.to(
+              counter,
+              {
+                n: end,
+                duration: 1.6,
+                ease: "power2.out",
+                onUpdate: () => {
+                  const v = Math.round(counter.n);
+                  el.textContent =
+                    (grouped ? v.toLocaleString("en-US") : String(v)) + suffix;
+                },
+              },
+              0.25 + i * 0.12
+            );
+          });
+      }
     },
     { scope: ref }
   );
@@ -101,8 +149,11 @@ export default function AboutSection() {
               aria-hidden="true"
               className="mt-10 hidden aspect-[4/3] items-end rounded-sm p-6 md:flex"
               style={{
-                background:
-                  "linear-gradient(135deg, var(--color-accent-soft), rgba(240,238,233,0.04))",
+                backgroundImage:
+                  "url('/assets/about-bg.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
                 border: "1px dashed var(--color-line)",
               }}
             >
@@ -133,16 +184,26 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* key metrics */}
-        <div className="mt-24 grid gap-4 sm:grid-cols-3">
+        {/* key metrics — staggered rise + count-up on scroll */}
+        <div className="mt-24 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {t.stats.map((stat) => (
             <div
               key={stat.label}
-              data-reveal
-              className="rounded-sm bg-surface p-8"
+              data-stat-card
+              className="rounded-sm bg-surface p-8 transition-transform duration-300 hover:-translate-y-1"
               style={{ border: "1px solid var(--color-line-soft)" }}
             >
-              <p className="font-display text-5xl font-medium md:text-6xl">
+              <span
+                data-stat-bar
+                aria-hidden="true"
+                className="block h-0.5 w-10"
+                style={{ background: "var(--color-accent)" }}
+              />
+              <p
+                data-stat-value
+                data-final={stat.value}
+                className="font-display mt-6 text-4xl font-medium md:text-5xl"
+              >
                 {stat.value}
               </p>
               <p className="mt-3 text-sm leading-relaxed text-text-dim">

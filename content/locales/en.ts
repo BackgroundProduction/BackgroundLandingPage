@@ -47,6 +47,7 @@ export const en = {
   },
   stats: [
     { value: "13+", label: "Landmark events produced" },
+    { value: "1,000,000+", label: "Total live audience across our events" },
     { value: "3", label: "Continental championships staged" },
     { value: "3", label: "Regions — Armenia · CIS · Europe" },
   ],
@@ -116,6 +117,7 @@ export const en = {
           "The EBRD Annual Meeting & Business Forum brought delegations from across the Bank’s regions to Yerevan — produced end to end.",
         video: null as string | null,
         youtube: "t_RVnYgDibo" as string | null,
+        youtubeStart: null as number | null,
       },
       {
         slug: "junior-eurovision-20th",
@@ -124,7 +126,8 @@ export const en = {
         detail:
           "The 20th anniversary of the Junior Eurovision Song Contest, staged for an international television audience.",
         video: null as string | null,
-        youtube: null as string | null,
+        youtube: "iSmB8q0wZCU" as string | null,
+        youtubeStart: null as number | null,
       },
       {
         slug: "european-weightlifting-championships",
@@ -133,7 +136,8 @@ export const en = {
         detail:
           "Opening ceremony, every competition day and the Federation Congress — one production, zero missed cues.",
         video: null as string | null,
-        youtube: null as string | null,
+        youtube: "FwqsGl5hMpg" as string | null,
+        youtubeStart: 26 as number | null,
       },
       {
         slug: "asian-regional-forum-2025",
@@ -143,6 +147,7 @@ export const en = {
           "A three-day investment-management forum in Dilijan for monetary institutions across Asia.",
         video: null as string | null,
         youtube: null as string | null,
+        youtubeStart: null as number | null,
       },
       {
         slug: "khazer-music-awards-2025",
@@ -152,6 +157,7 @@ export const en = {
           "The “Khazer” Armenian Music Awards — ceremony, show and broadcast treated as one continuous piece.",
         video: null as string | null,
         youtube: null as string | null,
+        youtubeStart: null as number | null,
       },
     ],
   },
@@ -228,6 +234,7 @@ export const en = {
         video: "/assets/journey/step-1.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null as string | null,
+        youtubeStart: null as number | null,
       },
       {
         title: "Design & plan",
@@ -236,6 +243,7 @@ export const en = {
         video: "/assets/journey/step-2.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null as string | null,
+        youtubeStart: null as number | null,
       },
       {
         title: "Produce & deliver",
@@ -243,6 +251,7 @@ export const en = {
         video: "/assets/journey/step-3.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null as string | null,
+        youtubeStart: null as number | null,
       },
     ],
   },

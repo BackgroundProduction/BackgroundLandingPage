@@ -87,7 +87,11 @@ export default function SuccessStoriesSection() {
                   {story.youtube ? (
                     // parallax layer is 120% tall, so the 16:9 iframe needs
                     // ~134% width to keep covering the frame
-                    <CleanYouTube id={story.youtube} coverWidth="134%" />
+                    <CleanYouTube
+                      id={story.youtube}
+                      coverWidth="134%"
+                      start={story.youtubeStart ?? undefined}
+                    />
                   ) : story.video ? (
                     <video
                       className="h-full w-full object-cover"

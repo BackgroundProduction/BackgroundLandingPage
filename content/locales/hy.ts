@@ -52,6 +52,7 @@ export const hy: Content = {
   },
   stats: [
     { value: "13+", label: "Խոշոր միջոցառում" },
+    { value: "1,000,000+", label: "Ընդհանուր կենդանի լսարան մեր միջոցառումներին" },
     { value: "3", label: "Մայրցամաքային առաջնություն" },
     { value: "3", label: "Տարածաշրջան՝ Հայաստան · ԱՊՀ · Եվրոպա" },
   ],
@@ -115,6 +116,7 @@ export const hy: Content = {
           "ՎԶԵԲ-ի տարեկան ժողովն ու գործարար ֆորումը Երևան բերեցին պատվիրակություններ բանկի բոլոր տարածաշրջաններից՝ կազմակերպված սկզբից մինչև վերջ։",
         video: null,
         youtube: "t_RVnYgDibo",
+        youtubeStart: null,
       },
       {
         slug: "junior-eurovision-20th",
@@ -123,7 +125,8 @@ export const hy: Content = {
         detail:
           "«Մանկական Եվրատեսիլ» երգի մրցույթի 20-ամյակը՝ բեմադրված միջազգային հեռուստալսարանի համար։",
         video: null,
-        youtube: null,
+        youtube: "iSmB8q0wZCU",
+        youtubeStart: null,
       },
       {
         slug: "european-weightlifting-championships",
@@ -132,7 +135,8 @@ export const hy: Content = {
         detail:
           "Բացման արարողություն, մրցումային բոլոր օրերը և ֆեդերացիայի կոնգրեսը՝ մեկ արտադրություն, զրո վրիպում։",
         video: null,
-        youtube: null,
+        youtube: "FwqsGl5hMpg",
+        youtubeStart: 26,
       },
       {
         slug: "asian-regional-forum-2025",
@@ -142,6 +146,7 @@ export const hy: Content = {
           "Երեքօրյա ֆորում Դիլիջանում՝ Ասիայի դրամավարկային հաստատությունների արժութային պահուստների կառավարման թեմայով։",
         video: null,
         youtube: null,
+        youtubeStart: null,
       },
       {
         slug: "khazer-music-awards-2025",
@@ -151,6 +156,7 @@ export const hy: Content = {
           "«Խազեր» երաժշտական մրցանակաբաշխությունը՝ արարողություն, շոու և հեռարձակում որպես մեկ ամբողջություն։",
         video: null,
         youtube: null,
+        youtubeStart: null,
       },
     ],
   },
@@ -221,6 +227,7 @@ export const hy: Content = {
         video: "/assets/journey/step-1.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null,
+        youtubeStart: null,
       },
       {
         title: "Նախագծել և պլանավորել",
@@ -228,6 +235,7 @@ export const hy: Content = {
         video: "/assets/journey/step-2.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null,
+        youtubeStart: null,
       },
       {
         title: "Արտադրել և հանձնել",
@@ -235,6 +243,7 @@ export const hy: Content = {
         video: "/assets/journey/step-3.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null,
+        youtubeStart: null,
       },
     ],
   },

@@ -11,9 +11,12 @@
 export default function CleanYouTube({
   id,
   coverWidth = "111.2%",
+  start,
 }: {
   id: string;
   coverWidth?: string;
+  /** seconds into the video to begin (first play; loops restart at 0) */
+  start?: number;
 }) {
   const params = new URLSearchParams({
     autoplay: "1",
@@ -28,6 +31,7 @@ export default function CleanYouTube({
     fs: "0",
     iv_load_policy: "3",
   });
+  if (start) params.set("start", String(start));
 
   return (
     <div className="absolute inset-0 overflow-hidden">
