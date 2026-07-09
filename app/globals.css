@@ -139,6 +139,37 @@ html.lenis, html.lenis body { height: auto; }
   .marquee { animation: none; }
 }
 
+/* Hero stage rig — sweeping beams + equalizer, pure CSS (no video assets) */
+.stage-beam {
+  position: absolute;
+  top: -12%;
+  height: 135%;
+  width: 30%;
+  transform-origin: top center;
+  clip-path: polygon(42% 0, 58% 0, 100% 100%, 0% 100%);
+  filter: blur(7px);
+  mix-blend-mode: screen;
+  animation: beam-sweep 7s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes beam-sweep {
+  from { transform: rotate(-16deg); }
+  to { transform: rotate(13deg); }
+}
+.eq-bar {
+  transform-origin: bottom center;
+  animation: eq-bounce 1s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes eq-bounce {
+  from { transform: scaleY(0.15); }
+  to { transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage-beam { animation: none; transform: rotate(-4deg); }
+  .eq-bar { animation: none; transform: scaleY(0.45); }
+}
+
 /* Subtle film grain */
 .grain::after {
   content: "";

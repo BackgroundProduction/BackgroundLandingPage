@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { useContent } from "@/components/dom/LocaleProvider";
@@ -19,17 +19,12 @@ import MagneticButton from "@/components/dom/ui/MagneticButton";
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const spotRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const spotX = useRef<((v: number) => void) | null>(null);
   const spotY = useRef<((v: number) => void) | null>(null);
   const [activeStep, setActiveStep] = useState(0);
   const { t } = useContent();
-
-  useEffect(() => {
-    videoRef.current?.play().catch(() => {});
-  }, []);
 
   useGSAP(
     () => {
@@ -158,26 +153,71 @@ export default function HeroSection() {
           boxShadow: "0 0 120px rgba(224,169,56,0.07)",
         }}
       >
-        <video
-          ref={videoRef}
-          className="h-full w-full object-cover"
-          style={{ background: "var(--color-bg)" }}
-          src="/assets/hero-bg.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-        />
-        {/* scrim so the headline reads over the footage */}
+        {/* generative stage — dark hall, sweeping beams, haze, no assets */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(10,10,10,0.42) 0%, rgba(10,10,10,0.55) 60%, rgba(10,10,10,0.8) 100%)",
+              "linear-gradient(to bottom, #0d0c0b 0%, #131211 55%, #0a0a0a 100%)",
           }}
         />
-        {/* scanline sheen drifting over the screen */}
+        {/* sweeping light beams */}
+        <div
+          className="stage-beam"
+          style={{
+            left: "6%",
+            background:
+              "linear-gradient(to bottom, rgba(224,169,56,0.5), rgba(224,169,56,0.08) 65%, transparent)",
+            animationDuration: "7.5s",
+          }}
+        />
+        <div
+          className="stage-beam"
+          style={{
+            left: "38%",
+            background:
+              "linear-gradient(to bottom, rgba(240,238,233,0.34), rgba(240,238,233,0.05) 65%, transparent)",
+            animationDuration: "9s",
+            animationDelay: "-3s",
+          }}
+        />
+        <div
+          className="stage-beam"
+          style={{
+            left: "66%",
+            background:
+              "linear-gradient(to bottom, rgba(224,169,56,0.42), rgba(224,169,56,0.07) 65%, transparent)",
+            animationDuration: "6.2s",
+            animationDelay: "-1.5s",
+          }}
+        />
+        {/* floor haze where the beams land */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-[46%]"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 90% at 50% 100%, rgba(224,169,56,0.14), transparent 70%)",
+          }}
+        />
+        {/* equalizer strip — the show's pulse */}
+        <div
+          className="absolute inset-x-10 bottom-5 flex h-[13%] items-end gap-[3px]"
+          style={{ opacity: 0.5 }}
+        >
+          {Array.from({ length: 36 }, (_, i) => (
+            <span
+              key={i}
+              className="eq-bar h-full flex-1 rounded-[1px]"
+              style={{
+                background:
+                  i % 9 === 4 ? "var(--color-accent)" : "rgba(240,238,233,0.35)",
+                animationDuration: `${0.7 + ((i * 37) % 60) / 100}s`,
+                animationDelay: `${-((i * 13) % 90) / 100}s`,
+              }}
+            />
+          ))}
+        </div>
+        {/* scanline sheen over the screen */}
         <div
           className="absolute inset-0"
           style={{
