@@ -14,6 +14,7 @@ export default function PrinciplesSection() {
   const leftRef = useRef<HTMLSpanElement>(null);
   const rightRef = useRef<HTMLSpanElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
   const { t } = useContent();
 
   useGSAP(
@@ -30,11 +31,12 @@ export default function PrinciplesSection() {
         gsap.set(staticRef.current, { display: "none" });
         gsap.set(animRef.current, { display: "flex" });
 
-        const coverScale = () =>
-          Math.max(
-            window.innerWidth / center.offsetWidth,
-            window.innerHeight / center.offsetHeight
-          ) * 1.1;
+        // grow to a fixed 1000×1000 frame, not full-bleed (capped to the
+        // viewport on small screens so it never spills off the edges)
+        const coverScale = () => {
+          const target = Math.min(1000, window.innerWidth * 0.92, window.innerHeight * 0.92);
+          return target / center.offsetWidth;
+        };
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -45,6 +47,20 @@ export default function PrinciplesSection() {
             scrub: 0.5,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            // flipbook: same progress that drives the scale picks the frame
+            onUpdate: (self) => {
+              const frames = frameRefs.current.filter(
+                (el): el is HTMLDivElement => el !== null
+              );
+              if (!frames.length) return;
+              const idx = Math.min(
+                frames.length - 1,
+                Math.floor(self.progress * frames.length)
+              );
+              frames.forEach((el, i) => {
+                el.style.opacity = i === idx ? "1" : "0";
+              });
+            },
           },
         });
 
@@ -84,14 +100,31 @@ export default function PrinciplesSection() {
             {t.principles.splitLeft}
           </span>
 
-          {/* square logo emblem — its baked-in background matches
-              --color-dark (#121110) so it blends seamlessly with the page */}
+          {/* centre square: a scroll-driven flipbook — frames swap with scroll
+              progress while the square scales to full-bleed. Frame 0 is the
+              transparent emblem shown at rest. */}
           <div
             ref={centerRef}
             className="relative z-0 aspect-square w-[10vw] min-w-[80px] shrink-0 overflow-hidden will-change-transform"
-            style={{ background: "var(--color-dark)" }}
           >
-            <Image src={t.principles.image} alt="" fill sizes="100vw" className="object-contain" />
+            {t.principles.images.map((src, i) => (
+              <div
+                key={`${src}-${i}`}
+                ref={(el) => {
+                  frameRefs.current[i] = el;
+                }}
+                className="absolute inset-0"
+                style={{ opacity: i === 0 ? 1 : 0 }}
+              >
+                <Image
+                  src={src}
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  className={src.includes("emblem") ? "object-contain" : "object-cover"}
+                />
+              </div>
+            ))}
           </div>
 
           <span

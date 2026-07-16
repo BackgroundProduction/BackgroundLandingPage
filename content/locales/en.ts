@@ -31,6 +31,8 @@ export const en = {
   hero: {
     eyebrow: "Event production — Yerevan, Armenia",
     title: "We produce events that move people — and make brands unforgettable",
+    // headline split for the serif-italic accent word (pre · accent · post)
+    titleParts: ["We produce events that ", "move people", " — and make brands unforgettable"],
     sub: "For institutions and brands whose occasions deserve more than an agenda — from state ceremonies to continental championships, produced end to end.",
     // stage-manager cue lines for the hero boot sequence
     cues: ["CUE 01 — SOUND CHECK ✓", "CUE 02 — LIGHTS ✓", "CUE 03 — DOORS OPEN ✓", "SHOWTIME"],
@@ -41,6 +43,13 @@ export const en = {
       sound: "03 SOUND",
       lights: "04 LIGHTS",
       live: "LIVE",
+    },
+    // HUD chips over the interactive 3D venue
+    hud: {
+      drag: "Drag to orbit",
+      location: "40.18°N — 44.51°E · Yerevan",
+      scroll: "Scroll",
+      figure: "fig. 01 — the venue, live",
     },
   },
   about: {
@@ -73,10 +82,24 @@ export const en = {
   principles: {
     eyebrow: "How we operate",
     heading: "Four words we actually mean",
-    // split statement for the expanding-image reveal (left ▪ image ▪ right)
+    // split statement for the expanding-image reveal (left ▪ image ▪ right).
+    // The centre square flips through `images` as you scroll while it scales
+    // to full-bleed — swap/extend these with real event photos (10+ reads best;
+    // the first frame is the emblem shown at rest).
     splitLeft: "We make",
     splitRight: "moments",
-    image: "/assets/logo-emblem.svg",
+    images: [
+      "/assets/moments-emblem.svg",
+      "/images/portfolio/placeholder-concert.svg",
+      "/images/portfolio/ebrd.jpg",
+      "/images/portfolio/placeholder-ceremony.svg",
+      "/assets/about-bg.jpg",
+      "/images/portfolio/placeholder-conference.svg",
+      "/images/portfolio/placeholder-sports.svg",
+      "/images/portfolio/placeholder-corporate.svg",
+      "/images/portfolio/placeholder-awards.svg",
+      "/images/portfolio/ebrd.jpg",
+    ],
     items: [
       {
         title: "Professional",
@@ -136,8 +159,8 @@ export const en = {
         detail:
           "The 20th anniversary of the Junior Eurovision Song Contest, staged for an international television audience.",
         video: null as string | null,
-        youtube: "iSmB8q0wZCU" as string | null,
-        youtubeStart: null as number | null,
+        youtube: "3JSdLgAoyAs" as string | null,
+        youtubeStart: 4573 as number | null,
       },
       {
         slug: "european-weightlifting-championships",
@@ -150,24 +173,34 @@ export const en = {
         youtubeStart: 26 as number | null,
       },
       {
-        slug: "asian-regional-forum-2025",
-        badge: "3 days",
-        result: "Central banks of the region at one table",
-        detail:
-          "A three-day investment-management forum in Dilijan for monetary institutions across Asia.",
-        video: null as string | null,
-        youtube: null as string | null,
-        youtubeStart: null as number | null,
-      },
-      {
         slug: "khazer-music-awards-2025",
         badge: "Live broadcast",
         result: "The national music scene on one stage",
         detail:
           "The “Khazer” Armenian Music Awards — ceremony, show and broadcast treated as one continuous piece.",
         video: null as string | null,
-        youtube: null as string | null,
+        youtube: "h0aPl0RB6YE" as string | null,
         youtubeStart: null as number | null,
+      },
+      {
+        slug: "european-karate-championships-60",
+        badge: "60th edition",
+        result: "A continental anniversary opened in Yerevan",
+        detail:
+          "The opening ceremony of the 60th European Karate Senior Championships — a jubilee edition staged for the whole continent.",
+        video: null as string | null,
+        youtube: "EYruedH2xEk" as string | null,
+        youtubeStart: 291 as number | null,
+      },
+      {
+        slug: "european-shooting-championship-2026",
+        badge: "2026",
+        result: "Europe’s marksmen on Armenian ground",
+        detail:
+          "The European Shooting Championships in Yerevan — precision sport delivered with broadcast-grade production.",
+        video: null as string | null,
+        youtube: "9_u4uPG9qko" as string | null,
+        youtubeStart: 57 as number | null,
       },
     ],
   },

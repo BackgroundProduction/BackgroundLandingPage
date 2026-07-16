@@ -57,8 +57,9 @@ export default function AboutSection() {
         );
       });
 
-      // stat cards: staggered rise, accent-bar sweep and count-up numbers.
-      // SSR renders the final values, so no-JS / reduced-motion stay correct.
+      // stat ledger: cells fade in while the serif numerals rise out of
+      // their overflow masks, then count up. SSR renders the final values,
+      // so no-JS / reduced-motion stay correct.
       const statCards = ref.current.querySelectorAll<HTMLElement>("[data-stat-card]");
       if (statCards.length) {
         const statsTl = gsap.timeline({
@@ -70,14 +71,14 @@ export default function AboutSection() {
         });
         statsTl.fromTo(
           statCards,
-          { opacity: 0, y: 48, scale: 0.96 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out", stagger: 0.12 }
+          { opacity: 0 },
+          { opacity: 1, duration: 0.7, ease: "power2.out", stagger: 0.1 }
         );
         statsTl.fromTo(
-          ref.current.querySelectorAll("[data-stat-bar]"),
-          { scaleX: 0 },
-          { scaleX: 1, duration: 0.7, ease: "power2.out", stagger: 0.12, transformOrigin: "left center" },
-          0.15
+          ref.current.querySelectorAll("[data-stat-value]"),
+          { yPercent: 112 },
+          { yPercent: 0, duration: 0.9, ease: "power3.out", stagger: 0.1 },
+          0.1
         );
         ref.current
           .querySelectorAll<HTMLElement>("[data-stat-value]")
@@ -149,8 +150,7 @@ export default function AboutSection() {
               aria-hidden="true"
               className="mt-10 hidden aspect-[4/3] items-end rounded-sm p-6 md:flex"
               style={{
-                backgroundImage:
-                  "url('/assets/about-bg.jpg')",
+                
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -184,33 +184,38 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* key metrics — staggered rise + count-up on scroll */}
-        <div className="mt-24 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {t.stats.map((stat) => (
-            <div
-              key={stat.label}
-              data-stat-card
-              className="rounded-sm bg-surface p-8 transition-transform duration-300 hover:-translate-y-1"
-              style={{ border: "1px solid var(--color-line-soft)" }}
-            >
-              <span
-                data-stat-bar
-                aria-hidden="true"
-                className="block h-0.5 w-10"
-                style={{ background: "var(--color-accent)" }}
-              />
-              <p
-                data-stat-value
-                data-final={stat.value}
-                className="font-display mt-6 text-4xl font-medium md:text-5xl"
+        {/* key metrics — editorial ledger: hairline rules instead of cards,
+            oversized serif numerals that rise out of a mask and count up */}
+        <div className="mt-24 border-y border-line">
+          <div className="grid lg:grid-cols-4">
+            {t.stats.map((stat, i) => (
+              <div
+                key={stat.label}
+                data-stat-card
+                className="group border-t border-line py-10 first:border-t-0 lg:border-t-0 lg:border-l lg:px-8 lg:first:border-l-0 lg:first:pl-0 lg:last:pr-0"
               >
-                {stat.value}
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-text-dim">
-                {stat.label}
-              </p>
-            </div>
-          ))}
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">
+                  {String(i + 1).padStart(2, "0")}
+                </p>
+                <div className="mt-6 overflow-hidden transition-transform duration-500 group-hover:-translate-y-1.5">
+                  <p
+                    data-stat-value
+                    data-final={stat.value}
+                    className="font-serif-display italic leading-none"
+                    style={{
+                      fontSize: "clamp(3.2rem, 5.2vw, 5.4rem)",
+                      padding: "0 0.06em 0.1em 0",
+                    }}
+                  >
+                    {stat.value}
+                  </p>
+                </div>
+                <p className="mt-5 max-w-[26ch] font-mono text-[11px] uppercase tracking-[0.18em] leading-relaxed text-text-dim">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* client strip */}

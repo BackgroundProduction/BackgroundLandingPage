@@ -36,6 +36,11 @@ export const hy: Content = {
     eyebrow: "Միջոցառումների կազմակերպում — Երևան, Հայաստան",
     title:
       "Մենք ստեղծում ենք միջոցառումներ, որոնք հուզում են մարդկանց և բրենդները դարձնում անմոռանալի",
+    titleParts: [
+      "Մենք ստեղծում ենք միջոցառումներ, որոնք ",
+      "հուզում են մարդկանց",
+      " և բրենդները դարձնում անմոռանալի",
+    ],
     sub: "Հաստատությունների և բրենդների համար, որոնց առիթներն ավելին են, քան օրակարգը՝ պետական արարողություններից մինչև մայրցամաքային առաջնություններ, կազմակերպված սկզբից մինչև վերջ։",
     cues: ["ՔՅՈՒ 01 — ՁԱՅՆ ✓", "ՔՅՈՒ 02 — ԼՈՒՅՍԵՐ ✓", "ՔՅՈՒ 03 — ԴՌՆԵՐԸ ԲԱՑ ԵՆ ✓", "ՍԿԻԶԲ"],
     rig: {
@@ -44,6 +49,12 @@ export const hy: Content = {
       sound: "03 ՁԱՅՆ",
       lights: "04 ԼՈՒՅՍԵՐ",
       live: "ՈՒՂԻՂ",
+    },
+    hud: {
+      drag: "Քաշեք՝ պտտելու համար",
+      location: "40.18°N — 44.51°E · Երևան",
+      scroll: "Ոլորեք",
+      figure: "նկ. 01 — բեմը ուղիղ եթերում",
     },
   },
   about: {
@@ -78,7 +89,18 @@ export const hy: Content = {
     heading: "Չորս բառ, որոնց տակ կանգնած ենք",
     splitLeft: "Ստեղծում ենք",
     splitRight: "պահեր",
-    image: "/assets/logo-emblem.svg",
+    images: [
+      "/assets/moments-emblem.svg",
+      "/images/portfolio/placeholder-concert.svg",
+      "/images/portfolio/ebrd.jpg",
+      "/images/portfolio/placeholder-ceremony.svg",
+      "/assets/about-bg.jpg",
+      "/images/portfolio/placeholder-conference.svg",
+      "/images/portfolio/placeholder-sports.svg",
+      "/images/portfolio/placeholder-corporate.svg",
+      "/images/portfolio/placeholder-awards.svg",
+      "/images/portfolio/ebrd.jpg",
+    ],
     items: [
       {
         title: "Պրոֆեսիոնալ",
@@ -133,8 +155,8 @@ export const hy: Content = {
         detail:
           "«Մանկական Եվրատեսիլ» երգի մրցույթի 20-ամյակը՝ բեմադրված միջազգային հեռուստալսարանի համար։",
         video: null,
-        youtube: "iSmB8q0wZCU",
-        youtubeStart: null,
+        youtube: "3JSdLgAoyAs",
+        youtubeStart: 4573,
       },
       {
         slug: "european-weightlifting-championships",
@@ -147,24 +169,34 @@ export const hy: Content = {
         youtubeStart: 26,
       },
       {
-        slug: "asian-regional-forum-2025",
-        badge: "3 օր",
-        result: "Տարածաշրջանի կենտրոնական բանկերը մեկ սեղանի շուրջ",
-        detail:
-          "Երեքօրյա ֆորում Դիլիջանում՝ Ասիայի դրամավարկային հաստատությունների արժութային պահուստների կառավարման թեմայով։",
-        video: null,
-        youtube: null,
-        youtubeStart: null,
-      },
-      {
         slug: "khazer-music-awards-2025",
         badge: "Ուղիղ եթեր",
         result: "Ազգային երաժշտական դաշտը մեկ բեմի վրա",
         detail:
           "«Խազեր» երաժշտական մրցանակաբաշխությունը՝ արարողություն, շոու և հեռարձակում որպես մեկ ամբողջություն։",
         video: null,
-        youtube: null,
+        youtube: "h0aPl0RB6YE",
         youtubeStart: null,
+      },
+      {
+        slug: "european-karate-championships-60",
+        badge: "60-րդ առաջնություն",
+        result: "Մայրցամաքային հոբելյանը բացվեց Երևանում",
+        detail:
+          "Կարատեի Եվրոպայի 60-րդ առաջնության բացման արարողությունը՝ հոբելյանական միջոցառում ամբողջ մայրցամաքի համար։",
+        video: null,
+        youtube: "EYruedH2xEk",
+        youtubeStart: 291,
+      },
+      {
+        slug: "european-shooting-championship-2026",
+        badge: "2026",
+        result: "Եվրոպայի հրաձիգները հայկական հողի վրա",
+        detail:
+          "Հրաձգության Եվրոպայի առաջնությունը Երևանում՝ ճշգրտության սպորտ՝ հեռարձակման մակարդակի արտադրությամբ։",
+        video: null,
+        youtube: "9_u4uPG9qko",
+        youtubeStart: 57,
       },
     ],
   },

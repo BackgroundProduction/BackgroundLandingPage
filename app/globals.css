@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Dark editorial palette — modern neutral black, off-white type, amber
+  /* Dark editorial palette — modern neutral black, off-white type, off-white
      accent. Sections that were dark-scoped (.theme-dark) become elevated
      panels one step lighter than the page. */
   --color-bg: #0a0a0a;
@@ -10,8 +10,8 @@
   --color-line-soft: rgba(240, 238, 233, 0.07);
   --color-text: #f0eee9;
   --color-text-dim: #8f8c86;
-  --color-accent: #e0a938;
-  --color-accent-soft: rgba(224, 169, 56, 0.14);
+  --color-accent: #f0eee9;
+  --color-accent-soft: rgba(240, 238, 233, 0.14);
   --color-ink: #0a0a0a;
   --color-paper: #f0eee9;
   --color-dark: #121110;
@@ -76,6 +76,12 @@ html.lenis, html.lenis body { height: auto; }
 
 .font-display {
   font-family: var(--font-display), var(--font-armenian), system-ui, sans-serif;
+}
+
+/* Editorial serif accent inside display headings; Armenian falls back to
+   Noto (synthetic italic) since Instrument Serif is latin-only. */
+.font-serif-display {
+  font-family: var(--font-serif-display), var(--font-armenian), Georgia, serif;
 }
 
 .text-display-xl {
@@ -246,3 +252,4 @@ html.lenis, html.lenis body { height: auto; }
 .skip-link:focus {
   transform: translateY(0);
 }
+

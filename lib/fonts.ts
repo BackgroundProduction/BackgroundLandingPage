@@ -1,4 +1,4 @@
-import { Space_Grotesk, Inter, Noto_Sans_Armenian } from "next/font/google";
+import { Space_Grotesk, Inter, Noto_Sans_Armenian, Instrument_Serif } from "next/font/google";
 
 export const grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -10,6 +10,17 @@ export const grotesk = Space_Grotesk({
 export const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+/* Editorial serif for the italic accent word inside display headings
+   (Shopify-Editions-style contrast against the grotesk). Latin only —
+   Armenian accent text falls through to Noto with synthetic italic. */
+export const serifDisplay = Instrument_Serif({
+  subsets: ["latin"],
+  variable: "--font-serif-display",
+  weight: "400",
+  style: ["normal", "italic"],
   display: "swap",
 });
 

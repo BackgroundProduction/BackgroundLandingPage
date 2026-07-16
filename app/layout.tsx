@@ -1,4 +1,4 @@
-import { grotesk, inter, notoArmenian } from "@/lib/fonts";
+import { grotesk, inter, notoArmenian, serifDisplay } from "@/lib/fonts";
 import "./globals.css";
 
 export default function RootLayout({
@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <html
       lang="hy"
-      className={`${grotesk.variable} ${inter.variable} ${notoArmenian.variable} h-full antialiased`}
+      className={`${grotesk.variable} ${inter.variable} ${notoArmenian.variable} ${serifDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full grain">{children}</body>
     </html>

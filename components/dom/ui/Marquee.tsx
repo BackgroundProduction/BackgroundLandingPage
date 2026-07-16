@@ -20,7 +20,7 @@ export default function Marquee({
           className="font-display flex items-center gap-8 whitespace-nowrap pr-8 text-3xl font-medium text-text-dim md:text-5xl"
         >
           {item}
-          <span className="text-accent">✦</span>
+          <span className="h-6 w-[3px] shrink-0 -skew-x-[18deg] bg-[rgba(240,238,233,0.5)] md:h-8" />
         </span>
       ))}
     </div>
