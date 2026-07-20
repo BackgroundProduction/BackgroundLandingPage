@@ -48,9 +48,8 @@ const orbit = {
   curX: 0.07,
 };
 
-/** Morph progress shared with the scenery: `m` (0 = stage, 1 = away from it)
- *  fades the beam cones; `flat` (1 = photo scene) swings the orbit to face
- *  the viewer, since photo scenes are flat billboards. */
+/** Morph progress shared with the scenery: `flat` (1 = photo scene) swings
+ *  the orbit to face the viewer, since photo scenes are flat billboards. */
 const morphShared = { m: 0, flat: 0 };
 
 // scenes 0..5 are the drawn venues; photo scenes are appended after
@@ -930,9 +929,6 @@ function MorphRig({ animate }: { animate: boolean }) {
     const inMorph = tin >= HOLD;
     const tm = inMorph ? (tin - HOLD) / MORPH : 0;
 
-    // the beam cones belong to the stage (scene 0); m is "how far from it"
-    const w0 = (i: number) => (i === 0 ? 1 : 0);
-    morphShared.m = 1 - (inMorph ? w0(src) + (w0(dst) - w0(src)) * tm : w0(src));
     // photo scenes are flat: 1 while a photo holds, blending during morphs
     const wp = (i: number) => (i >= DRAWN_SCENES ? 1 : 0);
     morphShared.flat = inMorph ? wp(src) + (wp(dst) - wp(src)) * tm : wp(src);
@@ -1168,54 +1164,6 @@ function Dust({ animate }: { animate: boolean }) {
   return <points ref={ref} geometry={geo} material={mat} frustumCulled={false} />;
 }
 
-/** Volumetric cones under the arch lamps; they sweep, and fade out while the
- *  rig is morphed away from the stage scene (the lamp bodies morph as dots). */
-function Beams({ animate }: { animate: boolean }) {
-  const group = useRef<THREE.Group>(null);
-  const mat = useMemo(
-    () =>
-      new THREE.MeshBasicMaterial({
-        color: ACCENT,
-        transparent: true,
-        opacity: 0.038,
-        side: THREE.DoubleSide,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      }),
-    []
-  );
-  useFrame(({ clock }) => {
-    if (!group.current) return;
-    const fade = 1 - Math.min(1, morphShared.m * 1.5);
-    group.current.visible = fade > 0.01;
-    // all cones share one material; reach it through the scene graph
-    group.current.traverse((o) => {
-      const mesh = o as THREE.Mesh;
-      if (mesh.isMesh) (mesh.material as THREE.MeshBasicMaterial).opacity = 0.038 * fade;
-    });
-    if (!animate) return;
-    group.current.children.forEach((c, i) => {
-      c.rotation.z = Math.sin(clock.elapsedTime * 0.45 + i * 1.7) * 0.3;
-    });
-  });
-  return (
-    <group ref={group}>
-      {LAMP_X.map((x, i) => {
-        const y = archY(x) - 0.4;
-        const coneH = y - 1.4; // reach just above the deck
-        return (
-          <group key={x} position={[x, y, 0]} rotation={[0, 0, i % 2 ? -0.16 : 0.16]}>
-            <mesh position={[0, -coneH / 2 - 0.35, 0]} scale={[1, coneH / 7.4, 1]}>
-              <coneGeometry args={[1.55, 7.4, 20, 1, true]} />
-              <primitive object={mat} attach="material" />
-            </mesh>
-          </group>
-        );
-      })}
-    </group>
-  );
-}
-
 /** Pulls the camera back on narrow viewports so the venue stays framed. */
 function ResponsiveCamera() {
   const { camera, size } = useThree();
@@ -1345,7 +1293,6 @@ export default function HeroStage() {
         <OrbitGroup autoRotate={!reduced}>
           <polarGridHelper args={[32, 16, 8, 64, "#2a2822", "#171613"]} />
           <MorphRig animate={!reduced} />
-          <Beams animate={!reduced} />
           <Dust animate={!reduced} />
         </OrbitGroup>
         <EffectComposer multisampling={2}>
