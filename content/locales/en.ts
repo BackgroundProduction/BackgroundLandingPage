@@ -70,14 +70,13 @@ export const en = {
     { value: "3", label: "Continental championships staged" },
     { value: "3", label: "Regions — Armenia · CIS · Europe" },
   ],
+  /* Client logo wall — only clients with real logo files are listed.
+     To add one: drop the file in public/assets/logos/ and add { name, logo }. */
   clients: [
-    "EBRD",
-    "Junior Eurovision",
-    "Yerevan Municipality",
-    "Khazer Music Awards",
-    "European Karate Federation",
-    "Altezza",
-    "Gyumri Beer Factory",
+    { name: "EBRD", logo: "/assets/logos/ebrd.svg" },
+    { name: "Yerevan Municipality", logo: "/assets/logos/yerevan-municipality.svg" },
+    { name: "Khazer Music Awards", logo: "/assets/logos/khazer.svg" },
+    { name: "European Karate Federation", logo: "/assets/logos/ekf.png" },
   ],
   principles: {
     eyebrow: "Why choose us",

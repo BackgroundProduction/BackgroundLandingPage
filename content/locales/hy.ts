@@ -71,13 +71,10 @@ export const hy: Content = {
     { value: "3", label: "Տարածաշրջան՝ Հայաստան · ԱՊՀ · Եվրոպա" },
   ],
   clients: [
-    "ՎԶԵԲ (EBRD)",
-    "Մանկական Եվրատեսիլ",
-    "Երևանի քաղաքապետարան",
-    "«Խազեր» մրցանակաբաշխություն",
-    "Կարատեի եվրոպական ֆեդերացիա",
-    "Ալտեցցա",
-    "Գյումրու գարեջրի գործարան",
+    { name: "ՎԶԵԲ (EBRD)", logo: "/assets/logos/ebrd.svg" },
+    { name: "Երևանի քաղաքապետարան", logo: "/assets/logos/yerevan-municipality.svg" },
+    { name: "«Խազեր» մրցանակաբաշխություն", logo: "/assets/logos/khazer.svg" },
+    { name: "Կարատեի եվրոպական ֆեդերացիա", logo: "/assets/logos/ekf.png" },
   ],
   principles: {
     eyebrow: "Ինչու հենց մենք",

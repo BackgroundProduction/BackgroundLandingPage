@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { useContent } from "@/components/dom/LocaleProvider";
@@ -218,20 +219,30 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* client strip */}
+        {/* client logo wall — logos forced monochrome to sit on the dark
+            ground, with small mono captions beneath (reference-style) */}
         <div
           data-reveal
           className="mt-16 border-t pt-10"
           style={{ borderColor: "var(--color-line-soft)" }}
         >
           <p className="text-eyebrow text-text-dim">{t.ui.trustedFor}</p>
-          <ul className="mt-6 flex flex-wrap gap-x-10 gap-y-4">
+          <ul className="mt-12 grid grid-cols-2 gap-x-10 gap-y-14 md:grid-cols-4">
             {t.clients.map((client) => (
-              <li
-                key={client}
-                className="font-display text-lg font-medium text-text-dim transition-colors hover:text-text"
-              >
-                {client}
+              <li key={client.name} className="flex flex-col items-center gap-7">
+                <div className="relative h-16 w-full md:h-20">
+                  <Image
+                    src={client.logo}
+                    alt={client.name}
+                    fill
+                    sizes="(min-width: 768px) 22vw, 45vw"
+                    className="object-contain opacity-75 transition-opacity duration-300 hover:opacity-100"
+                    style={{ filter: "brightness(0) invert(1)" }}
+                  />
+                </div>
+                <span className="text-center font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">
+                  {client.name}
+                </span>
               </li>
             ))}
           </ul>
