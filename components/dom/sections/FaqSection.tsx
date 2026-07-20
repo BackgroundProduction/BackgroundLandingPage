@@ -30,17 +30,22 @@ export default function FaqSection() {
           </p>
 
           <div data-reveal>
-            {/* photo slot — swap for a team headshot */}
+            {/* photo slot — branded placeholder until a team headshot lands */}
             <div
               aria-hidden="true"
-              className="mb-5 flex aspect-square w-44 items-end rounded-sm p-4"
+              className="relative mb-5 flex aspect-square w-44 items-end rounded-sm p-4"
               style={{
                 background:
                   "linear-gradient(135deg, var(--color-accent-soft), rgba(240,238,233,0.04))",
                 border: "1px dashed var(--color-line)",
               }}
             >
-              <span className="text-eyebrow text-text-dim">{t.ui.photoLabel}</span>
+              <img
+                src="/assets/logo.svg"
+                alt=""
+                className="pointer-events-none absolute inset-0 m-auto h-1/1 w-auto opacity-25"
+              />
+              
             </div>
             <p className="font-display text-lg font-medium leading-snug">
               {t.faq.moreTitle}

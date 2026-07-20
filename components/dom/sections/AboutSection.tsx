@@ -43,10 +43,14 @@ export default function AboutSection() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: ref.current,
-          // starts once the section is well inside the viewport, not on first peek
-          start: "top 45%",
-          end: "center 40%",
+          // assembly runs as the section rises and is fully complete by the
+          // time its top settles near the top of the viewport
+          start: "top 85%",
+          end: "top 20%",
           scrub: 0.4,
+          // positions are measured before fonts/media settle, which otherwise
+          // leaves the mark pre-assembled on load
+          invalidateOnRefresh: true,
         },
       });
       pieces.forEach((piece, i) => {
@@ -117,27 +121,13 @@ export default function AboutSection() {
       aria-labelledby="about-heading"
       className="relative overflow-hidden px-[var(--gutter)] py-[var(--space-section-y)]"
     >
-      {/* centred background logo — assembles like a puzzle on scroll */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
-      >
-        <svg
-          ref={svgRef}
-          viewBox="0 0 29.7 39.7"
-          className="h-[72vh] w-auto opacity-[0.07]"
-          fill="#fff"
-        >
-          {LOGO_PIECES.map((d, i) => (
-            <path key={i} d={d} />
-          ))}
-        </svg>
-      </div>
-
       <div className="relative z-10 mx-auto max-w-9xl">
         {/* studio intro — two columns */}
-        <div className="grid items-start gap-10 md:grid-cols-2 md:gap-20">
-          <div data-reveal>
+        {/* columns stretch so the right-hand copy can resolve against the
+            full height of the brand mark instead of stopping a third of the
+            way down */}
+        <div className="grid items-start gap-10 md:grid-cols-2 md:gap-20 md:items-stretch">
+          <div data-reveal className="flex flex-col">
             <p className="text-eyebrow text-accent">{t.about.eyebrow}</p>
             <h2
               id="about-heading"
@@ -146,24 +136,26 @@ export default function AboutSection() {
               {t.about.heading}
               <span className="text-accent">.</span>
             </h2>
-            {/* photo slot — swap for real team/production photography */}
+            {/* brand mark under the heading — assembles like a puzzle on
+                scroll. Grows to fill whatever height the stats column sets
+                opposite, so both columns land on the same baseline. */}
             <div
               aria-hidden="true"
-              className="mt-10 hidden aspect-[4/3] items-end rounded-sm p-6 md:flex"
-              style={{
-                
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                border: "1px dashed var(--color-line)",
-              }}
+              className="pointer-events-none mt-10 hidden min-h-0 flex-1 items-center justify-center md:flex"
             >
-              <span className="text-eyebrow text-text-dim">
-                {t.ui.photoLabel}
-              </span>
+              <svg
+                ref={svgRef}
+                viewBox="0 0 29.7 39.7"
+                className="h-full w-auto"
+                fill="#fff"
+              >
+                {LOGO_PIECES.map((d, i) => (
+                  <path key={i} d={d} />
+                ))}
+              </svg>
             </div>
           </div>
-          <div className="space-y-6">
+          <div className="flex flex-col space-y-6">
             <p
               data-reveal
               className="font-display text-display-md font-medium leading-snug"
@@ -179,48 +171,53 @@ export default function AboutSection() {
                 {p}
               </p>
             ))}
-            <p data-reveal className="font-display text-xl font-medium text-accent">
+            <p
+              data-reveal
+              className="font-display text-xl font-medium text-accent"
+            >
               {t.about.aside}
             </p>
-          </div>
-        </div>
 
-        {/* key metrics — editorial ledger: hairline rules instead of cards,
-            oversized serif numerals that rise out of a mask and count up */}
-        <div className="mt-24 border-y border-line">
-          <div className="grid lg:grid-cols-4">
-            {t.stats.map((stat, i) => (
-              <div
-                key={stat.label}
-                data-stat-card
-                className="group border-t border-line py-10 first:border-t-0 lg:border-t-0 lg:border-l lg:px-8 lg:first:border-l-0 lg:first:pl-0 lg:last:pr-0"
-              >
-                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">
-                  {String(i + 1).padStart(2, "0")}
-                </p>
-                <div className="mt-6 overflow-hidden transition-transform duration-500 group-hover:-translate-y-1.5">
-                  <p
-                    data-stat-value
-                    data-final={stat.value}
-                    className="font-serif-display italic leading-none"
-                    style={{
-                      fontSize: "clamp(3.2rem, 5.2vw, 5.4rem)",
-                      padding: "0 0.06em 0.1em 0",
-                    }}
+            {/* key metrics — answers the question above, and fills the column
+                down to the base of the brand mark opposite. Editorial ledger:
+                hairline rules instead of cards, oversized serif numerals that
+                rise out of a mask and count up. */}
+            <div className="border-t border-line md:mt-auto">
+              <div className="grid grid-cols-2">
+                {t.stats.map((stat, i) => (
+                  <div
+                    key={stat.label}
+                    data-stat-card
+                    className="group border-b border-line py-8 odd:pr-8 even:border-l even:border-line even:pl-8"
                   >
-                    {stat.value}
-                  </p>
-                </div>
-                <p className="mt-5 max-w-[26ch] font-mono text-[11px] uppercase tracking-[0.18em] leading-relaxed text-text-dim">
-                  {stat.label}
-                </p>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">
+                      {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <div className="mt-4 overflow-hidden transition-transform duration-500 group-hover:-translate-y-1.5">
+                      <p
+                        data-stat-value
+                        data-final={stat.value}
+                        className="font-serif-display italic leading-none"
+                        style={{
+                          fontSize: "clamp(2.4rem, 3.4vw, 3.6rem)",
+                          padding: "0 0.06em 0.1em 0",
+                        }}
+                      >
+                        {stat.value}
+                      </p>
+                    </div>
+                    <p className="mt-4 max-w-[26ch] font-mono text-[11px] uppercase tracking-[0.18em] leading-relaxed text-text-dim">
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
 
-        {/* client logo wall — logos forced monochrome to sit on the dark
-            ground, with small mono captions beneath (reference-style) */}
+        {/* client logo wall — logos shown in their original brand colours,
+            with small mono captions beneath (reference-style) */}
         <div
           data-reveal
           className="mt-16 border-t pt-10"
@@ -236,8 +233,7 @@ export default function AboutSection() {
                     alt={client.name}
                     fill
                     sizes="(min-width: 768px) 22vw, 45vw"
-                    className="object-contain opacity-75 transition-opacity duration-300 hover:opacity-100"
-                    style={{ filter: "brightness(0) invert(1)" }}
+                    className="object-contain"
                   />
                 </div>
                 <span className="text-center font-mono text-[11px] uppercase tracking-[0.22em] text-text-dim">

@@ -1,20 +1,21 @@
 "use client";
 
 /**
- * Tiny WebAudio sound engine — everything synthesized in the browser,
- * no audio files, no licenses. Off by default; started only from a user
+ * Tiny WebAudio sound engine. Off by default; started only from a user
  * gesture (browser autoplay policies require it anyway).
  *
- * - ambient: two soft detuned triangle oscillators (A2 + E3 fifth) through
- *   a lowpass, with a slow LFO "breathing" the gain — a quiet room tone.
+ * - ambient: the background music track, looped, routed through WebAudio
+ *   so it shares the master gain with the UI blips and can fade in/out.
  * - tick: short high blip for link/button hovers.
  * - click: two-step confirmation blip for presses.
  */
+const AMBIENT_SRC = "/assets/sound/bg-bgmusic.mp3";
+const AMBIENT_GAIN = 0.35;
+
 class SoundEngine {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
-  private ambientNodes: OscillatorNode[] = [];
-  private lfo: OscillatorNode | null = null;
+  private el: HTMLAudioElement | null = null;
   enabled = false;
 
   private ensureContext() {
@@ -33,38 +34,28 @@ class SoundEngine {
     if (this.enabled) return;
     this.enabled = true;
 
-    const pad = ctx.createGain();
-    pad.gain.value = 0;
-    // fade the room tone in over 2s
-    pad.gain.linearRampToValueAtTime(0.035, ctx.currentTime + 2);
-
-    const filter = ctx.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.value = 320;
-    filter.Q.value = 0.4;
-
-    // slow breathing on the pad volume
-    this.lfo = ctx.createOscillator();
-    this.lfo.frequency.value = 0.07;
-    const lfoDepth = ctx.createGain();
-    lfoDepth.gain.value = 0.012;
-    this.lfo.connect(lfoDepth);
-    lfoDepth.connect(pad.gain);
-    this.lfo.start();
-
-    for (const freq of [110, 164.81]) {
-      // A2 + E3 — an open fifth, calm and unmusical enough to disappear
-      const osc = ctx.createOscillator();
-      osc.type = "triangle";
-      osc.frequency.value = freq;
-      osc.detune.value = Math.random() * 6 - 3;
-      osc.connect(filter);
-      osc.start();
-      this.ambientNodes.push(osc);
+    // The <audio> element is created once and reused — createMediaElementSource
+    // may only be called a single time per element.
+    if (!this.el) {
+      this.el = new Audio(AMBIENT_SRC);
+      this.el.loop = true;
+      this.el.preload = "auto";
+      const src = ctx.createMediaElementSource(this.el);
+      const pad = ctx.createGain();
+      pad.gain.value = 0;
+      src.connect(pad);
+      pad.connect(this.master!);
+      this.padGain = pad;
     }
-    filter.connect(pad);
-    pad.connect(this.master!);
-    this.padGain = pad;
+
+    const t = ctx.currentTime;
+    this.padGain!.gain.cancelScheduledValues(t);
+    this.padGain!.gain.setValueAtTime(this.padGain!.gain.value, t);
+    // fade the track in over 2s
+    this.padGain!.gain.linearRampToValueAtTime(AMBIENT_GAIN, t + 2);
+    void this.el.play().catch(() => {
+      /* blocked before a gesture — the toggle retries on the next click */
+    });
   }
   private padGain: GainNode | null = null;
 
@@ -73,11 +64,13 @@ class SoundEngine {
     this.enabled = false;
     const t = this.ctx.currentTime;
     this.padGain?.gain.cancelScheduledValues(t);
+    this.padGain?.gain.setValueAtTime(this.padGain.gain.value, t);
     this.padGain?.gain.linearRampToValueAtTime(0, t + 0.6);
-    const nodes = [...this.ambientNodes, this.lfo].filter(Boolean) as OscillatorNode[];
-    this.ambientNodes = [];
-    this.lfo = null;
-    setTimeout(() => nodes.forEach((n) => n.stop()), 700);
+    const el = this.el;
+    // pause only after the fade, so it doesn't cut off
+    setTimeout(() => {
+      if (!this.enabled) el?.pause();
+    }, 700);
   }
 
   private blip(freq: number, duration: number, volume: number) {

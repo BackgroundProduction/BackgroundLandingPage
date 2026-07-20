@@ -1,10 +1,16 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { useContent } from "@/components/dom/LocaleProvider";
+import { scrollImages } from "@/content/scroll-images";
+
+/* Pin length per flipbook frame, in % of viewport height. More frames need a
+   longer scroll or the cuts come too fast to read. */
+const SCROLL_PER_FRAME = 12;
+const MIN_SCROLL = 160;
 
 export default function PrinciplesSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -16,6 +22,17 @@ export default function PrinciplesSection() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
   const { t } = useContent();
+
+  // photos come from public/assets/scrollimages/ (generated list); the emblem
+  // stays frame 0 as the at-rest state. Falls back to the locale list while
+  // that folder is still empty.
+  const frames = useMemo(
+    () =>
+      scrollImages.length
+        ? [t.principles.images[0], ...scrollImages]
+        : t.principles.images,
+    [t.principles.images]
+  );
 
   useGSAP(
     () => {
@@ -42,7 +59,7 @@ export default function PrinciplesSection() {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top top",
-            end: "+=160%",
+            end: `+=${Math.max(MIN_SCROLL, frames.length * SCROLL_PER_FRAME)}%`,
             pin: true,
             scrub: 0.5,
             anticipatePin: 1,
@@ -107,7 +124,7 @@ export default function PrinciplesSection() {
             ref={centerRef}
             className="relative z-0 aspect-square w-[10vw] min-w-[80px] shrink-0 overflow-hidden will-change-transform"
           >
-            {t.principles.images.map((src, i) => (
+            {frames.map((src, i) => (
               <div
                 key={`${src}-${i}`}
                 ref={(el) => {
@@ -120,7 +137,9 @@ export default function PrinciplesSection() {
                   src={src}
                   alt=""
                   fill
-                  sizes="100vw"
+                  // the square never renders wider than 1000px (see coverScale)
+                  sizes="(max-width: 768px) 92vw, 1000px"
+                  priority={i === 0}
                   className={src.includes("emblem") ? "object-contain" : "object-cover"}
                 />
               </div>

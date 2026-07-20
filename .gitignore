@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# full-resolution originals for the flipbook (kept locally, never committed)
+.scrollimages-originals/

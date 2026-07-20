@@ -1,6 +1,6 @@
 export const en = {
   meta: {
-    title: "Background Production — Event Production & Management",
+    title: "Background Production  Event Production & Management",
     description:
       "Professional music & movie producing, corporate events, dinner galas, concerts, grand openings, conferences, forums, private and government events. Physical, hybrid, and virtual.",
   },
@@ -23,20 +23,19 @@ export const en = {
     menu: "Menu",
     studio: "Studio",
     follow: "Follow",
-    showreelLabel: "Showreel — video coming soon",
-    photoLabel: "Production still — photography coming",
+    showreelLabel: "Showreel  video coming soon",
     stepLabel: "Step",
     skipToContent: "Skip to content",
     clientStories: "Real client stories",
   },
   hero: {
-    eyebrow: "Event production — Yerevan, Armenia",
+    eyebrow: "Event production  Yerevan, Armenia",
     title: "We produce top events that move people and make days special",
     // headline split for the serif-italic accent word (pre · accent · post)
     titleParts: ["We produce top events that ", "move people", " and make days special"],
     sub: "Background Production plans and produces corporate events, concerts, dinner galas, grand openings, conferences and government ceremonies across Armenia, the CIS and Europe",
     // stage-manager cue lines for the hero boot sequence
-    cues: ["CUE 01 — SOUND CHECK ✓", "CUE 02 — LIGHTS ✓", "CUE 03 — DOORS OPEN ✓", "SHOWTIME"],
+    cues: ["CUE 01  SOUND CHECK ✓", "CUE 02  LIGHTS ✓", "CUE 03  DOORS OPEN ✓", "SHOWTIME"],
     // phase labels for the self-drawing venue rig
     rig: {
       design: "01 DESIGN",
@@ -48,9 +47,9 @@ export const en = {
     // HUD chips over the interactive 3D venue
     hud: {
       drag: "Drag to orbit",
-      location: "40.18°N — 44.51°E · Yerevan",
+      location: "40.18°N  44.51°E · Yerevan",
       scroll: "Scroll",
-      figure: "fig. 01 — the venue, live",
+      figure: "fig. 01  the venue, live",
     },
   },
   about: {
@@ -68,22 +67,24 @@ export const en = {
     { value: "13+", label: "Landmark events produced" },
     { value: "1,000,000+", label: "Total live audience across our events" },
     { value: "3", label: "Continental championships staged" },
-    { value: "3", label: "Regions — Armenia · CIS · Europe" },
+    { value: "3", label: "Regions  Armenia · CIS · Europe" },
   ],
-  /* Client logo wall — only clients with real logo files are listed.
+  /* Client logo wall  only clients with real logo files are listed.
      To add one: drop the file in public/assets/logos/ and add { name, logo }. */
   clients: [
     { name: "EBRD", logo: "/assets/logos/ebrd.svg" },
     { name: "Yerevan Municipality", logo: "/assets/logos/yerevan-municipality.svg" },
     { name: "Khazer Music Awards", logo: "/assets/logos/khazer.svg" },
     { name: "European Karate Federation", logo: "/assets/logos/ekf.png" },
+    { name: "Government of Armenia", logo: "/assets/logos/armenia-gov.png" },
+    { name: "European Shooting Confederation", logo: "/assets/logos/european-shooting.jpeg" },
   ],
   principles: {
     eyebrow: "Why choose us",
     heading: "Why choose us",
     // split statement for the expanding-image reveal (left ▪ image ▪ right).
     // The centre square flips through `images` as you scroll while it scales
-    // to full-bleed — swap/extend these with real event photos (10+ reads best;
+    // to full-bleed  swap/extend these with real event photos (10+ reads best;
     // the first frame is the emblem shown at rest).
     splitLeft: "We make",
     splitRight: "moments",
@@ -110,7 +111,7 @@ export const en = {
       },
       {
         title: "Innovative",
-        text: "Physical, hybrid, or fully virtual — we pick the format around the audience, not the other way around",
+        text: "Physical, hybrid, or fully virtual  we pick the format around the audience, not the other way around",
       },
       {
         title: "Experienced",
@@ -132,10 +133,10 @@ export const en = {
     "Dinner Galas",
     "Music & Film Production",
   ],
-  /* Success stories — stacked column rows. `slug` must match a portfolio
+  /* Success stories  stacked column rows. `slug` must match a portfolio
      entry (image/title come from there). `video`: set a path (e.g.
      "/assets/stories/ebrd.mp4") to show a looping video instead of the image.
-     NOTE: `badge` + `result` lines are editorial placeholders — replace with
+     NOTE: `badge` + `result` lines are editorial placeholders  replace with
      your verified figures (attendance, countries, broadcast reach). */
   success: {
     eyebrow: "Success stories",
@@ -146,7 +147,7 @@ export const en = {
         badge: "2024",
         result: "Armenia’s largest international business gathering of the year",
         detail:
-          "The EBRD Annual Meeting & Business Forum brought delegations from across the Bank’s regions to Yerevan — produced end to end.",
+          "The EBRD Annual Meeting & Business Forum brought delegations from across the Bank’s regions to Yerevan  produced end to end.",
         video: null as string | null,
         youtube: "t_RVnYgDibo" as string | null,
         youtubeStart: null as number | null,
@@ -166,7 +167,7 @@ export const en = {
         badge: "3 events in 1",
         result: "A full continental championship cycle",
         detail:
-          "Opening ceremony, every competition day and the Federation Congress — one production, zero missed cues.",
+          "Opening ceremony, every competition day and the Federation Congress  one production, zero missed cues.",
         video: null as string | null,
         youtube: "FwqsGl5hMpg" as string | null,
         youtubeStart: 26 as number | null,
@@ -176,7 +177,7 @@ export const en = {
         badge: "Live broadcast",
         result: "The national music scene on one stage",
         detail:
-          "The “Khazer” Armenian Music Awards — ceremony, show and broadcast treated as one continuous piece.",
+          "The “Khazer” Armenian Music Awards  ceremony, show and broadcast treated as one continuous piece.",
         video: null as string | null,
         youtube: "h0aPl0RB6YE" as string | null,
         youtubeStart: null as number | null,
@@ -186,7 +187,7 @@ export const en = {
         badge: "60th edition",
         result: "A continental anniversary opened in Yerevan",
         detail:
-          "The opening ceremony of the 60th European Karate Senior Championships — a jubilee edition staged for the whole continent.",
+          "The opening ceremony of the 60th European Karate Senior Championships  a jubilee edition staged for the whole continent.",
         video: null as string | null,
         youtube: "EYruedH2xEk" as string | null,
         youtubeStart: 291 as number | null,
@@ -196,20 +197,20 @@ export const en = {
         badge: "2026",
         result: "Europe’s marksmen on Armenian ground",
         detail:
-          "The European Shooting Championships in Yerevan — precision sport delivered with broadcast-grade production.",
+          "The European Shooting Championships in Yerevan  precision sport delivered with broadcast-grade production.",
         video: null as string | null,
         youtube: "9_u4uPG9qko" as string | null,
         youtubeStart: 57 as number | null,
       },
     ],
   },
-  /* Client testimonials shown beside the services list. PLACEHOLDER quotes —
+  /* Client testimonials shown beside the services list. PLACEHOLDER quotes 
      replace `quote`, `author`, `role` with real client statements you are
      authorised to publish. */
   testimonials: [
     {
       quote:
-        "Background handled a continental championship as if it were routine — every ceremony, every broadcast cue, flawless. They carry the pressure so you don't feel it.",
+        "Background handled a continental championship as if it were routine  every ceremony, every broadcast cue, flawless. They carry the pressure so you don't feel it.",
       author: "Federation Partner",
       role: "Sports Championship, Yerevan",
     },
@@ -221,7 +222,7 @@ export const en = {
     },
     {
       quote:
-        "From concept to the final broadcast, it was one seamless production. Professional, calm, and genuinely creative — exactly the partner a high-stakes event needs.",
+        "From concept to the final broadcast, it was one seamless production. Professional, calm, and genuinely creative  exactly the partner a high-stakes event needs.",
       author: "Broadcast Partner",
       role: "Music Awards, Yerevan",
     },
@@ -236,29 +237,29 @@ export const en = {
         slug: "music-film-production",
         title: "Music & Film Production",
         description:
-          "Professional music and movie producing — from concept and score to final cut, crafted with cinematic precision.",
-        image: "/images/portfolio/placeholder-concert.svg",
+          "Professional music and movie producing  from concept and score to final cut, crafted with cinematic precision.",
+        image: "/assets/help-images/move-production.jpg",
       },
       {
         slug: "concerts-grand-openings",
         title: "Concerts & Grand Openings",
         description:
-          "Concerts, grand openings and anniversaries staged as unforgettable spectacles — lighting, sound and emotion in perfect sync.",
-        image: "/images/portfolio/placeholder-ceremony.svg",
+          "Concerts, grand openings and anniversaries staged as unforgettable spectacles  lighting, sound and emotion in perfect sync.",
+        image: "/assets/help-images/concert.webp",
       },
       {
         slug: "conferences-forums",
         title: "Conferences & Forums",
         description:
-          "Corporate events, dinner galas, conferences and international forums — physical, hybrid and virtual — executed flawlessly end to end.",
-        image: "/images/portfolio/ebrd.jpg",
+          "Corporate events, dinner galas, conferences and international forums  physical, hybrid and virtual  executed flawlessly end to end.",
+        image: "/assets/help-images/private-events.webp",
       },
       {
         slug: "government-private-events",
         title: "Government & Private Events",
         description:
           "State ceremonies, official inaugurations and private celebrations handled with discretion, protocol and grandeur.",
-        image: "/images/portfolio/placeholder-corporate.svg",
+        image: "/assets/help-images/goverment-private.webp",
       },
     ],
   },
@@ -281,7 +282,7 @@ export const en = {
       {
         title: "We Plan",
         text: "Every detail, every step, every emotion mapped out in advance. This is the real work the audience never sees",
-        // Pexels video 18069235 (Pexels license — free commercial use)
+        // Pexels video 18069235 (Pexels license  free commercial use)
         video: "/assets/journey/step-2.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null as string | null,
@@ -314,7 +315,7 @@ export const en = {
       },
       {
         q: "Can an event be hybrid or virtual?",
-        a: "Yes, we deliver everything — physical, hybrid, or fully virtual. We build the format around your audience and your goals",
+        a: "Yes, we deliver everything  physical, hybrid, or fully virtual. We build the format around your audience and your goals",
       },
       {
         q: "How do we start?",
@@ -328,7 +329,7 @@ export const en = {
     sub: "Write, call, or just tell us what you're thinking and let's nail it!",
   },
   footer: {
-    blurb: "Full-service event production — physical, hybrid and virtual.",
+    blurb: "Full-service event production  physical, hybrid and virtual.",
   },
   contact: {
     email: "info@background.am",
