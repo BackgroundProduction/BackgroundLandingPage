@@ -22,7 +22,7 @@ const ARRAY_X = [-5.2, 5.2];
 // scene cycle: hold each picture, then morph to the next (stage → film
 // camera → conference hall → gala/state event → photo scenes → back around).
 // The scene count is dynamic: 4 drawn venues + however many photos load.
-const HOLD = 8;
+const HOLD = 5;
 const MORPH = 3;
 const SEG_T = HOLD + MORPH;
 const STAGGER = 0.35; // fraction of the morph spent staggering dot starts
@@ -52,8 +52,8 @@ const orbit = {
  *  the orbit to face the viewer, since photo scenes are flat billboards. */
 const morphShared = { m: 0, flat: 0 };
 
-// scenes 0..5 are the drawn venues; photo scenes are appended after
-const DRAWN_SCENES = 6;
+// scenes 0..8 are the drawn venues; photo scenes are appended after
+const DRAWN_SCENES = 9;
 
 /* ------------------------------------------------------------------ */
 /* Line-sketch builders: every scene is one flat list of segments      */
@@ -648,6 +648,190 @@ function buildInstallation(s: Sk, a: Sk) {
   }
 }
 
+/** Scene G — awards night: a glowing trophy on a stepped pedestal, a star
+ *  overhead and confetti glints (Khazer, Hero of Our Times…). */
+function buildTrophy(s: Sk, a: Sk) {
+  const w45 = tone(WIRE, 0.45);
+  const w5 = tone(WIRE, 0.5);
+  const w6 = tone(WIRE, 0.6);
+  const dim8 = tone(WIRE_DIM, 0.8);
+  const acc45 = tone(ACCENT, 0.45);
+  const acc55 = tone(ACCENT, 0.55);
+  const rand = mulberry32(77);
+
+  // ceremony floor
+  ring(s, dim8, 0, 0.02, 0, 4.2, "y", 64);
+  ring(s, w5, 0, 0.02, 0, 6.4, "y", 96, [0.6, 0.5]);
+
+  // stepped pedestal
+  box(s, w6, 0, 0.45, 0, 3.4, 0.9, 3.4);
+  box(s, w6, 0, 1.1, 0, 2.5, 0.4, 2.5);
+
+  // stem and cup as rings of revolution
+  ring(s, w5, 0, 1.35, 0, 0.55, "y", 24);
+  ring(s, w5, 0, 1.9, 0, 0.32, "y", 20);
+  ring(s, w5, 0, 2.45, 0, 0.5, "y", 24);
+  ring(s, w6, 0, 3.0, 0, 1.05, "y", 32);
+  ring(s, w6, 0, 3.6, 0, 1.45, "y", 40);
+  ring(a, acc55, 0, 4.25, 0, 1.7, "y", 56); // glowing rim
+  for (let k = 0; k < 8; k++) {
+    const ang = (k / 8) * Math.PI * 2;
+    const cx = Math.cos(ang);
+    const cz = Math.sin(ang);
+    polyline(s, w45, [
+      [cx * 0.32, 1.9, cz * 0.32],
+      [cx * 0.5, 2.45, cz * 0.5],
+      [cx * 1.05, 3.0, cz * 1.05],
+      [cx * 1.45, 3.6, cz * 1.45],
+      [cx * 1.7, 4.25, cz * 1.7],
+    ]);
+  }
+  // handles
+  for (const dir of [-1, 1]) {
+    polyline(a, acc45, [
+      [dir * 1.55, 4.05, 0],
+      [dir * 2.35, 3.85, 0],
+      [dir * 2.55, 3.3, 0],
+      [dir * 2.1, 2.85, 0],
+      [dir * 1.15, 2.75, 0],
+    ]);
+  }
+  // star hovering above the cup
+  const star: [number, number, number][] = [];
+  for (let i = 0; i <= 10; i++) {
+    const ang = (i / 10) * Math.PI * 2 - Math.PI / 2;
+    const r = i % 2 === 0 ? 0.85 : 0.36;
+    star.push([Math.cos(ang) * r, 5.7 + Math.sin(ang) * r, 0]);
+  }
+  polyline(a, acc55, star);
+  // confetti glints drifting in the air
+  for (let i = 0; i < 40; i++) {
+    const x = (rand() - 0.5) * 10;
+    const y = 2 + rand() * 7;
+    const z = (rand() - 0.5) * 6;
+    seg(a, x, y, z, x + (rand() - 0.5) * 0.35, y + (rand() - 0.5) * 0.35, z, acc45);
+  }
+}
+
+/** Scene H — the singing fountains: a basin with a ring of curved jets
+ *  leaning toward a tall central crown, droplets glinting at the crests. */
+function buildFountain(s: Sk, a: Sk) {
+  const w5 = tone(WIRE, 0.5);
+  const w6 = tone(WIRE, 0.6);
+  const dim8 = tone(WIRE_DIM, 0.8);
+  const acc45 = tone(ACCENT, 0.45);
+  const acc55 = tone(ACCENT, 0.55);
+  const rand = mulberry32(41);
+
+  // plaza + basin rims
+  ring(s, dim8, 0, 0.02, 0, 8, "y", 96, [0.6, 0.5]);
+  ring(s, w6, 0, 0.05, 0, 6.5, "y", 96);
+  ring(s, w6, 0, 0.35, 0, 6.2, "y", 96);
+  ring(s, w5, 0, 0.35, 0, 2.2, "y", 40);
+
+  // ring of jets arcing toward the centre
+  const JETS = 14;
+  for (let k = 0; k < JETS; k++) {
+    const ang = (k / JETS) * Math.PI * 2;
+    const cx = Math.cos(ang);
+    const cz = Math.sin(ang);
+    const pts: [number, number, number][] = [];
+    for (let i = 0; i <= 8; i++) {
+      const t = i / 8;
+      const r = 5.6 - t * 3.1;
+      const y = 0.35 + Math.sin(t * Math.PI * 0.62) * 4.6;
+      pts.push([cx * r, y, cz * r]);
+    }
+    polyline(a, k % 2 ? acc45 : acc55, pts);
+  }
+  // central crown jet
+  for (let k = 0; k < 6; k++) {
+    const ang = (k / 6) * Math.PI * 2;
+    const dx = Math.cos(ang) * 0.9;
+    const dz = Math.sin(ang) * 0.9;
+    polyline(a, acc55, [
+      [0, 0.4, 0],
+      [dx * 0.25, 4.2, dz * 0.25],
+      [dx * 0.75, 6.4, dz * 0.75],
+      [dx, 7.2, dz],
+    ]);
+  }
+  // droplets falling off the crests
+  for (let i = 0; i < 30; i++) {
+    const ang = rand() * Math.PI * 2;
+    const r = 1.5 + rand() * 3.5;
+    const y = 3.5 + rand() * 4;
+    const x = Math.cos(ang) * r;
+    const z = Math.sin(ang) * r;
+    seg(s, x, y, z, x + (rand() - 0.5) * 0.2, y - 0.3 - rand() * 0.3, z, w5);
+  }
+}
+
+/** Scene I — fireworks over the city: three particle bursts above a dim
+ *  skyline, launch trails rising from the ground. */
+function buildFireworks(s: Sk, a: Sk) {
+  const w45 = tone(WIRE, 0.45);
+  const w5 = tone(WIRE, 0.5);
+  const dim8 = tone(WIRE_DIM, 0.8);
+  const acc45 = tone(ACCENT, 0.45);
+  const acc55 = tone(ACCENT, 0.55);
+  const rand = mulberry32(9);
+
+  // city horizon
+  seg(s, -9, 0.02, -3.5, 9, 0.02, -3.5, dim8);
+  const skyline = [
+    [-8.2, 1.6, 1.4], [-6.2, 2.4, 1.0], [-4.6, 1.2, 1.6], [-2.4, 2.0, 1.2],
+    [0.2, 1.5, 1.8], [2.6, 2.6, 1.0], [4.6, 1.3, 1.5], [6.8, 2.1, 1.2], [8.4, 1.0, 1.4],
+  ] as const;
+  for (const [bx, bh, bw] of skyline) {
+    polyline(s, w45, [
+      [bx - bw / 2, 0.02, -3.5],
+      [bx - bw / 2, bh, -3.5],
+      [bx + bw / 2, bh, -3.5],
+      [bx + bw / 2, 0.02, -3.5],
+    ]);
+  }
+
+  // three bursts
+  const bursts: [number, number, number, number][] = [
+    [-4.2, 6.6, -1, 2.1],
+    [0.8, 7.6, 0, 2.6],
+    [5.0, 5.9, -1.5, 1.7],
+  ];
+  for (const [bx, by, bz, R] of bursts) {
+    for (let k = 0; k < 22; k++) {
+      const u = rand() * 2 - 1;
+      const ph = rand() * Math.PI * 2;
+      const sq = Math.sqrt(1 - u * u);
+      const dx = sq * Math.cos(ph);
+      const dz = sq * Math.sin(ph);
+      const inner = 0.25 + rand() * 0.15;
+      const tip = 0.8 + rand() * 0.2;
+      seg(
+        a,
+        bx + dx * R * inner, by + u * R * inner, bz + dz * R * inner,
+        bx + dx * R * tip, by + u * R * tip - 0.15, bz + dz * R * tip,
+        rand() > 0.4 ? acc55 : acc45
+      );
+    }
+    ring(a, acc45, bx, by, bz, R * 0.35, "z", 20);
+  }
+
+  // launch trails rising to each burst
+  for (const [bx, by, bz] of bursts) {
+    const x0 = bx * 0.75;
+    for (let i = 0; i < 7; i++) {
+      const t1 = i / 7;
+      const t2 = t1 + 0.06;
+      const px = (t: number) => x0 + (bx - x0) * t;
+      const py = (t: number) => 0.1 + (by - 1.2) * t;
+      const pz = (t: number) => -2 + (bz + 2) * t;
+      seg(s, px(t1), py(t1), pz(t1), px(t2), py(t2), pz(t2), w5);
+    }
+  }
+  ring(s, dim8, 0, 0.02, 0, 6, "y", 96, [0.6, 0.5]);
+}
+
 /* ------------------------------------------------------------------ */
 /* Scene matching: equal particle budgets per scene, spatial sort for  */
 /* coherent travel, precomputed per-particle stagger delays.           */
@@ -817,6 +1001,9 @@ async function buildPools(): Promise<{ structure: Pool; accent: Pool }> {
     buildGala,
     buildOpera,
     buildInstallation,
+    buildTrophy,
+    buildFountain,
+    buildFireworks,
   ];
   const structures: Sk[] = [];
   const accents: Sk[] = [];
