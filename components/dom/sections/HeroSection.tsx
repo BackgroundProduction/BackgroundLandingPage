@@ -85,15 +85,13 @@ export default function HeroSection() {
         aria-hidden="true"
         className="pointer-events-none absolute right-[var(--gutter)] top-1/2 z-20 hidden -translate-y-1/2 flex-col items-end gap-3 md:flex"
       >
+        {/* reviewer note: the drag-to-orbit chip is removed; only the phase
+            chip stays */}
         <div data-chip className={chip}>
           <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
           <span key={phase} className="fade-in">
             {phases[phase]}
           </span>
-        </div>
-        <div data-chip className={chip}>
-          <span className="text-accent">⟲</span>
-          {t.hero.hud.drag}
         </div>
       </div>
 

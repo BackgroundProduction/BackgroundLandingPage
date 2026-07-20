@@ -17,7 +17,8 @@ export const en = {
     sound: "Sound",
     soundOn: "on",
     soundOff: "off",
-    dragSideways: "Drag / scroll sideways →",
+    // reviewer note: keep only the arrow
+    dragSideways: "→",
     trustedFor: "Trusted for",
     menu: "Menu",
     studio: "Studio",
@@ -30,10 +31,10 @@ export const en = {
   },
   hero: {
     eyebrow: "Event production — Yerevan, Armenia",
-    title: "We produce events that move people — and make brands unforgettable",
+    title: "We produce top events that move people and make days special",
     // headline split for the serif-italic accent word (pre · accent · post)
-    titleParts: ["We produce events that ", "move people", " — and make brands unforgettable"],
-    sub: "For institutions and brands whose occasions deserve more than an agenda — from state ceremonies to continental championships, produced end to end.",
+    titleParts: ["We produce top events that ", "move people", " and make days special"],
+    sub: "Background Production plans and produces corporate events, concerts, dinner galas, grand openings, conferences and government ceremonies across Armenia, the CIS and Europe",
     // stage-manager cue lines for the hero boot sequence
     cues: ["CUE 01 — SOUND CHECK ✓", "CUE 02 — LIGHTS ✓", "CUE 03 — DOORS OPEN ✓", "SHOWTIME"],
     // phase labels for the self-drawing venue rig
@@ -54,15 +55,14 @@ export const en = {
   },
   about: {
     eyebrow: "Who we are",
-    heading: "The magic is behind the scene",
+    heading: "Everything you don't see is our job",
     philosophy:
-      "Event planning is all about the behind scene “magic”. It's about tiny details and logistics and emotions that should be carefully thought and mapped out to create a memorable experience.",
+      "Every event we run starts with months of careful groundwork and ends up as a story. People remember your brand, and they remember the day",
     paragraphs: [
-      "Background Production is an Armenia-based, full-service firm specializing in music and film production, event planning, and project management — operating locally and across the CIS and European regions.",
-      "We are process-driven, idea-oriented and results focused. We listen to the customer and translate their offer into mind-blowing ideas — committed to take each project through from start to finish while keeping the vision, goals, budget and client's needs in mind.",
-      "From dinner galas and grand openings to government ceremonies and continental championships, we deliver stress-free experiences built on proven expertise and reputation.",
+      "Background Production is an Armenia-based, full-service firm specializing in music and film production, event planning, and project management, operating locally and across the CIS and Europe",
+      "From dinner galas and grand openings to government ceremonies and continental championships, we deliver stress-free experiences built on proven expertise and reputation",
     ],
-    aside: "We love details!",
+    aside: "Should we talk numbers?",
   },
   stats: [
     { value: "13+", label: "Landmark events produced" },
@@ -80,8 +80,8 @@ export const en = {
     "Gyumri Beer Factory",
   ],
   principles: {
-    eyebrow: "How we operate",
-    heading: "Four words we actually mean",
+    eyebrow: "Why choose us",
+    heading: "Why choose us",
     // split statement for the expanding-image reveal (left ▪ image ▪ right).
     // The centre square flips through `images` as you scroll while it scales
     // to full-bleed — swap/extend these with real event photos (10+ reads best;
@@ -103,25 +103,25 @@ export const en = {
     items: [
       {
         title: "Professional",
-        text: "Protocol-grade delivery, from government ceremonies to continental sport. No detail unowned, no deadline missed.",
+        text: "From government ceremonies to continental sport, everything runs to protocol. Nothing gets missed, nothing runs late",
       },
       {
         title: "Creative",
-        text: "We translate a brief into ideas the room has never seen before — then engineer them until they work.",
+        text: "We read the brief, then forget the obvious. We pitch ideas the room hasn't seen, and work them until they actually land",
       },
       {
         title: "Innovative",
-        text: "Physical, hybrid or fully virtual — we build the format around the audience, not the other way round.",
+        text: "Physical, hybrid, or fully virtual — we pick the format around the audience, not the other way around",
       },
       {
         title: "Experienced",
-        text: "Years of productions across Armenia, the CIS and Europe, carried by reputation rather than promises.",
+        text: "Years of production across Armenia, the CIS and Europe. Backed by track record, not talk",
       },
     ],
   },
   work: {
     eyebrow: "Selected work",
-    heading: "Moments we made unforgettable",
+    heading: "We made all this special",
   },
   marquee: [
     "Corporate Events",
@@ -140,7 +140,7 @@ export const en = {
      your verified figures (attendance, countries, broadcast reach). */
   success: {
     eyebrow: "Success stories",
-    heading: "Proof, not promises",
+    heading: "How do we create masterpieces?",
     items: [
       {
         slug: "ebrd-2024-annual-meeting",
@@ -265,23 +265,23 @@ export const en = {
   },
   process: {
     eyebrow: "How it works",
-    bigTitle: "Project Journey",
+    bigTitle: "3 Steps to Quality",
     heading: "Three steps between a brief and a memory",
     /* `video`: drop your clip at the path (e.g. "/assets/journey/step-1.mp4")
        and it plays in the sticky media panel. `poster` shows until the video
        loads (or if the file isn't there yet). */
     steps: [
       {
-        title: "Listen & translate",
-        text: "We start with your goals, audience and budget — and translate them into a concept worth remembering.",
+        title: "We Listen",
+        text: "We start with your goals, your audience and your budget, and turn them into an idea worth remembering",
         video: "/assets/journey/step-1.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null as string | null,
         youtubeStart: null as number | null,
       },
       {
-        title: "Design & plan",
-        text: "Every tiny detail, logistic and emotion is mapped out in advance. This is the behind-scene magic.",
+        title: "We Plan",
+        text: "Every detail, every step, every emotion mapped out in advance. This is the real work the audience never sees",
         // Pexels video 18069235 (Pexels license — free commercial use)
         video: "/assets/journey/step-2.mp4",
         poster: "/images/portfolio/ebrd.jpg",
@@ -289,8 +289,8 @@ export const en = {
         youtubeStart: null as number | null,
       },
       {
-        title: "Produce & deliver",
-        text: "On show day you are a guest at your own event. We run the room, end to end, stress-free.",
+        title: "We Deliver",
+        text: "On the day of the event, you're a guest at your own celebration. We run the room, start to finish, stress-free",
         video: "/assets/journey/step-3.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null as string | null,
@@ -307,26 +307,26 @@ export const en = {
     items: [
       {
         q: "What kinds of events do you produce?",
-        a: "Corporate events, dinner galas, concerts, grand openings, anniversaries, conferences, international forums, sports championships, private and government events — plus music and film production.",
+        a: "We plan corporate events, dinner galas, concerts, grand openings, anniversaries, conferences, international forums, sports championships, private and government events, plus music and film production",
       },
       {
         q: "Do you work outside Armenia?",
-        a: "Yes. We operate locally and across the CIS and European regions, and have produced continental-scale events end to end.",
+        a: "Yes. We operate across Armenia, the CIS and Europe, and have delivered continental-scale events end to end",
       },
       {
         q: "Can an event be hybrid or virtual?",
-        a: "All three formats — physical, hybrid and virtual. We design the format around your audience and goals.",
+        a: "Yes, we deliver everything — physical, hybrid, or fully virtual. We build the format around your audience and your goals",
       },
       {
         q: "How do we start?",
-        a: "Write to info@background.am or call +374 55 605070. Tell us the occasion, the date and the ambition — we take it from there.",
+        a: "Write to info@background.am or call +374 55 605070. Tell us about the occasion and we'll take it from there",
       },
     ],
   },
   contactSection: {
     eyebrow: "Contact",
-    heading: "Ready to raise the curtain?",
-    sub: "Tell us the occasion, the date and the ambition — we take it from there.",
+    heading: "Your best event hasn't happened yet",
+    sub: "Write, call, or just tell us what you're thinking and let's nail it!",
   },
   footer: {
     blurb: "Full-service event production — physical, hybrid and virtual.",

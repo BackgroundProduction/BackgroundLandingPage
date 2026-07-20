@@ -178,12 +178,8 @@ export default function ServicesSection() {
             </div>
           </div>
 
-          <p
-            key={active}
-            className="fade-in dim mt-10 max-w-lg text-[length:var(--text-body-lg)] leading-relaxed lg:max-w-[62%]"
-          >
-            {items[active].description}
-          </p>
+          {/* reviewer note: per-service description removed to keep the
+              section visual — the data stays in content for future use */}
         </div>
       </div>
     </section>
