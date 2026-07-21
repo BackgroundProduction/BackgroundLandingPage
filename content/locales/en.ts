@@ -29,11 +29,11 @@ export const en = {
     clientStories: "Real client stories",
   },
   hero: {
-    eyebrow: "Event production  Yerevan, Armenia",
-    title: "We produce top events that move people and make days special",
+    eyebrow: "Event production // Yerevan, Armenia",
+    title: "We don't run events. We make moments.",
     // headline split for the serif-italic accent word (pre · accent · post)
-    titleParts: ["We produce top events that ", "move people", " and make days special"],
-    sub: "Background Production plans and produces corporate events, concerts, dinner galas, grand openings, conferences and government ceremonies across Armenia, the CIS and Europe",
+    titleParts: ["We don't run events. We make ", "moments", ""],
+    sub: "One partner for the whole thing — strategy, staging, sound, light and film. Concerts, galas, forums, opening ceremonies and state occasions, across Armenia, the CIS and Europe.",
     // stage-manager cue lines for the hero boot sequence
     cues: ["CUE 01  SOUND CHECK ✓", "CUE 02  LIGHTS ✓", "CUE 03  DOORS OPEN ✓", "SHOWTIME"],
     // phase labels for the self-drawing venue rig
@@ -54,20 +54,20 @@ export const en = {
   },
   about: {
     eyebrow: "Who we are",
-    heading: "Everything you don't see is our job",
+    heading: "One team. Every kind of moment",
     philosophy:
-      "Every event we run starts with months of careful groundwork and ends up as a story. People remember your brand, and they remember the day",
+      "No silos, no handoffs, no excuses. One team owns your event — from the first idea to the last light going dark.",
     paragraphs: [
-      "Background Production is an Armenia-based, full-service firm specializing in music and film production, event planning, and project management, operating locally and across the CIS and Europe",
-      "From dinner galas and grand openings to government ceremonies and continental championships, we deliver stress-free experiences built on proven expertise and reputation",
+      "Background Production is a full-service event company from Yerevan — strategy, creative, production, sound, light and film under one roof.",
+      "From government ceremonies to continental sport, we've delivered across Armenia, the CIS and Europe. Bold enough to try what the room hasn't seen. Experienced enough to make it land.",
     ],
     aside: "Should we talk numbers?",
   },
   stats: [
-    { value: "13+", label: "Landmark events produced" },
+    { value: "60+", label: "Landmark events produced" },
     { value: "1,000,000+", label: "Total live audience across our events" },
-    { value: "3", label: "Continental championships staged" },
-    { value: "3", label: "Regions  Armenia · CIS · Europe" },
+    { value: "10+", label: "Continental championships staged" },
+    { value: "20+", label: "Regions  Armenia · CIS · Europe" },
   ],
   /* Client logo wall  only clients with real logo files are listed.
      To add one: drop the file in public/assets/logos/ and add { name, logo }. */
@@ -86,7 +86,7 @@ export const en = {
     // The centre square flips through `images` as you scroll while it scales
     // to full-bleed  swap/extend these with real event photos (10+ reads best;
     // the first frame is the emblem shown at rest).
-    splitLeft: "We make",
+    splitLeft: "We make ",
     splitRight: "moments",
     images: [
       "/assets/moments-emblem.svg",
@@ -103,19 +103,19 @@ export const en = {
     items: [
       {
         title: "Professional",
-        text: "From government ceremonies to continental sport, everything runs to protocol. Nothing gets missed, nothing runs late",
+        text: "State ceremony or continental sport, it runs to protocol. Nothing missed. Nothing late.",
       },
       {
         title: "Creative",
-        text: "We read the brief, then forget the obvious. We pitch ideas the room hasn't seen, and work them until they actually land",
+        text: "We read the brief, then forget the obvious. Ideas the room hasn't seen — worked until they land.",
       },
       {
         title: "Innovative",
-        text: "Physical, hybrid, or fully virtual  we pick the format around the audience, not the other way around",
+        text: "Physical, hybrid or fully virtual. We build the format around the audience, never the other way around.",
       },
       {
         title: "Experienced",
-        text: "Years of production across Armenia, the CIS and Europe. Backed by track record, not talk",
+        text: "Years of production across Armenia, the CIS and Europe. Backed by track record, not talk.",
       },
     ],
   },
@@ -140,7 +140,7 @@ export const en = {
      your verified figures (attendance, countries, broadcast reach). */
   success: {
     eyebrow: "Success stories",
-    heading: "How do we create masterpieces?",
+    heading: "How the big ones get made.",
     items: [
       {
         slug: "ebrd-2024-annual-meeting",
@@ -237,35 +237,35 @@ export const en = {
         slug: "music-film-production",
         title: "Music & Film Production",
         description:
-          "Professional music and movie producing  from concept and score to final cut, crafted with cinematic precision.",
+          "Music and film, produced end to end. Concept, score, shoot, final cut — cinematic precision at every frame.",
         image: "/assets/help-images/move-production.jpg",
       },
       {
         slug: "concerts-grand-openings",
         title: "Concerts & Grand Openings",
         description:
-          "Concerts, grand openings and anniversaries staged as unforgettable spectacles  lighting, sound and emotion in perfect sync.",
+          "Concerts, grand openings and anniversaries, staged as spectacle. Light, sound and emotion, locked in sync.",
         image: "/assets/help-images/concert.webp",
       },
       {
         slug: "conferences-forums",
         title: "Conferences & Forums",
         description:
-          "Corporate events, dinner galas, conferences and international forums  physical, hybrid and virtual  executed flawlessly end to end.",
+          "Corporate events, galas, conferences and international forums. Physical, hybrid or virtual — flawless start to finish.",
         image: "/assets/help-images/private-events.webp",
       },
       {
         slug: "government-private-events",
         title: "Government & Private Events",
         description:
-          "State ceremonies, official inaugurations and private celebrations handled with discretion, protocol and grandeur.",
+          "State ceremonies, official inaugurations and private celebrations. Handled with discretion, protocol and grandeur.",
         image: "/assets/help-images/goverment-private.webp",
       },
     ],
   },
   process: {
     eyebrow: "How it works",
-    bigTitle: "3 Steps to Quality",
+    bigTitle: "Project journey",
     heading: "Three steps between a brief and a memory",
     /* `video`: drop your clip at the path (e.g. "/assets/journey/step-1.mp4")
        and it plays in the sticky media panel. `poster` shows until the video
@@ -273,7 +273,7 @@ export const en = {
     steps: [
       {
         title: "We Listen",
-        text: "We start with your goals, your audience and your budget, and turn them into an idea worth remembering",
+        text: "Your goals, your audience, your budget — turned into an idea worth remembering.",
         video: "/assets/journey/step-1.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null as string | null,
@@ -281,7 +281,7 @@ export const en = {
       },
       {
         title: "We Plan",
-        text: "Every detail, every step, every emotion mapped out in advance. This is the real work the audience never sees",
+        text: "Every detail, every cue, every emotion mapped in advance. The real work the audience never sees.",
         // Pexels video 18069235 (Pexels license  free commercial use)
         video: "/assets/journey/step-2.mp4",
         poster: "/images/portfolio/ebrd.jpg",
@@ -290,7 +290,7 @@ export const en = {
       },
       {
         title: "We Deliver",
-        text: "On the day of the event, you're a guest at your own celebration. We run the room, start to finish, stress-free",
+        text: "On the day, you're a guest at your own event. We run the room, start to finish.",
         video: "/assets/journey/step-3.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null as string | null,
@@ -326,7 +326,7 @@ export const en = {
   contactSection: {
     eyebrow: "Contact",
     heading: "Your best event hasn't happened yet",
-    sub: "Write, call, or just tell us what you're thinking and let's nail it!",
+    sub: "Write, call, or just tell us what you're picturing. We'll take it from there.",
   },
   footer: {
     blurb: "Full-service event production  physical, hybrid and virtual.",
@@ -345,6 +345,18 @@ export const en = {
     { label: "YouTube", href: "https://www.youtube.com/@backgroundproduction" },
   ],
   portfolio: [
+    {
+      slug: "vardavar-2026",
+      title: "Vardavar Festival",
+      category: "City Festival",
+      location: "Republic Square, Yerevan",
+      date: "July 12, 2026",
+      image: {
+        src: "/images/portfolio/placeholder-concert.svg",
+        alt: "Vardavar 2026 festival staged on Republic Square, Yerevan",
+        isPlaceholder: true,
+      },
+    },
     {
       slug: "european-shooting-championship-2026",
       title: "European Shooting Championship",

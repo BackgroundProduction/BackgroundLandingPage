@@ -122,7 +122,7 @@ export default function PrinciplesSection() {
               transparent emblem shown at rest. */}
           <div
             ref={centerRef}
-            className="relative z-0 aspect-square w-[10vw] min-w-[80px] shrink-0 overflow-hidden will-change-transform"
+            className="relative z-0 aspect-square w-[7vw] min-w-[80px] shrink-0 overflow-hidden will-change-transform"
           >
             {frames.map((src, i) => (
               <div
@@ -138,7 +138,7 @@ export default function PrinciplesSection() {
                   alt=""
                   fill
                   // the square never renders wider than 1000px (see coverScale)
-                  sizes="(max-width: 768px) 92vw, 1000px"
+                  sizes="(max-width: 568px) 92vw, 1000px"
                   priority={i === 0}
                   className={src.includes("emblem") ? "object-contain" : "object-cover"}
                 />
