@@ -30,10 +30,10 @@ export const en = {
   },
   hero: {
     eyebrow: "Event production // Yerevan, Armenia",
-    title: "We don't run events. We make moments.",
+    title: "Build to Be Remembered",
     // headline split for the serif-italic accent word (pre · accent · post)
-    titleParts: ["We don't run events. We make ", "moments", ""],
-    sub: "One partner for the whole thing — strategy, staging, sound, light and film. Concerts, galas, forums, opening ceremonies and state occasions, across Armenia, the CIS and Europe.",
+    titleParts: ["Build to Be ", "Remembered", ""],
+    sub: "One partner. Endless possibility",
     // stage-manager cue lines for the hero boot sequence
     cues: ["CUE 01  SOUND CHECK ✓", "CUE 02  LIGHTS ✓", "CUE 03  DOORS OPEN ✓", "SHOWTIME"],
     // phase labels for the self-drawing venue rig
@@ -54,7 +54,7 @@ export const en = {
   },
   about: {
     eyebrow: "Who we are",
-    heading: "One team. Every kind of moment",
+    heading: "One team. Legacy Experience",
     philosophy:
       "No silos, no handoffs, no excuses. One team owns your event — from the first idea to the last light going dark.",
     paragraphs: [
@@ -86,8 +86,8 @@ export const en = {
     // The centre square flips through `images` as you scroll while it scales
     // to full-bleed  swap/extend these with real event photos (10+ reads best;
     // the first frame is the emblem shown at rest).
-    splitLeft: "We make ",
-    splitRight: "moments",
+    splitLeft: "We Design",
+    splitRight: "the Moments",
     images: [
       "/assets/moments-emblem.svg",
       "/images/portfolio/placeholder-concert.svg",
