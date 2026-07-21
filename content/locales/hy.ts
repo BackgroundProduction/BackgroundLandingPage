@@ -75,7 +75,7 @@ export const hy: Content = {
     { name: "«Խազեր» մրցանակաբաշխություն", logo: "/assets/logos/khazer.svg" },
     { name: "Կարատեի եվրոպական ֆեդերացիա", logo: "/assets/logos/ekf.png" },
     { name: "ՀՀ կառավարություն", logo: "/assets/logos/armenia-gov.png" },
-    { name: "Հրաձգության եվրոպական կոնֆեդերացիա", logo: "/assets/logos/european-shooting.jpeg" },
+    { name: "Հրաձգության եվրոպական կոնֆեդերացիա", logo: "/assets/logos/european-shooting.png" },
   ],
   principles: {
     eyebrow: "Ինչու հենց մենք",

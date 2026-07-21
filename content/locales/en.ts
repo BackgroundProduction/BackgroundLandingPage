@@ -56,9 +56,9 @@ export const en = {
     eyebrow: "Who we are",
     heading: "One team. Legacy Experience",
     philosophy:
-      "No silos, no handoffs, no excuses. One team owns your event — from the first idea to the last light going dark.",
+      "No silos, no handoffs, no excuses. One team owns your event from the first idea to the last light going dark.",
     paragraphs: [
-      "Background Production is a full-service event company from Yerevan — strategy, creative, production, sound, light and film under one roof.",
+      "Background Production is a full-service event company from Yerevan strategy, creative, production, sound, light and film under one roof.",
       "From government ceremonies to continental sport, we've delivered across Armenia, the CIS and Europe. Bold enough to try what the room hasn't seen. Experienced enough to make it land.",
     ],
     aside: "Should we talk numbers?",
@@ -77,7 +77,7 @@ export const en = {
     { name: "Khazer Music Awards", logo: "/assets/logos/khazer.svg" },
     { name: "European Karate Federation", logo: "/assets/logos/ekf.png" },
     { name: "Government of Armenia", logo: "/assets/logos/armenia-gov.png" },
-    { name: "European Shooting Confederation", logo: "/assets/logos/european-shooting.jpeg" },
+    { name: "European Shooting Confederation", logo: "/assets/logos/european-shooting.png" },
   ],
   principles: {
     eyebrow: "Why choose us",
@@ -107,7 +107,7 @@ export const en = {
       },
       {
         title: "Creative",
-        text: "We read the brief, then forget the obvious. Ideas the room hasn't seen — worked until they land.",
+        text: "We read the brief, then forget the obvious. Ideas the room hasn't seen worked until they land.",
       },
       {
         title: "Innovative",
@@ -237,7 +237,7 @@ export const en = {
         slug: "music-film-production",
         title: "Music & Film Production",
         description:
-          "Music and film, produced end to end. Concept, score, shoot, final cut — cinematic precision at every frame.",
+          "Music and film, produced end to end. Concept, score, shoot, final cut cinematic precision at every frame.",
         image: "/assets/help-images/move-production.jpg",
       },
       {
@@ -251,7 +251,7 @@ export const en = {
         slug: "conferences-forums",
         title: "Conferences & Forums",
         description:
-          "Corporate events, galas, conferences and international forums. Physical, hybrid or virtual — flawless start to finish.",
+          "Corporate events, galas, conferences and international forums. Physical, hybrid or virtual flawless start to finish.",
         image: "/assets/help-images/private-events.webp",
       },
       {
@@ -273,7 +273,7 @@ export const en = {
     steps: [
       {
         title: "We Listen",
-        text: "Your goals, your audience, your budget — turned into an idea worth remembering.",
+        text: "Your goals, your audience, your budget turned into an idea worth remembering.",
         video: "/assets/journey/step-1.mp4",
         poster: "/images/portfolio/ebrd.jpg",
         youtube: null as string | null,
