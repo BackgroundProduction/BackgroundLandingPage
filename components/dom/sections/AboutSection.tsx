@@ -134,7 +134,7 @@ export default function AboutSection() {
               className="font-display font-medium text-display-lg mt-6"
             >
               {t.about.heading}
-              <span className="text-accent">.</span>
+              
             </h2>
             {/* brand mark under the heading — assembles like a puzzle on
                 scroll. Grows to fill whatever height the stats column sets

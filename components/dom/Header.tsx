@@ -21,7 +21,7 @@ export default function Header() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/assets/logo.svg" alt="" aria-hidden="true" className="h-5 w-auto" />
-          Background<span className="text-accent">.</span>
+          Background Production
         </a>
         <nav aria-label="Main navigation" className="hidden lg:block">
           <ul className="flex gap-8">
