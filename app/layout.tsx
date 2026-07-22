@@ -8,7 +8,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="hy"
+      lang="en"
       className={`${grotesk.variable} ${inter.variable} ${notoArmenian.variable} ${serifDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full grain">{children}</body>

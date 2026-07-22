@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 /**
  * Clean background YouTube embed: muted autoplay, looped, no controls /
  * related videos / keyboard, non-interactive (pointer events blocked).
@@ -7,6 +9,11 @@
  * cover-crops the container (111.2% suits a 16/10 frame).
  * A small YouTube logo can still flash briefly — the embed API does not
  * allow removing it entirely.
+ *
+ * The iframe is only mounted while its box is near the viewport. Every embed
+ * is an autoplaying player in its own process; leaving all of them mounted
+ * pinned this page at ~2fps, because the GPU decodes one stream in hardware
+ * and falls back to software for the rest.
  */
 export default function CleanYouTube({
   id,
@@ -33,16 +40,33 @@ export default function CleanYouTube({
   });
   if (start) params.set("start", String(start));
 
+  const box = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(false);
+
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => setNear(e.isIntersecting),
+      // mount a little before it scrolls in so there is no visible pop
+      { rootMargin: "200px", threshold: 0.01 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      <iframe
-        title=""
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        style={{ height: "100%", width: coverWidth, border: "none" }}
-        src={`https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`}
-        allow="autoplay; encrypted-media"
-      />
+    <div ref={box} className="absolute inset-0 overflow-hidden">
+      {near && (
+        <iframe
+          title=""
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{ height: "100%", width: coverWidth, border: "none" }}
+          src={`https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`}
+          allow="autoplay; encrypted-media"
+        />
+      )}
       {/* transparent blocker — no pause on click, no hover chrome */}
       <div className="absolute inset-0" />
     </div>

@@ -49,7 +49,9 @@ html {
 }
 
 body {
-  background: var(--color-bg);
+  /* deliberately transparent: html paints the page colour, and body's own
+     background would render *after* negative z-index children, hiding the
+     ribbon layer behind the content */
   color: var(--color-text);
   font-family: var(--font-body), var(--font-armenian), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -62,8 +64,12 @@ body {
 }
 
 /* Dark-scoped blocks (footer, final CTA) */
+/* The elevated sections used to paint an opaque #121110, which hid the
+   page-wide ribbon layer sitting behind the content. A 3.5% warm-white wash
+   over the page background renders the same colour while staying translucent,
+   so the ribbons still read through it. */
 .theme-dark {
-  background: var(--color-dark);
+  background: rgba(240, 238, 233, 0.035);
   color: var(--color-dark-text);
 }
 .theme-dark .dim { color: var(--color-dark-dim); }

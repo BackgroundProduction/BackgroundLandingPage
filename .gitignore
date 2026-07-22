@@ -42,3 +42,6 @@ next-env.d.ts
 
 # full-resolution originals for the flipbook (kept locally, never committed)
 .scrollimages-originals/
+
+# full-resolution media originals (kept locally, never committed)
+.media-originals/

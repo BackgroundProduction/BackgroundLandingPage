@@ -9,7 +9,7 @@
  * - tick: short high blip for link/button hovers.
  * - click: two-step confirmation blip for presses.
  */
-const AMBIENT_SRC = "/assets/sound/bg-bgmusic.mp3";
+const AMBIENT_SRC = "/assets/sound/bg-bgmusic.m4a";
 const AMBIENT_GAIN = 0.35;
 
 class SoundEngine {

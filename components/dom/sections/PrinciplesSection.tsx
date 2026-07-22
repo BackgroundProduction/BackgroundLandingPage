@@ -12,6 +12,13 @@ import { scrollImages } from "@/content/scroll-images";
 const SCROLL_PER_FRAME = 12;
 const MIN_SCROLL = 160;
 
+/* The gilded frame's opening sits at ~17% in from every edge (measured off
+   frame.webp's alpha channel, and centred within it). Photos are inset just
+   under that so their edges tuck behind the gold lip with no hairline gap;
+   the emblem gets more room so its wordmark can't be clipped. */
+const PHOTO_INSET = "15.5%";
+const EMBLEM_INSET = "21%";
+
 export default function PrinciplesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const animRef = useRef<HTMLDivElement>(null);
@@ -95,6 +102,7 @@ export default function PrinciplesSection() {
   return (
     <section
       ref={sectionRef}
+      id="principles"
       aria-labelledby="principles-heading"
       className="theme-dark relative flex min-h-screen items-center justify-center overflow-hidden px-[var(--gutter)] py-[var(--space-section-y)]"
     >
@@ -130,8 +138,11 @@ export default function PrinciplesSection() {
                 ref={(el) => {
                   frameRefs.current[i] = el;
                 }}
-                className="absolute inset-0"
-                style={{ opacity: i === 0 ? 1 : 0 }}
+                className="absolute"
+                style={{
+                  inset: src.includes("emblem") ? EMBLEM_INSET : PHOTO_INSET,
+                  opacity: i === 0 ? 1 : 0,
+                }}
               >
                 <Image
                   src={src}
@@ -144,6 +155,19 @@ export default function PrinciplesSection() {
                 />
               </div>
             ))}
+
+            {/* gilded frame — static above the flipbook, so every photo reads
+                as hung inside it. Trimmed to its own gold edge, so it lines up
+                with the square and the photos only show through its window. */}
+            <Image
+              src="/assets/frame.webp"
+              alt=""
+              aria-hidden="true"
+              fill
+              sizes="(max-width: 568px) 92vw, 1000px"
+              priority
+              className="pointer-events-none z-10 select-none object-fill"
+            />
           </div>
 
           <span
@@ -185,7 +209,7 @@ export default function PrinciplesSection() {
       {/* STATIC fallback — mobile / reduced motion (default before JS) */}
       <div ref={staticRef} className="w-full">
         <p className="text-eyebrow text-accent">{t.principles.eyebrow}</p>
-        <h2 className="font-display font-medium text-display-lg mt-6 max-w-[20ch]">
+        <h2 className="font-display font-bold uppercase text-display-lg mt-6 max-w-[20ch]">
           {t.principles.heading}
           <span className="text-accent">.</span>
         </h2>

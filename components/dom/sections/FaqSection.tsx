@@ -12,6 +12,7 @@ export default function FaqSection() {
   return (
     <section
       ref={ref}
+      id="faq"
       aria-labelledby="faq-heading"
       className="theme-dark px-[var(--gutter)] py-[var(--space-section-y)]"
     >
@@ -52,7 +53,7 @@ export default function FaqSection() {
             </p>
             <p className="dim mt-1 text-sm">{t.faq.moreText}</p>
             <a
-              href={t.contact.emailHref}
+              href={t.contact.phoneHref}
               className="mt-5 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-transform hover:scale-[1.03]"
               style={{ background: "var(--color-paper)", color: "var(--color-ink)" }}
             >
@@ -67,7 +68,7 @@ export default function FaqSection() {
           <h2
             id="faq-heading"
             data-reveal
-            className="font-display font-medium max-w-[20ch]"
+            className="font-display font-bold uppercase max-w-[20ch]"
             style={{ fontSize: "clamp(2rem, 4vw, 4rem)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
           >
             {t.faq.heading}

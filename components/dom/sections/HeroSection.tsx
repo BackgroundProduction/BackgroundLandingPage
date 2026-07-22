@@ -67,7 +67,7 @@ export default function HeroSection() {
       ref={ref}
       id="top"
       aria-label="Introduction"
-      className="relative isolate min-h-screen overflow-hidden"
+      className="relative isolate min-h-svh overflow-hidden"
     >
       {/* the venue — drag to orbit */}
       <div data-stage className="absolute inset-0 z-0" aria-hidden="true">
@@ -98,7 +98,7 @@ export default function HeroSection() {
       {/* headline block — pointer-events pass through to the rig except on CTAs */}
       {/* full-width with the same gutter as the header, so the copy
           left-aligns with the logo */}
-      <div className="pointer-events-none relative z-20 flex min-h-screen w-full flex-col justify-end px-[var(--gutter)] pb-8 pt-28">
+      <div className="pointer-events-none relative z-20 flex min-h-svh w-full flex-col justify-end px-[var(--gutter)] pb-8 pt-28">
         <p data-reveal className="text-eyebrow text-text-dim">
           {t.hero.eyebrow}
         </p>
@@ -112,12 +112,7 @@ export default function HeroSection() {
           }}
         >
           {t.hero.titleParts[0]}
-          <em
-            className="font-serif-display italic text-accent"
-            style={{ fontSize: "1.06em", letterSpacing: "0" }}
-          >
-            {t.hero.titleParts[1]}
-          </em>
+          <span className="text-accent">{t.hero.titleParts[1]}</span>
           {t.hero.titleParts[2]}
           <span className="text-accent">.</span>
         </h1>
@@ -127,7 +122,7 @@ export default function HeroSection() {
         >
           <div className="flex flex-wrap items-center gap-4">
             <MagneticButton
-              href={t.contact.emailHref}
+              href={t.contact.phoneHref}
               className="rounded-full px-7 py-3.5 font-medium"
               style={{ background: "var(--color-paper)", color: "var(--color-ink)" }}
             >

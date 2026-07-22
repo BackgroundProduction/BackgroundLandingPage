@@ -52,8 +52,8 @@ const orbit = {
  *  the orbit to face the viewer, since photo scenes are flat billboards. */
 const morphShared = { m: 0, flat: 0 };
 
-// scenes 0..8 are the drawn venues; photo scenes are appended after
-const DRAWN_SCENES = 9;
+// scenes 0..5 are the drawn venues; photo scenes are appended after
+const DRAWN_SCENES = 6;
 
 /* ------------------------------------------------------------------ */
 /* Line-sketch builders: every scene is one flat list of segments      */
@@ -365,7 +365,7 @@ function chair(
   );
 }
 
-/** Scene C — conferences & forums: dais, screen with charts, podium,
+/** Scene C — conferences & forums: dais, blank screen, podium,
  *  panel table, audience rows, hanging banners. */
 function buildConference(s: Sk, a: Sk) {
   const w45 = tone(WIRE, 0.45);
@@ -374,7 +374,6 @@ function buildConference(s: Sk, a: Sk) {
   const w8 = tone(WIRE, 0.8);
   const dim8 = tone(WIRE_DIM, 0.8);
   const acc45 = tone(ACCENT, 0.45);
-  const acc55 = tone(ACCENT, 0.55);
 
   // stage dais
   box(s, w6, 0, 0.35, -1.5, 12, 0.7, 5);
@@ -395,21 +394,6 @@ function buildConference(s: Sk, a: Sk) {
   // support poles down to the dais
   seg(s,-3.4, sy - 2.5, sz, -3.4, 0.7, sz, w5);
   seg(s,3.4, sy - 2.5, sz, 3.4, 0.7, sz, w5);
-
-  // on-screen chart: ascending bars (right half, accent)
-  const bh = [0.7, 1.2, 1.6, 2.1, 2.7];
-  for (let i = 0; i < 5; i++) {
-    const bx = 0.5 + i * 0.75;
-    const h = bh[i];
-    seg(a,bx - 0.26, 3.55, sz + 0.05, bx - 0.26, 3.55 + h, sz + 0.05, acc55);
-    seg(a,bx - 0.26, 3.55 + h, sz + 0.05, bx + 0.26, 3.55 + h, sz + 0.05, acc55);
-    seg(a,bx + 0.26, 3.55 + h, sz + 0.05, bx + 0.26, 3.55, sz + 0.05, acc55);
-    seg(a,bx + 0.26, 3.55, sz + 0.05, bx - 0.26, 3.55, sz + 0.05, acc55);
-  }
-  // on-screen pie chart (left half, dashed accent ring + two slice lines)
-  ring(a, acc55, -2.5, sy + 0.1, sz + 0.05, 1.15, "z", 64, [0.42, 0.28]);
-  seg(a,-2.5, sy + 0.1, sz + 0.05, -2.5, sy + 1.25, sz + 0.05, acc45);
-  seg(a,-2.5, sy + 0.1, sz + 0.05, -3.5, sy - 0.47, sz + 0.05, acc45);
 
   // podium with gooseneck mic (stage left)
   box(s, w6, -2.6, 1.28, -0.5, 0.9, 1.15, 0.7);
@@ -540,98 +524,7 @@ function polyline(s: Sk, c: THREE.Color, pts: [number, number, number][]) {
     seg(s, pts[i - 1][0], pts[i - 1][1], pts[i - 1][2], pts[i][0], pts[i][1], pts[i][2], c);
 }
 
-/** Scene E — the Yerevan Opera & Ballet Theatre (Tamanyan's rotunda on
- *  Freedom Square): stylobate, arched lower hall, ring colonnade, shallow
- *  conical roof, grand entrance arch and the festival sphere above. */
-function buildOpera(s: Sk, a: Sk) {
-  const w45 = tone(WIRE, 0.45);
-  const w5 = tone(WIRE, 0.5);
-  const w6 = tone(WIRE, 0.6);
-  const dim8 = tone(WIRE_DIM, 0.8);
-  const acc45 = tone(ACCENT, 0.45);
-  const acc55 = tone(ACCENT, 0.55);
-
-  // Freedom Square plaza
-  ring(s, dim8, 0, 0.02, 0, 7.6, "y", 96, [0.6, 0.5]);
-  ring(s, dim8, 0, 0.02, 0, 6.2, "y", 64);
-
-  // stylobate — the wide base drum with pilaster rhythm
-  ring(s, w6, 0, 0.12, 0, 5.7, "y", 72);
-  ring(s, w6, 0, 1.15, 0, 5.7, "y", 72);
-  for (let k = 0; k < 18; k++) {
-    const ang = (k / 18) * Math.PI * 2;
-    const cx = Math.cos(ang) * 5.7;
-    const cz = Math.sin(ang) * 5.7;
-    seg(s, cx, 0.12, cz, cx, 1.15, cz, w45);
-  }
-
-  // lower hall drum with arched windows around the cylinder
-  ring(s, w6, 0, 1.15, 0, 5.0, "y", 72);
-  ring(s, w6, 0, 3.55, 0, 5.0, "y", 72);
-  for (let k = 0; k < 14; k++) {
-    const angC = (k / 14) * Math.PI * 2;
-    const aw = 0.13; // half-width of a window, in radians
-    const yB = 1.5;
-    const yT = 2.9;
-    const pt = (ang: number, y: number): [number, number, number] => [
-      Math.cos(ang) * 5.0,
-      y,
-      Math.sin(ang) * 5.0,
-    ];
-    const arch: [number, number, number][] = [pt(angC - aw, yB), pt(angC - aw, yT)];
-    for (let i = 0; i <= 6; i++) {
-      const u = i / 6;
-      arch.push(pt(angC - aw + 2 * aw * u, yT + Math.sin(Math.PI * u) * 0.45));
-    }
-    arch.push(pt(angC + aw, yT), pt(angC + aw, yB));
-    polyline(s, w5, arch);
-  }
-
-  // upper drum wearing its ring colonnade
-  ring(s, w6, 0, 3.55, 0, 4.2, "y", 64);
-  ring(s, w5, 0, 3.75, 0, 4.2, "y", 64);
-  ring(s, w5, 0, 5.75, 0, 4.2, "y", 64);
-  ring(s, w6, 0, 6.0, 0, 4.35, "y", 64);
-  for (let k = 0; k < 26; k++) {
-    const ang = (k / 26) * Math.PI * 2;
-    const cx = Math.cos(ang) * 4.2;
-    const cz = Math.sin(ang) * 4.2;
-    seg(s, cx, 3.75, cz, cx, 5.75, cz, w6);
-  }
-
-  // shallow conical roof
-  ring(s, w5, 0, 6.75, 0, 3.1, "y", 48);
-  ring(s, w5, 0, 7.1, 0, 1.1, "y", 24);
-  for (let k = 0; k < 16; k++) {
-    const ang = (k / 16) * Math.PI * 2;
-    seg(
-      s,
-      Math.cos(ang) * 4.35, 6.0, Math.sin(ang) * 4.35,
-      Math.cos(ang) * 1.1, 7.1, Math.sin(ang) * 1.1,
-      w45
-    );
-  }
-
-  // grand entrance portico, projecting from the front (accent)
-  for (const dx of [-1.6, 1.6]) seg(a, dx, 0.12, 5.8, dx, 2.5, 5.8, acc45);
-  const portal: [number, number, number][] = [];
-  for (let i = 0; i <= 12; i++) {
-    const u = i / 12;
-    portal.push([-1.6 + 3.2 * u, 2.5 + Math.sin(Math.PI * u) * 1.5, 5.8]);
-  }
-  polyline(a, acc55, portal);
-  // entrance steps
-  seg(s, -2.6, 0.05, 6.5, 2.6, 0.05, 6.5, dim8);
-  seg(s, -2.2, 0.1, 6.15, 2.2, 0.1, 6.15, dim8);
-
-  // festival sphere hovering above the roof (accent)
-  seg(s, 0, 7.1, 0, 0, 8.1, 0, dim8);
-  ring(a, acc55, 0, 8.55, 0, 0.45, "z", 20);
-  ring(a, acc45, 0, 8.55, 0, 0.45, "x", 20);
-  ring(a, acc45, 0, 8.55, 0, 0.45, "y", 20);
-}
-
-/** Scene F — the client's own installation, traced 1:1 from their CAD
+/** Scene E — the client's own installation, traced 1:1 from their CAD
  *  model (DWG → mesh edges → lib/installation-edges.json). Proportions
  *  are exact; only a uniform scale makes it read at hero size. The tall
  *  tower and rooflines glow as accents. */
@@ -648,126 +541,7 @@ function buildInstallation(s: Sk, a: Sk) {
   }
 }
 
-/** Scene G — awards night: a glowing trophy on a stepped pedestal, a star
- *  overhead and confetti glints (Khazer, Hero of Our Times…). */
-function buildTrophy(s: Sk, a: Sk) {
-  const w45 = tone(WIRE, 0.45);
-  const w5 = tone(WIRE, 0.5);
-  const w6 = tone(WIRE, 0.6);
-  const dim8 = tone(WIRE_DIM, 0.8);
-  const acc45 = tone(ACCENT, 0.45);
-  const acc55 = tone(ACCENT, 0.55);
-  const rand = mulberry32(77);
-
-  // ceremony floor
-  ring(s, dim8, 0, 0.02, 0, 4.2, "y", 64);
-  ring(s, w5, 0, 0.02, 0, 6.4, "y", 96, [0.6, 0.5]);
-
-  // stepped pedestal
-  box(s, w6, 0, 0.45, 0, 3.4, 0.9, 3.4);
-  box(s, w6, 0, 1.1, 0, 2.5, 0.4, 2.5);
-
-  // stem and cup as rings of revolution
-  ring(s, w5, 0, 1.35, 0, 0.55, "y", 24);
-  ring(s, w5, 0, 1.9, 0, 0.32, "y", 20);
-  ring(s, w5, 0, 2.45, 0, 0.5, "y", 24);
-  ring(s, w6, 0, 3.0, 0, 1.05, "y", 32);
-  ring(s, w6, 0, 3.6, 0, 1.45, "y", 40);
-  ring(a, acc55, 0, 4.25, 0, 1.7, "y", 56); // glowing rim
-  for (let k = 0; k < 8; k++) {
-    const ang = (k / 8) * Math.PI * 2;
-    const cx = Math.cos(ang);
-    const cz = Math.sin(ang);
-    polyline(s, w45, [
-      [cx * 0.32, 1.9, cz * 0.32],
-      [cx * 0.5, 2.45, cz * 0.5],
-      [cx * 1.05, 3.0, cz * 1.05],
-      [cx * 1.45, 3.6, cz * 1.45],
-      [cx * 1.7, 4.25, cz * 1.7],
-    ]);
-  }
-  // handles
-  for (const dir of [-1, 1]) {
-    polyline(a, acc45, [
-      [dir * 1.55, 4.05, 0],
-      [dir * 2.35, 3.85, 0],
-      [dir * 2.55, 3.3, 0],
-      [dir * 2.1, 2.85, 0],
-      [dir * 1.15, 2.75, 0],
-    ]);
-  }
-  // star hovering above the cup
-  const star: [number, number, number][] = [];
-  for (let i = 0; i <= 10; i++) {
-    const ang = (i / 10) * Math.PI * 2 - Math.PI / 2;
-    const r = i % 2 === 0 ? 0.85 : 0.36;
-    star.push([Math.cos(ang) * r, 5.7 + Math.sin(ang) * r, 0]);
-  }
-  polyline(a, acc55, star);
-  // confetti glints drifting in the air
-  for (let i = 0; i < 40; i++) {
-    const x = (rand() - 0.5) * 10;
-    const y = 2 + rand() * 7;
-    const z = (rand() - 0.5) * 6;
-    seg(a, x, y, z, x + (rand() - 0.5) * 0.35, y + (rand() - 0.5) * 0.35, z, acc45);
-  }
-}
-
-/** Scene H — the singing fountains: a basin with a ring of curved jets
- *  leaning toward a tall central crown, droplets glinting at the crests. */
-function buildFountain(s: Sk, a: Sk) {
-  const w5 = tone(WIRE, 0.5);
-  const w6 = tone(WIRE, 0.6);
-  const dim8 = tone(WIRE_DIM, 0.8);
-  const acc45 = tone(ACCENT, 0.45);
-  const acc55 = tone(ACCENT, 0.55);
-  const rand = mulberry32(41);
-
-  // plaza + basin rims
-  ring(s, dim8, 0, 0.02, 0, 8, "y", 96, [0.6, 0.5]);
-  ring(s, w6, 0, 0.05, 0, 6.5, "y", 96);
-  ring(s, w6, 0, 0.35, 0, 6.2, "y", 96);
-  ring(s, w5, 0, 0.35, 0, 2.2, "y", 40);
-
-  // ring of jets arcing toward the centre
-  const JETS = 14;
-  for (let k = 0; k < JETS; k++) {
-    const ang = (k / JETS) * Math.PI * 2;
-    const cx = Math.cos(ang);
-    const cz = Math.sin(ang);
-    const pts: [number, number, number][] = [];
-    for (let i = 0; i <= 8; i++) {
-      const t = i / 8;
-      const r = 5.6 - t * 3.1;
-      const y = 0.35 + Math.sin(t * Math.PI * 0.62) * 4.6;
-      pts.push([cx * r, y, cz * r]);
-    }
-    polyline(a, k % 2 ? acc45 : acc55, pts);
-  }
-  // central crown jet
-  for (let k = 0; k < 6; k++) {
-    const ang = (k / 6) * Math.PI * 2;
-    const dx = Math.cos(ang) * 0.9;
-    const dz = Math.sin(ang) * 0.9;
-    polyline(a, acc55, [
-      [0, 0.4, 0],
-      [dx * 0.25, 4.2, dz * 0.25],
-      [dx * 0.75, 6.4, dz * 0.75],
-      [dx, 7.2, dz],
-    ]);
-  }
-  // droplets falling off the crests
-  for (let i = 0; i < 30; i++) {
-    const ang = rand() * Math.PI * 2;
-    const r = 1.5 + rand() * 3.5;
-    const y = 3.5 + rand() * 4;
-    const x = Math.cos(ang) * r;
-    const z = Math.sin(ang) * r;
-    seg(s, x, y, z, x + (rand() - 0.5) * 0.2, y - 0.3 - rand() * 0.3, z, w5);
-  }
-}
-
-/** Scene I — fireworks over the city: three particle bursts above a dim
+/** Scene F — fireworks over the city: three particle bursts above a dim
  *  skyline, launch trails rising from the ground. */
 function buildFireworks(s: Sk, a: Sk) {
   const w45 = tone(WIRE, 0.45);
@@ -999,10 +773,7 @@ async function buildPools(): Promise<{ structure: Pool; accent: Pool }> {
     buildCamera,
     buildConference,
     buildGala,
-    buildOpera,
     buildInstallation,
-    buildTrophy,
-    buildFountain,
     buildFireworks,
   ];
   const structures: Sk[] = [];
@@ -1171,16 +942,24 @@ function MorphRig({ animate }: { animate: boolean }) {
 let dotTexture: THREE.CanvasTexture | null = null;
 function getDotTexture() {
   if (!dotTexture) {
+    // 128px with a smooth falloff — at 64px the gradient banded visibly once
+    // a point rendered larger than ~30px on screen
+    const S = 128;
     const c = document.createElement("canvas");
-    c.width = c.height = 64;
+    c.width = c.height = S;
     const ctx = c.getContext("2d")!;
-    const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    const grad = ctx.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
     grad.addColorStop(0, "rgba(255,255,255,1)");
     grad.addColorStop(0.35, "rgba(255,255,255,0.7)");
+    grad.addColorStop(0.7, "rgba(255,255,255,0.25)");
     grad.addColorStop(1, "rgba(255,255,255,0)");
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 64, 64);
+    ctx.fillRect(0, 0, S, S);
     dotTexture = new THREE.CanvasTexture(c);
+    // trilinear filtering so far-away (tiny) points stay smooth too
+    dotTexture.generateMipmaps = true;
+    dotTexture.minFilter = THREE.LinearMipmapLinearFilter;
+    dotTexture.magFilter = THREE.LinearFilter;
   }
   return dotTexture;
 }
@@ -1351,15 +1130,34 @@ function Dust({ animate }: { animate: boolean }) {
   return <points ref={ref} geometry={geo} material={mat} frustumCulled={false} />;
 }
 
-/** Pulls the camera back on narrow viewports so the venue stays framed. */
+/** Pulls the camera back on narrow viewports so the venue stays framed.
+ *  Solved continuously: given the vertical fov and current aspect, find the
+ *  distance at which the full scene width fits — the old fixed steps still
+ *  cropped the 12-unit-wide scenes on phone aspects (~0.45). */
 function ResponsiveCamera() {
-  const { camera, size } = useThree();
+  const { camera, scene, size } = useThree();
   useEffect(() => {
+    const cam = camera as THREE.PerspectiveCamera;
     const aspect = size.width / size.height;
-    const z = aspect < 0.7 ? 30 : aspect < 1.1 ? 25 : 20.5;
-    camera.position.set(0, 5.6, z);
-    camera.lookAt(0, 3.6, 0);
-  }, [camera, size]);
+    const halfV = THREE.MathUtils.degToRad(cam.fov / 2);
+    // the widest thing on stage is the 15-unit logo backwall, plus margin
+    const targetW = 16;
+    const fitW = targetW / 2 / (Math.tan(halfV) * aspect);
+    const z = Math.max(20.5, fitW);
+    cam.position.set(0, 5.6, z);
+    // On tall viewports the distant camera sees far more vertical span than
+    // the ~10-unit scene, which parks a band of empty sky above the wall.
+    // Aim so the scene's top lands just under the header instead of centre.
+    const sceneTop = 10.2;
+    const lookY = Math.min(3.6, sceneTop - 0.72 * z * Math.tan(halfV));
+    cam.lookAt(0, lookY, 0);
+    // fog was tuned for z=20.5 (near z-4.5, far z+25.5); keep the same
+    // offsets or a distant camera puts the whole scene inside the fog
+    if (scene.fog instanceof THREE.Fog) {
+      scene.fog.near = z - 4.5;
+      scene.fog.far = z + 25.5;
+    }
+  }, [camera, scene, size]);
   return null;
 }
 
@@ -1463,7 +1261,10 @@ export default function HeroStage() {
     >
       <Canvas
         camera={{ position: [0, 5.6, 20.5], fov: 31 }}
-        dpr={[1, 1.5]}
+        // render at native device resolution (capped at 2) — the old 1.5 cap
+        // meant every frame was upscaled ~33% on retina, which is exactly the
+        // soft/grainy look on the dots
+        dpr={[1, 2]}
         gl={{
           antialias: false, // the composer owns AA; MSAA here would be paid twice
           alpha: false,

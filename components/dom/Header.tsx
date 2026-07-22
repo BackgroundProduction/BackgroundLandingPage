@@ -4,7 +4,8 @@ import { useContent } from "@/components/dom/LocaleProvider";
 import SoundToggle from "@/components/dom/SoundToggle";
 
 export default function Header() {
-  const { t, locale } = useContent();
+  // `locale` feeds the commented-out language toggle below
+  const { t } = useContent();
 
   return (
     <header className="fixed top-0 inset-x-0 z-50">
@@ -20,8 +21,7 @@ export default function Header() {
           className="flex items-center gap-2.5 font-display text-lg font-medium tracking-tight"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/logo.svg" alt="" aria-hidden="true" className="h-5 w-auto" />
-          Background Production
+          <img src="/assets/bg-header-logo.svg" alt="" aria-hidden="true" className="h-15 w-auto" />
         </a>
         <nav aria-label="Main navigation" className="hidden lg:block">
           <ul className="flex gap-8">
@@ -38,38 +38,39 @@ export default function Header() {
           </ul>
         </nav>
         <div className="flex items-center gap-3">
-          {/* language switcher — Armenian lives at /, English at /en */}
+          {/* language switcher hidden while the site is EN-only — restore by uncommenting
           <nav aria-label="Language" className="flex items-center gap-1 text-xs font-medium">
-            <a
-              href="/"
-              aria-current={locale === "hy" ? "page" : undefined}
-              className="rounded-full px-2.5 py-1.5 transition-colors"
-              style={
-                locale === "hy"
-                  ? { background: "var(--color-paper)", color: "var(--color-ink)" }
-                  : { color: "var(--color-text-dim)" }
-              }
-            >
-              ՀԱՅ
-            </a>
-            <a
-              href="/en"
-              aria-current={locale === "en" ? "page" : undefined}
-              className="rounded-full px-2.5 py-1.5 transition-colors"
-              style={
-                locale === "en"
-                  ? { background: "var(--color-paper)", color: "var(--color-ink)" }
-                  : { color: "var(--color-text-dim)" }
-              }
-            >
-              ENG
-            </a>
-          </nav>
+                      <a
+                        href="/"
+                        aria-current={locale === "hy" ? "page" : undefined}
+                        className="rounded-full px-2.5 py-1.5 transition-colors"
+                        style={
+                          locale === "hy"
+                            ? { background: "var(--color-paper)", color: "var(--color-ink)" }
+                            : { color: "var(--color-text-dim)" }
+                        }
+                      >
+                        ՀԱՅ
+                      </a>
+                      <a
+                        href="/en"
+                        aria-current={locale === "en" ? "page" : undefined}
+                        className="rounded-full px-2.5 py-1.5 transition-colors"
+                        style={
+                          locale === "en"
+                            ? { background: "var(--color-paper)", color: "var(--color-ink)" }
+                            : { color: "var(--color-text-dim)" }
+                        }
+                      >
+                        ENG
+                      </a>
+                    </nav>
+          */}
           <div className="hidden sm:block">
             <SoundToggle />
           </div>
           <a
-            href={t.contact.emailHref}
+            href={t.contact.phoneHref}
             className="hidden rounded-full px-5 py-2 text-sm font-medium transition-transform hover:scale-[1.03] md:block"
             style={{ background: "var(--color-paper)", color: "var(--color-ink)" }}
           >

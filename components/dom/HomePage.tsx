@@ -7,10 +7,11 @@ import type { Locale } from "@/content";
 import SmoothScrollProvider from "@/components/dom/SmoothScrollProvider";
 import Header from "@/components/dom/Header";
 import ScrollProgress from "@/components/dom/ui/ScrollProgress";
+import ScrollParticles from "@/components/dom/ScrollParticles";
 import HeroSection from "@/components/dom/sections/HeroSection";
 import AboutSection from "@/components/dom/sections/AboutSection";
 import PrinciplesSection from "@/components/dom/sections/PrinciplesSection";
-import MarqueeStrip from "@/components/dom/sections/MarqueeStrip";
+// import MarqueeStrip from "@/components/dom/sections/MarqueeStrip";
 import SuccessStoriesSection from "@/components/dom/sections/SuccessStoriesSection";
 import PortfolioSection from "@/components/dom/sections/PortfolioSection";
 import ServicesSection from "@/components/dom/sections/ServicesSection";
@@ -34,11 +35,12 @@ export default function HomePage({ locale }: { locale: Locale }) {
         <SkipLink />
         <Header />
         <ScrollProgress />
+        <ScrollParticles />
         <main className="relative">
           <HeroSection />
           <AboutSection />
           <PrinciplesSection />
-          <MarqueeStrip />
+          {/* <MarqueeStrip /> */}
           <SuccessStoriesSection />
           <PortfolioSection />
           <ServicesSection />

@@ -131,7 +131,7 @@ export default function AboutSection() {
             <p className="text-eyebrow text-accent">{t.about.eyebrow}</p>
             <h2
               id="about-heading"
-              className="font-display font-medium text-display-lg mt-6"
+              className="font-display font-bold uppercase text-display-lg mt-6"
             >
               {t.about.heading}
               
@@ -197,10 +197,10 @@ export default function AboutSection() {
                       <p
                         data-stat-value
                         data-final={stat.value}
-                        className="font-serif-display italic leading-none"
+                        className="font-display font-medium leading-none"
                         style={{
                           fontSize: "clamp(2.4rem, 3.4vw, 3.6rem)",
-                          padding: "0 0.06em 0.1em 0",
+                          padding: "0 0 0.1em 0",
                         }}
                       >
                         {stat.value}

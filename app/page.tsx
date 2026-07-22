@@ -3,13 +3,10 @@ import HomePage from "@/components/dom/HomePage";
 import { locales } from "@/content";
 
 export const metadata: Metadata = {
-  title: locales.hy.meta.title,
-  description: locales.hy.meta.description,
-  alternates: {
-    languages: { hy: "/", en: "/en" },
-  },
+  title: locales.en.meta.title,
+  description: locales.en.meta.description,
 };
 
 export default function Page() {
-  return <HomePage locale="hy" />;
+  return <HomePage locale="en" />;
 }

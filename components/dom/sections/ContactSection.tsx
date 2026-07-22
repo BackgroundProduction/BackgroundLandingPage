@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useContent } from "@/components/dom/LocaleProvider";
 import MagneticButton from "@/components/dom/ui/MagneticButton";
 import { useReveal } from "./useReveal";
@@ -9,6 +9,23 @@ export default function ContactSection() {
   const ref = useRef<HTMLElement>(null);
   const { t } = useContent();
   useReveal(ref);
+  const [copied, setCopied] = useState(false);
+
+  /* mailto: only works if the visitor has a desktop mail client registered —
+     for everyone reading mail in a browser tab the click silently does
+     nothing. Copy the address as well so the button always responds. The
+     href is left intact, so mail clients still open where they exist. */
+  const copyEmail = () => {
+    navigator.clipboard?.writeText(t.contact.email).then(
+      () => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      },
+      () => {
+        /* clipboard blocked (insecure origin / denied) — the mailto still fires */
+      }
+    );
+  };
 
   return (
     <section
@@ -25,7 +42,7 @@ export default function ContactSection() {
         <h2
           id="contact-heading"
           data-reveal
-          className="font-display font-medium text-display-xl mx-auto mt-8 max-w-[16ch]"
+          className="font-display font-bold uppercase text-display-xl mx-auto mt-8 max-w-[16ch]"
         >
           {t.contactSection.heading}
         </h2>
@@ -41,10 +58,11 @@ export default function ContactSection() {
         >
           <MagneticButton
             href={t.contact.emailHref}
+            onClick={copyEmail}
             className="rounded-full px-8 py-4 font-medium"
             style={{ background: "var(--color-accent)", color: "var(--color-ink)" }}
           >
-            {t.contact.email}
+            {copied ? t.ui.emailCopied : t.contact.email}
           </MagneticButton>
           <MagneticButton
             href={t.contact.phoneHref}
