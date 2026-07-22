@@ -83,6 +83,13 @@ export const hy: Content = {
     { name: "Մանկական Եվրատեսիլ", logo: "/assets/logos/junior-evrovision.png" },
     { name: "Ակբա բանկ", logo: "/assets/logos/Acba-logo.png" },
     { name: "Eleiko", logo: "/assets/logos/Eleiko_Logo_2017.svg" },
+    { name: "Արդշինբանկ", logo: "/assets/logos/ardshin-logo.png" },
+    { name: "ՀՀ կենտրոնական բանկ", logo: "/assets/logos/central-bank.svg.webp" },
+    {
+      name: "Dubai World Trade Centre",
+      logo: "/assets/logos/dubai-world-trade-centre-vector-logo.png",
+    },
+    { name: "DXB Live", logo: "/assets/logos/dxb-live.png" },
   ],
   principles: {
     eyebrow: "Ինչու հենց մենք",
@@ -143,8 +150,8 @@ export const hy: Content = {
         detail:
           "ՎԶԵԲ-ի տարեկան ժողովն ու գործարար ֆորումը Երևան բերեցին պատվիրակություններ բանկի բոլոր տարածաշրջաններից՝ կազմակերպված սկզբից մինչև վերջ։",
         video: null,
-        youtube: "t_RVnYgDibo",
-        youtubeStart: null,
+        youtube: "Ulta39yn-uw",
+        youtubeStart: 6,
       },
       {
         slug: "junior-eurovision-20th",
@@ -306,7 +313,7 @@ export const hy: Content = {
       },
       {
         q: "Ինչպե՞ս դիմել",
-        a: "Կապվեք մեզ հետ info@background.am էլ. հասցեով կամ զանգահարեք +374 55 605070։ Պատմեք Ձեր նպատակի մասին, մնացածը կանենք մենք",
+        a: "Կապվեք մեզ հետ info@background.am էլ. հասցեով կամ զանգահարեք +374 60 605070։ Պատմեք Ձեր նպատակի մասին, մնացածը կանենք մենք",
       },
     ],
   },
@@ -321,9 +328,14 @@ export const hy: Content = {
   contact: {
     email: "info@background.am",
     emailHref: "mailto:info@background.am",
-    phone: "+374 55 605070",
-    phoneHref: "tel:+37455605070",
+    phone: "+374 60 605070",
+    phoneHref: "tel:+37460605070",
+    phoneAlt: "+374 55 605070",
+    phoneAltHref: "tel:+37455605070",
     location: "Երևան, Հայաստան",
+    address: "Գևորգ Էմինի փ. 8",
+    addressHref:
+      "https://www.google.com/maps/search/?api=1&query=Gevorg+Emin+Street+8%2C+Yerevan%2C+Armenia",
   },
   social: [
     { label: "Facebook", href: "https://www.facebook.com/share/17nPQfMmYH/?mibextid=wwXIfr" },
@@ -368,7 +380,7 @@ export const hy: Content = {
       slug: "ebrd-2024-annual-meeting",
       video: null as string | null,
       youtube: "Ulta39yn-uw",
-      youtubeStart: 11,
+      youtubeStart: 6,
       title: "ՎԶԵԲ-ի տարեկան ժողով և գործարար ֆորում",
       category: "Գործարար համաժողով",
       location: "Երևան, Հայաստան",

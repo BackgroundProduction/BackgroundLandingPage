@@ -104,6 +104,16 @@ export default function ContactSection() {
               <li>{t.contact.location}</li>
               <li>
                 <a
+                  href={t.contact.addressHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-colors hover:text-accent"
+                >
+                  {t.contact.address}
+                </a>
+              </li>
+              <li>
+                <a
                   href={t.contact.emailHref}
                   className="transition-colors hover:text-accent"
                 >
@@ -116,6 +126,14 @@ export default function ContactSection() {
                   className="transition-colors hover:text-accent"
                 >
                   {t.contact.phone}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={t.contact.phoneAltHref}
+                  className="transition-colors hover:text-accent"
+                >
+                  {t.contact.phoneAlt}
                 </a>
               </li>
             </ul>

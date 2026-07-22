@@ -151,6 +151,7 @@ function StepYouTube({ id }: { id: string }) {
     disablekb: "1",
     fs: "0",
     iv_load_policy: "3",
+    cc_load_policy: "0", // no captions/transcript overlay
   });
 
   return (

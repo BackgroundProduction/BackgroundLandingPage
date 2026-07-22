@@ -85,6 +85,13 @@ export const en = {
     { name: "Junior Eurovision", logo: "/assets/logos/junior-evrovision.png" },
     { name: "Acba Bank", logo: "/assets/logos/Acba-logo.png" },
     { name: "Eleiko", logo: "/assets/logos/Eleiko_Logo_2017.svg" },
+    { name: "Ardshinbank", logo: "/assets/logos/ardshin-logo.png" },
+    { name: "Central Bank of Armenia", logo: "/assets/logos/central-bank.svg.webp" },
+    {
+      name: "Dubai World Trade Centre",
+      logo: "/assets/logos/dubai-world-trade-centre-vector-logo.png",
+    },
+    { name: "DXB Live", logo: "/assets/logos/dxb-live.png" },
   ],
   principles: {
     eyebrow: "Why choose us",
@@ -154,8 +161,8 @@ export const en = {
         detail:
           "The EBRD Annual Meeting & Business Forum brought delegations from across the Bank’s regions to Yerevan  produced end to end.",
         video: null as string | null,
-        youtube: "t_RVnYgDibo" as string | null,
-        youtubeStart: null as number | null,
+        youtube: "Ulta39yn-uw" as string | null,
+        youtubeStart: 6 as number | null,
       },
       {
         slug: "junior-eurovision-20th",
@@ -324,7 +331,7 @@ export const en = {
       },
       {
         q: "How do we start?",
-        a: "Write to info@background.am or call +374 55 605070. Tell us about the occasion and we'll take it from there",
+        a: "Write to info@background.am or call +374 60 605070. Tell us about the occasion and we'll take it from there",
       },
     ],
   },
@@ -339,9 +346,14 @@ export const en = {
   contact: {
     email: "info@background.am",
     emailHref: "mailto:info@background.am",
-    phone: "+374 55 605070",
-    phoneHref: "tel:+37455605070",
+    phone: "+374 60 605070",
+    phoneHref: "tel:+37460605070",
+    phoneAlt: "+374 55 605070",
+    phoneAltHref: "tel:+37455605070",
     location: "Yerevan, Armenia",
+    address: "Gevorg Emin St 8",
+    addressHref:
+      "https://www.google.com/maps/search/?api=1&query=Gevorg+Emin+Street+8%2C+Yerevan%2C+Armenia",
   },
   social: [
     { label: "Facebook", href: "https://www.facebook.com/share/17nPQfMmYH/?mibextid=wwXIfr" },
@@ -386,7 +398,7 @@ export const en = {
       slug: "ebrd-2024-annual-meeting",
       video: null as string | null,
       youtube: "Ulta39yn-uw" as string | null,
-      youtubeStart: 11 as number | null,
+      youtubeStart: 6 as number | null,
       title: "EBRD Annual Meeting and Business Forum",
       category: "Business Conference",
       location: "Yerevan, Armenia",
