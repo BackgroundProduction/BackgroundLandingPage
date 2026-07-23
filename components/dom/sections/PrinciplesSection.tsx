@@ -24,6 +24,7 @@ export default function PrinciplesSection() {
   const animRef = useRef<HTMLDivElement>(null);
   const staticRef = useRef<HTMLDivElement>(null);
   const centerRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLSpanElement>(null);
   const rightRef = useRef<HTMLSpanElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -50,17 +51,21 @@ export default function PrinciplesSection() {
       // off the edges, then reveal the principle words over the filled image
       mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
         const center = centerRef.current;
-        if (!center || !sectionRef.current) return;
+        const stage = stageRef.current;
+        if (!center || !stage || !sectionRef.current) return;
 
         gsap.set(staticRef.current, { display: "none" });
         gsap.set(animRef.current, { display: "flex" });
 
-        // grow to a fixed 1000×1000 frame, not full-bleed (capped to the
-        // viewport on small screens so it never spills off the edges)
-        const coverScale = () => {
-          const target = Math.min(1000, window.innerWidth * 0.92, window.innerHeight * 0.92);
-          return target / center.offsetWidth;
-        };
+        // The stage is laid out at its *final* size and scaled DOWN to sit in
+        // the text line, then animated back to 1. Scaling a promoted layer up
+        // from ~7vw only stretches the pixels it was first rasterised at, so
+        // the frame and photos arrived visibly blocky; going the other way
+        // rasterises at full size and every intermediate step stays sharp.
+        const restScale = () =>
+          center.offsetWidth / (stage.offsetWidth || center.offsetWidth);
+
+        gsap.set(stage, { scale: restScale() });
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -71,6 +76,9 @@ export default function PrinciplesSection() {
             scrub: 0.5,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            // the layout box and the stage both change with the viewport, so
+            // the at-rest scale has to be measured again after a resize
+            onRefresh: () => gsap.set(stage, { scale: restScale() }),
             // flipbook: same progress that drives the scale picks the frame
             onUpdate: (self) => {
               const frames = frameRefs.current.filter(
@@ -90,7 +98,7 @@ export default function PrinciplesSection() {
 
         tl.to(leftRef.current, { xPercent: -170, opacity: 0, ease: "power2.in" }, 0)
           .to(rightRef.current, { xPercent: 170, opacity: 0, ease: "power2.in" }, 0)
-          .to(center, { scale: () => coverScale(), ease: "power2.inOut" }, 0)
+          .to(stage, { scale: 1, ease: "power2.inOut" }, 0)
           .fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, ease: "none" }, 0.62);
       });
 
@@ -130,8 +138,18 @@ export default function PrinciplesSection() {
               transparent emblem shown at rest. */}
           <div
             ref={centerRef}
-            className="relative z-0 aspect-square w-[7vw] min-w-[80px] shrink-0 overflow-hidden will-change-transform"
+            className="relative z-0 aspect-square w-[7vw] min-w-[80px] shrink-0"
           >
+            {/* The stage carries the artwork at its final size; the box above
+                only reserves the small slot in the text line. */}
+            <div
+              ref={stageRef}
+              className="absolute left-1/2 top-1/2 aspect-square overflow-hidden will-change-transform"
+              style={{
+                width: "min(1000px, 92vw, 92vh)",
+                margin: "calc(min(1000px, 92vw, 92vh) / -2) 0 0 calc(min(1000px, 92vw, 92vh) / -2)",
+              }}
+            >
             {frames.map((src, i) => (
               <div
                 key={`${src}-${i}`}
@@ -168,6 +186,7 @@ export default function PrinciplesSection() {
               priority
               className="pointer-events-none z-10 select-none object-fill"
             />
+            </div>
           </div>
 
           <span
