@@ -90,6 +90,8 @@ export const hy: Content = {
       logo: "/assets/logos/dubai-world-trade-centre-vector-logo.png",
     },
     { name: "DXB Live", logo: "/assets/logos/dxb-live.png" },
+    { name: "Հայաստանի հանրային հեռուստաընկերություն", logo: "/assets/logos/Armenian_Public_TV_logo_(2021)-02.svg" },
+    { name: "Grammy Awards", logo: "/assets/logos/Grammy_Awards_logo.svg" },
   ],
   principles: {
     eyebrow: "Ինչու հենց մենք",
@@ -180,7 +182,7 @@ export const hy: Content = {
         detail:
           "«Խազեր» երաժշտական մրցանակաբաշխությունը՝ արարողություն, շոու և հեռարձակում որպես մեկ ամբողջություն։",
         video: null,
-        youtube: "h0aPl0RB6YE",
+        youtube: "Vulw5H6mkqs",
         youtubeStart: null,
       },
       {

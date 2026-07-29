@@ -92,6 +92,8 @@ export const en = {
       logo: "/assets/logos/dubai-world-trade-centre-vector-logo.png",
     },
     { name: "DXB Live", logo: "/assets/logos/dxb-live.png" },
+    { name: "Armenian Public TV", logo: "/assets/logos/Armenian_Public_TV_logo_(2021)-02.svg" },
+    { name: "Grammy Awards", logo: "/assets/logos/Grammy_Awards_logo.svg" },
   ],
   principles: {
     eyebrow: "Why choose us",
@@ -191,7 +193,7 @@ export const en = {
         detail:
           "The “Khazer” Armenian Music Awards  ceremony, show and broadcast treated as one continuous piece.",
         video: null as string | null,
-        youtube: "h0aPl0RB6YE" as string | null,
+        youtube: "Vulw5H6mkqs" as string | null,
         youtubeStart: null as number | null,
       },
       {
