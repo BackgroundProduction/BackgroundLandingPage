@@ -182,6 +182,16 @@ export const hy: Content = {
         detail:
           "«Խազեր» երաժշտական մրցանակաբաշխությունը՝ արարողություն, շոու և հեռարձակում որպես մեկ ամբողջություն։",
         video: null,
+        youtube: "h0aPl0RB6YE",
+        youtubeStart: null,
+      },
+      {
+        slug: "khazer-music-awards-2026",
+        badge: "2026",
+        result: "Ազգային երաժշտական դաշտը՝ մեկ տարի անց, ավելի մեծ",
+        detail:
+          "«Խազեր» երաժշտական մրցանակաբաշխության 2026-ի թողարկումը՝ արարողություն, շոու և հեռարձակում որպես մեկ ամբողջություն։",
+        video: null,
         youtube: "Vulw5H6mkqs",
         youtubeStart: null,
       },
@@ -315,7 +325,7 @@ export const hy: Content = {
       },
       {
         q: "Ինչպե՞ս դիմել",
-        a: "Կապվեք մեզ հետ info@background.am էլ. հասցեով կամ զանգահարեք +374 60 605070։ Պատմեք Ձեր նպատակի մասին, մնացածը կանենք մենք",
+        a: "Կապվեք մեզ հետ info@background.am էլ. հասցեով կամ զանգահարեք +374 60 506070։ Պատմեք Ձեր նպատակի մասին, մնացածը կանենք մենք",
       },
     ],
   },
@@ -330,8 +340,8 @@ export const hy: Content = {
   contact: {
     email: "info@background.am",
     emailHref: "mailto:info@background.am",
-    phone: "+374 60 605070",
-    phoneHref: "tel:+37460605070",
+    phone: "+374 60 506070",
+    phoneHref: "tel:+37460506070",
     phoneAlt: "+374 55 605070",
     phoneAltHref: "tel:+37455605070",
     location: "Երևան, Հայաստան",
@@ -374,6 +384,22 @@ export const hy: Content = {
       image: {
         src: "/images/portfolio/khazer.jpg",
         alt: "«Խազեր» երաժշտական մրցանակաբաշխություն 2025",
+        position: "center",
+        isPlaceholder: true,
+      },
+    },
+    {
+      slug: "khazer-music-awards-2026",
+      video: null as string | null,
+      youtube: null,
+      youtubeStart: null,
+      title: "«Խազեր» երաժշտական մրցանակաբաշխություն",
+      category: "Երաժշտական մրցանակաբաշխություն",
+      location: "Երևան, Հայաստան",
+      date: "2026",
+      image: {
+        src: "/images/portfolio/khazer.jpg",
+        alt: "«Խազեր» երաժշտական մրցանակաբաշխություն 2026",
         position: "center",
         isPlaceholder: true,
       },

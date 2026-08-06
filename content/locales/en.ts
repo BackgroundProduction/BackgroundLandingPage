@@ -193,6 +193,16 @@ export const en = {
         detail:
           "The “Khazer” Armenian Music Awards  ceremony, show and broadcast treated as one continuous piece.",
         video: null as string | null,
+        youtube: "h0aPl0RB6YE" as string | null,
+        youtubeStart: null as number | null,
+      },
+      {
+        slug: "khazer-music-awards-2026",
+        badge: "2026",
+        result: "The national music scene, one year bigger",
+        detail:
+          "The 2026 edition of the “Khazer” Armenian Music Awards  ceremony, show and broadcast delivered as one continuous piece.",
+        video: null as string | null,
         youtube: "Vulw5H6mkqs" as string | null,
         youtubeStart: null as number | null,
       },
@@ -333,7 +343,7 @@ export const en = {
       },
       {
         q: "How do we start?",
-        a: "Write to info@background.am or call +374 60 605070. Tell us about the occasion and we'll take it from there",
+        a: "Write to info@background.am or call +374 60 506070. Tell us about the occasion and we'll take it from there",
       },
     ],
   },
@@ -348,8 +358,8 @@ export const en = {
   contact: {
     email: "info@background.am",
     emailHref: "mailto:info@background.am",
-    phone: "+374 60 605070",
-    phoneHref: "tel:+37460605070",
+    phone: "+374 60 506070",
+    phoneHref: "tel:+37460506070",
     phoneAlt: "+374 55 605070",
     phoneAltHref: "tel:+37455605070",
     location: "Yerevan, Armenia",
@@ -392,6 +402,22 @@ export const en = {
       image: {
         src: "/images/portfolio/khazer.jpg",
         alt: "Khazer Armenian Music Awards 2025 ceremony",
+        position: "center",
+        isPlaceholder: true,
+      },
+    },
+    {
+      slug: "khazer-music-awards-2026",
+      video: null as string | null,
+      youtube: null as string | null,
+      youtubeStart: null as number | null,
+      title: "“Khazer” Armenian Music Awards",
+      category: "Music Awards",
+      location: "Yerevan, Armenia",
+      date: "2026",
+      image: {
+        src: "/images/portfolio/khazer.jpg",
+        alt: "Khazer Armenian Music Awards 2026 ceremony",
         position: "center",
         isPlaceholder: true,
       },

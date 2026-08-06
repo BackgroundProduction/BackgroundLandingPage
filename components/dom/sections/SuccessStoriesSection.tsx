@@ -22,6 +22,7 @@ const TITLE_GRADIENTS: string[][] = [
   ["#BEF264", "#34D399", "#0EA5A4"], // lime → emerald → teal
   ["#FFD3A5", "#FD9A6E", "#E0475B"], // peach → coral → crimson
   ["#F0EEE9", "#C7CCD4", "#8E97A3"], // warm white → platinum → steel
+  ["#FBC2EB", "#F78CA0", "#C471ED"], // blush → rose → orchid
 ];
 
 export default function SuccessStoriesSection() {
