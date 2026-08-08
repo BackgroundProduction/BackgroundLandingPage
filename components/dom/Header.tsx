@@ -66,9 +66,7 @@ export default function Header() {
                       </a>
                     </nav>
           */}
-          <div className="hidden sm:block">
-            <SoundToggle />
-          </div>
+          <SoundToggle />
           <a
             href={t.contact.phoneHref}
             className="hidden rounded-full px-5 py-2 text-sm font-medium transition-transform hover:scale-[1.03] md:block"

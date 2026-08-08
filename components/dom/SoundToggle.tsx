@@ -51,7 +51,7 @@ export default function SoundToggle() {
       onClick={toggle}
       aria-pressed={on}
       aria-label={on ? "Turn sound off" : "Turn sound on"}
-      className="flex items-center gap-2 rounded-full border border-line px-4 py-2 text-xs font-medium transition-colors hover:border-accent hover:text-accent"
+      className="flex items-center gap-2 whitespace-nowrap rounded-full border border-line px-4 py-2 text-xs font-medium transition-colors hover:border-accent hover:text-accent"
     >
       <span
         aria-hidden="true"
