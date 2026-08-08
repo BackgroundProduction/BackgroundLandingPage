@@ -391,7 +391,7 @@ export const hy: Content = {
     {
       slug: "khazer-music-awards-2026",
       video: null as string | null,
-      youtube: null,
+      youtube: "Pn6Psrpsx5c",
       youtubeStart: null,
       title: "«Խազեր» երաժշտական մրցանակաբաշխություն",
       category: "Երաժշտական մրցանակաբաշխություն",
@@ -401,7 +401,7 @@ export const hy: Content = {
         src: "/images/portfolio/khazer.jpg",
         alt: "«Խազեր» երաժշտական մրցանակաբաշխություն 2026",
         position: "center",
-        isPlaceholder: true,
+        isPlaceholder: false,
       },
     },
     {

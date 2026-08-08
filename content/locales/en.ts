@@ -409,7 +409,7 @@ export const en = {
     {
       slug: "khazer-music-awards-2026",
       video: null as string | null,
-      youtube: null as string | null,
+      youtube: "Pn6Psrpsx5c" as string | null,
       youtubeStart: null as number | null,
       title: "“Khazer” Armenian Music Awards",
       category: "Music Awards",
@@ -419,7 +419,7 @@ export const en = {
         src: "/images/portfolio/khazer.jpg",
         alt: "Khazer Armenian Music Awards 2026 ceremony",
         position: "center",
-        isPlaceholder: true,
+        isPlaceholder: false,
       },
     },
     {
