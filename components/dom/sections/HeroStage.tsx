@@ -1133,32 +1133,31 @@ function Dust({ animate }: { animate: boolean }) {
 /** Pulls the camera back on narrow viewports so the venue stays framed.
  *  Solved continuously: given the vertical fov and current aspect, find the
  *  distance at which the full scene width fits — the old fixed steps still
- *  cropped the 12-unit-wide scenes on phone aspects (~0.45). */
+ *  cropped the 12-unit-wide scenes on phone aspects (~0.45).
+ *
+ *  Also owns the scene fog: it was tuned for z=20.5 (near z-4.5, far z+25.5)
+ *  and must keep those offsets or a distant camera puts the whole scene
+ *  inside the fog. The distance is derived in render and fed to the `<fog>`
+ *  element as props, so nothing mutates the objects handed out by useThree. */
 function ResponsiveCamera() {
-  const { camera, scene, size } = useThree();
+  const { camera, size } = useThree();
+  const cam = camera as THREE.PerspectiveCamera;
+  const aspect = size.width / size.height;
+  const halfV = THREE.MathUtils.degToRad(cam.fov / 2);
+  // the widest thing on stage is the 15-unit logo backwall, plus margin
+  const targetW = 16;
+  const fitW = targetW / 2 / (Math.tan(halfV) * aspect);
+  const z = Math.max(20.5, fitW);
+  // On tall viewports the distant camera sees far more vertical span than
+  // the ~10-unit scene, which parks a band of empty sky above the wall.
+  // Aim so the scene's top lands just under the header instead of centre.
+  const sceneTop = 10.2;
+  const lookY = Math.min(3.6, sceneTop - 0.72 * z * Math.tan(halfV));
   useEffect(() => {
-    const cam = camera as THREE.PerspectiveCamera;
-    const aspect = size.width / size.height;
-    const halfV = THREE.MathUtils.degToRad(cam.fov / 2);
-    // the widest thing on stage is the 15-unit logo backwall, plus margin
-    const targetW = 16;
-    const fitW = targetW / 2 / (Math.tan(halfV) * aspect);
-    const z = Math.max(20.5, fitW);
     cam.position.set(0, 5.6, z);
-    // On tall viewports the distant camera sees far more vertical span than
-    // the ~10-unit scene, which parks a band of empty sky above the wall.
-    // Aim so the scene's top lands just under the header instead of centre.
-    const sceneTop = 10.2;
-    const lookY = Math.min(3.6, sceneTop - 0.72 * z * Math.tan(halfV));
     cam.lookAt(0, lookY, 0);
-    // fog was tuned for z=20.5 (near z-4.5, far z+25.5); keep the same
-    // offsets or a distant camera puts the whole scene inside the fog
-    if (scene.fog instanceof THREE.Fog) {
-      scene.fog.near = z - 4.5;
-      scene.fog.far = z + 25.5;
-    }
-  }, [camera, scene, size]);
-  return null;
+  }, [cam, z, lookY]);
+  return <fog attach="fog" args={[BG]} near={z - 4.5} far={z + 25.5} />;
 }
 
 /** Drag-to-orbit rig: inertia + damping, slow auto-rotate when idle. */
@@ -1273,9 +1272,9 @@ export default function HeroStage() {
         }}
         frameloop={running ? "always" : "never"}
       >
+        {/* frames the camera and renders the fog that tracks it */}
         <ResponsiveCamera />
         <color attach="background" args={[BG]} />
-        <fog attach="fog" args={[BG, 16, 46]} />
         {/* brand backwall stays outside the orbit group so it always reads */}
         <LogoWall animate={!reduced} />
         <OrbitGroup autoRotate={!reduced}>
