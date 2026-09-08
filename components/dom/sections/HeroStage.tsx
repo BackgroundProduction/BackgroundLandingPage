@@ -6,9 +6,11 @@ import * as THREE from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import installationEdges from "@/lib/installation-edges.json";
 
-const ACCENT = "#f0eee9";
-const WIRE = "#6f6c66";
-const WIRE_DIM = "#3a3833";
+// cool blue-white monochrome — luminous points on black, the GPT/OpenAI
+// particle palette, rather than the warm cream the rest of the site uses
+const ACCENT = "#e4ecff";
+const WIRE = "#8494b3";
+const WIRE_DIM = "#3d465c";
 const BG = "#0a0a0a";
 
 // arch truss span (feet at ±SPAN_X on the ground) and apex height
@@ -690,9 +692,10 @@ interface Pool {
   delays: Float32Array;
 }
 
-// dot budgets per pool — fixed regardless of scene complexity
-const STRUCTURE_DOTS = 6000;
-const ACCENT_DOTS = 2200;
+// dot budgets per pool — fixed regardless of scene complexity. Dense on
+// purpose: many fine points read as luminous mist rather than a string of beads
+const STRUCTURE_DOTS = 9000;
+const ACCENT_DOTS = 3000;
 
 /**
  * Sample a photo into structure/accent clouds by EDGE strength: contours and
@@ -857,9 +860,11 @@ function MorphRig({ animate }: { animate: boolean }) {
       p.frustumCulled = false;
       return p;
     };
+    // finer points than before — crisp specks of light with the glow coming
+    // from the sprite halo and bloom, not from a fat disc
     return {
-      structure: make(scenes.structure, 0.085, 0.85),
-      accent: make(scenes.accent, 0.17, 0.95),
+      structure: make(scenes.structure, 0.06, 0.85),
+      accent: make(scenes.accent, 0.12, 0.95),
     };
   }, [scenes]);
 
@@ -943,15 +948,19 @@ let dotTexture: THREE.CanvasTexture | null = null;
 function getDotTexture() {
   if (!dotTexture) {
     // 128px with a smooth falloff — at 64px the gradient banded visibly once
-    // a point rendered larger than ~30px on screen
+    // a point rendered larger than ~30px on screen. Profile is a star: a tight
+    // bright core with a long, soft halo tail, so dots glow like points of
+    // light rather than flat discs (the "galaxy" look) while the core keeps the
+    // sketched lines legible.
     const S = 128;
     const c = document.createElement("canvas");
     c.width = c.height = S;
     const ctx = c.getContext("2d")!;
     const grad = ctx.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
     grad.addColorStop(0, "rgba(255,255,255,1)");
-    grad.addColorStop(0.35, "rgba(255,255,255,0.7)");
-    grad.addColorStop(0.7, "rgba(255,255,255,0.25)");
+    grad.addColorStop(0.12, "rgba(255,255,255,0.92)");
+    grad.addColorStop(0.28, "rgba(255,255,255,0.45)");
+    grad.addColorStop(0.55, "rgba(255,255,255,0.14)");
     grad.addColorStop(1, "rgba(255,255,255,0)");
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, S, S);
@@ -1049,7 +1058,7 @@ function LogoWall({ animate }: { animate: boolean }) {
     () =>
       new THREE.PointsMaterial({
         color: ACCENT,
-        size: 0.13,
+        size: 0.12,
         sizeAttenuation: true,
         map: getDotTexture(),
         transparent: true,
@@ -1095,13 +1104,14 @@ function Dust({ animate }: { animate: boolean }) {
   const ref = useRef<THREE.Points>(null);
   const geo = useMemo(() => {
     const rand = mulberry32(99);
-    const n = 340;
+    // a denser, deeper starfield reads as galaxy dust around the rig
+    const n = 900;
     const p = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) {
-      const r = 2.5 + rand() * 12.5;
+      const r = 2.5 + rand() * 15.5;
       const ang = rand() * Math.PI * 2;
       p[i * 3] = Math.cos(ang) * r;
-      p[i * 3 + 1] = rand() * 11;
+      p[i * 3 + 1] = rand() * 13;
       p[i * 3 + 2] = Math.sin(ang) * r;
     }
     const g = new THREE.BufferGeometry();
@@ -1112,11 +1122,11 @@ function Dust({ animate }: { animate: boolean }) {
     () =>
       new THREE.PointsMaterial({
         color: ACCENT,
-        size: 0.09,
+        size: 0.07,
         sizeAttenuation: true,
         map: getDotTexture(),
         transparent: true,
-        opacity: 0.35,
+        opacity: 0.42,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       }),
@@ -1285,10 +1295,10 @@ export default function HeroStage() {
         <EffectComposer multisampling={2}>
           <Bloom
             mipmapBlur
-            intensity={0.9}
-            luminanceThreshold={0.3}
-            luminanceSmoothing={0.3}
-            radius={0.72}
+            intensity={1.6}
+            luminanceThreshold={0.18}
+            luminanceSmoothing={0.35}
+            radius={0.95}
           />
         </EffectComposer>
       </Canvas>

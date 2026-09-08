@@ -3,14 +3,19 @@
 import { useEffect, useRef } from "react";
 
 /**
- * A braided ribbon of light that sweeps diagonally across the page as you
- * scroll — left to right, then back again.
+ * A braided stream of light — soft glowing particles — that sweeps diagonally
+ * across the page as you scroll, left to right and back again.
  *
  * The spine is a function of *document* position, not screen position: it
  * oscillates across the full width with a period of a couple of viewport
  * heights, so scrolling drags a long diagonal stroke through the window and the
  * direction reverses on its own. Each strand samples that same spine at a
- * slightly different point, which is what makes them fan out and cross.
+ * slightly different point, which is what makes the strands fan out and cross.
+ *
+ * The strands are drawn as rows of soft dots (an offscreen glow sprite) with
+ * additive `lighter` compositing, so where dots overlap they brighten — the
+ * same galaxy-particle language as the hero. The dots travel along each strand
+ * as the page scrolls, so the stream reads as moving rather than static.
  *
  * Toward the top and bottom of the window the bundle spreads wider and fades
  * out, so the stroke dissolves at its ends instead of being cut off.
@@ -21,8 +26,7 @@ import { useEffect, useRef } from "react";
  */
 
 const STRANDS = 16;
-const MAX_DPR = 2; // native retina — at 1.5 the 2px dashes rendered soft
-const STEP = 10; // px between path samples
+const MAX_DPR = 2;
 
 /* How far across the width the spine swings, as a fraction of viewport width
    either side of centre, and how many viewport heights one full left→right→left
@@ -30,9 +34,8 @@ const STEP = 10; // px between path samples
 const SWING = 0.42;
 const CYCLE_SCREENS = 2.4;
 
-/* Dash pattern: 2px mark, 15px gap. Drawn with butt caps — round caps would add
-   half a line-width at each end and close the gaps up at this size. */
-const DASH: [number, number] = [2, 15];
+/* Spacing between glowing dots along a strand, in px. */
+const GAP = 15;
 
 /* Per-section visibility. The bundle now crosses the whole width, so instead of
    steering it around media we simply fade it down over the sections that are
@@ -52,10 +55,11 @@ const DIM: Record<string, number> = {
 type Strand = {
   lag: number; // samples the spine slightly ahead/behind — makes them cross
   off: number; // -1..1 across the bundle
-  width: number;
+  radius: number; // dot glow radius in px
   alpha: number;
   bright: boolean;
-  dashSpeed: number; // how fast the dashes travel along the strand
+  speed: number; // how fast the dots travel along the strand
+  twk: number; // per-strand twinkle phase offset
 };
 
 const smooth = (t: number) => t * t * (3 - 2 * t);
@@ -72,11 +76,29 @@ export default function ScrollParticles() {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
+    // offscreen glow sprite: a cream star with a tight core and a soft halo,
+    // matching the hero particles. Drawn (scaled) at every dot — far cheaper
+    // than building a radial gradient per dot per frame.
+    const SP = 48;
+    const sprite = document.createElement("canvas");
+    sprite.width = sprite.height = SP;
+    const sctx = sprite.getContext("2d");
+    if (sctx) {
+      const g = sctx.createRadialGradient(SP / 2, SP / 2, 0, SP / 2, SP / 2, SP / 2);
+      // cool white to match the hero's particle palette
+      g.addColorStop(0, "rgba(228,236,255,1)");
+      g.addColorStop(0.16, "rgba(228,236,255,0.85)");
+      g.addColorStop(0.4, "rgba(228,236,255,0.28)");
+      g.addColorStop(0.7, "rgba(228,236,255,0.07)");
+      g.addColorStop(1, "rgba(228,236,255,0)");
+      sctx.fillStyle = g;
+      sctx.fillRect(0, 0, SP, SP);
+    }
+
     let w = 0;
     let h = 0;
     let k = 0; // spine frequency, radians per document px
     let strands: Strand[] = [];
-    let fadeGrad: CanvasGradient | null = null;
     let stops: { top: number; dim: number }[] = [];
     let raf = 0;
 
@@ -103,13 +125,6 @@ export default function ScrollParticles() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       k = (Math.PI * 2) / (CYCLE_SCREENS * h);
 
-      // dissolve the stroke at both ends rather than cutting it off
-      fadeGrad = ctx.createLinearGradient(0, 0, 0, h);
-      fadeGrad.addColorStop(0, "rgba(240,238,233,0)");
-      fadeGrad.addColorStop(0.26, "rgba(240,238,233,1)");
-      fadeGrad.addColorStop(0.74, "rgba(240,238,233,1)");
-      fadeGrad.addColorStop(1, "rgba(240,238,233,0)");
-
       strands = Array.from({ length: STRANDS }, (_, i) => {
         const t = i / (STRANDS - 1);
         const bright = i % 5 === 2;
@@ -118,11 +133,12 @@ export default function ScrollParticles() {
           // the strands stay a tight rope rather than drifting apart
           lag: (t * 2 - 1) * h * 0.05 + (Math.random() - 0.5) * 14,
           off: t * 2 - 1 + (Math.random() - 0.5) * 0.1,
-          width: bright ? 1.2 + Math.random() * 0.8 : 0.5 + Math.random() * 0.7,
-          // sits behind the content now, so it needs a little more presence
-          alpha: bright ? 0.34 + Math.random() * 0.16 : 0.12 + Math.random() * 0.16,
+          radius: bright ? 2.6 + Math.random() * 1.2 : 1.3 + Math.random() * 0.9,
+          // sits behind the content now, so it needs a little presence
+          alpha: bright ? 0.5 + Math.random() * 0.22 : 0.18 + Math.random() * 0.16,
           bright,
-          dashSpeed: 0.25 + Math.random() * 0.5,
+          speed: 0.25 + Math.random() * 0.5,
+          twk: Math.random() * Math.PI * 2,
         };
       });
       measure();
@@ -153,43 +169,59 @@ export default function ScrollParticles() {
       return w * (0.5 + swing * Math.sin(docY * k));
     };
 
+    // vertical dissolve at the top and bottom of the window (baked per-dot,
+    // since additive compositing can't be masked by an overlay gradient)
+    const endFade = (y: number) => {
+      const t = y / h;
+      if (t < 0.26) return clamp01(t / 0.26);
+      if (t > 0.74) return clamp01((1 - t) / 0.26);
+      return 1;
+    };
+
     const draw = () => {
       raf = requestAnimationFrame(draw);
       const scrollY = window.scrollY;
 
+      ctx.clearRect(0, 0, w, h);
       // hold off until the hero is behind us, then ease in over half a screen
       const fade = clamp01((scrollY - h * 0.6) / (h * 0.5));
-      ctx.clearRect(0, 0, w, h);
-      if (fade <= 0 || !fadeGrad) return;
+      if (fade <= 0) return;
 
       const visible = fade * dimAt(scrollY + h / 2);
       if (visible <= 0.01) return;
 
       const spread = Math.min(w * 0.022, 30);
-      ctx.strokeStyle = fadeGrad;
+      const now = performance.now();
+      ctx.globalCompositeOperation = "lighter";
 
       for (const s of strands) {
-        ctx.globalAlpha = s.alpha * visible;
-        ctx.lineWidth = s.width;
-        ctx.lineCap = "butt";
-        ctx.setLineDash(DASH);
-        // negative offset sends the dashes travelling down the strand as the
-        // page scrolls, so the rope reads as moving rather than static
-        ctx.lineDashOffset = -scrollY * s.dashSpeed;
-        ctx.beginPath();
-        for (let y = -STEP; y <= h + STEP; y += STEP) {
-          // the ends of the stroke fan wider as they dissolve
+        // dots travel along the strand as the page scrolls
+        const travel = (((scrollY * s.speed) % GAP) + GAP) % GAP;
+        for (let yi = -1; ; yi++) {
+          const y = yi * GAP + travel;
+          if (y > h + GAP) break;
+          if (y < -GAP) continue;
+
+          const ef = endFade(y);
+          if (ef <= 0) continue;
+
+          // the ends of the stream fan wider as they dissolve
           const edge = clamp01((Math.abs(y - h / 2) / (h / 2) - 0.3) / 0.7);
           const fan = 1 + edge * 1.7;
           const x = spineX(scrollY + y + s.lag) + s.off * spread * fan;
-          if (y <= -STEP) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
 
+          // gentle twinkle so the stream shimmers like a starfield
+          const tw = 0.72 + 0.28 * Math.sin(now * 0.0012 + yi * 1.7 + s.twk);
+          const a = s.alpha * visible * ef * tw;
+          if (a <= 0.01) continue;
+
+          const r = s.radius;
+          ctx.globalAlpha = clamp01(a);
+          ctx.drawImage(sprite, x - r, y - r, r * 2, r * 2);
+        }
       }
-      ctx.setLineDash([]);
-      ctx.lineDashOffset = 0;
+
+      ctx.globalCompositeOperation = "source-over";
       ctx.globalAlpha = 1;
     };
 
