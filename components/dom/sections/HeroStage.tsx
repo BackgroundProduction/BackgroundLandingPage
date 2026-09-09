@@ -81,6 +81,58 @@ const orbit = {
  *  the orbit to face the viewer, since photo scenes are flat billboards. */
 const morphShared = { m: 0, flat: 0 };
 
+/**
+ * Scroll state shared by every star material: how far the rig has dissolved
+ * into the page-wide scroll stream (0 sketch → 1 stream), the raw scroll
+ * offset the stream rides on, and the per-section dim of that stream.
+ * Written once per frame by ScrollDriver, read by every material update.
+ */
+const scroll = { y: 0, scatter: 0, dim: 1 };
+
+// Per-section visibility of the stream: the wall-to-wall media sections get
+// a quieter ribbon. Keyed by section id; blended between section centres.
+const STREAM_DIM: Record<string, number> = {
+  top: 0,
+  about: 1,
+  principles: 0.7,
+  stories: 0.85,
+  work: 0.3,
+  services: 1,
+  process: 0.75,
+  faq: 1,
+  contact: 1,
+};
+let streamStops: { top: number; dim: number }[] = [];
+
+function measureStreamStops() {
+  streamStops = Object.entries(STREAM_DIM)
+    .map(([id, dim]) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const b = el.getBoundingClientRect();
+      return { top: window.scrollY + b.top + b.height / 2, dim };
+    })
+    .filter((x): x is { top: number; dim: number } => x !== null)
+    .sort((a, b) => a.top - b.top);
+}
+
+function streamDimAt(docY: number) {
+  const stops = streamStops;
+  if (!stops.length) return 1;
+  if (docY <= stops[0].top) return stops[0].dim;
+  const last = stops[stops.length - 1];
+  if (docY >= last.top) return last.dim;
+  for (let i = 0; i < stops.length - 1; i++) {
+    const a = stops[i];
+    const b = stops[i + 1];
+    if (docY >= a.top && docY <= b.top) {
+      const t = (docY - a.top) / (b.top - a.top);
+      return a.dim + (b.dim - a.dim) * t * t * (3 - 2 * t);
+    }
+  }
+  return last.dim;
+}
+
 // scenes 0..5 are the drawn venues; photo scenes are appended after
 const DRAWN_SCENES = 6;
 
@@ -912,7 +964,30 @@ function starFrame(
     scatterH: fr.scatterH,
     scatterY: fr.lookY,
     twinkleSpeed,
+    scatter: scroll.scatter,
+    scrollY: scroll.y,
+    viewportW: state.size.width,
+    viewportH: state.size.height,
+    streamDim: scroll.dim,
   };
+}
+
+/**
+ * Reads the page scroll each frame and eases the rig between its sketch and
+ * the page-wide stream: the dissolve starts 60 px down and is complete by
+ * 800 px (Astra's disperse distance), damped so it never snaps.
+ */
+function ScrollDriver() {
+  useFrame((state, dt) => {
+    const y = window.scrollY;
+    scroll.y = y;
+    const target = THREE.MathUtils.smootherstep(y, 60, 800);
+    const k = 1 - Math.exp(-6 * Math.min(dt, 0.05));
+    scroll.scatter += (target - scroll.scatter) * k;
+    if (Math.abs(target - scroll.scatter) < 1e-4) scroll.scatter = target;
+    scroll.dim = streamDimAt(y + state.size.height / 2);
+  });
+  return null;
 }
 
 /**
@@ -1013,6 +1088,8 @@ function MorphRig({
   useFrame((state, dt) => {
     if (!clouds || !scenes) return;
     const s = st.current;
+    // a page that loads already scrolled skips the intro (as Astra does)
+    if (s.intro === 0 && scroll.y > 40) s.intro = INTRO_S;
     // a hitch slows the intro instead of jumping it (Astra clamps at 50 ms)
     s.intro = animate ? Math.min(INTRO_S, s.intro + Math.min(dt, 0.05)) : INTRO_S;
     const intro = s.intro / INTRO_S;
@@ -1026,12 +1103,13 @@ function MorphRig({
         scenes.accent.stars.heroIndices,
         state.camera,
         scratch,
-        THREE.MathUtils.smoothstep(intro, 0.85, 1),
+        THREE.MathUtils.smoothstep(intro, 0.85, 1) * (1 - scroll.scatter),
         state.size.width / Math.max(1, state.size.height)
       );
     }
-    // the cycle waits for the intro to land on the first venue
-    if (!animate || intro < 1) return;
+    // the cycle waits for the intro to land, and holds while the rig is
+    // dissolved into the scroll stream so it is intact when you scroll back
+    if (!animate || intro < 1 || scroll.scatter > 0.001) return;
     const sceneCount = scenes.structure.pos.length;
     const cycle = SEG_T * sceneCount;
     s.t = (s.t + Math.min(dt, 0.1)) % cycle;
@@ -1279,6 +1357,20 @@ function ResponsiveCamera() {
   return null;
 }
 
+/** The stage floor grid; dissolves with the rig when the page scrolls. */
+function FloorGrid() {
+  const ref = useRef<THREE.PolarGridHelper>(null);
+  useFrame(() => {
+    const g = ref.current;
+    if (!g) return;
+    const m = g.material as THREE.LineBasicMaterial;
+    m.transparent = true;
+    m.opacity = 1 - scroll.scatter;
+    g.visible = scroll.scatter < 0.999;
+  });
+  return <polarGridHelper ref={ref} args={[32, 16, 8, 64, "#1a1f2b", "#0f1219"]} />;
+}
+
 /** Drag-to-orbit rig: inertia + damping, slow auto-rotate when idle. */
 function OrbitGroup({
   autoRotate,
@@ -1350,6 +1442,19 @@ export default function HeroStage() {
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
+  // section centres for the stream's per-section dim; sections lazy-load
+  // media, so re-measure on load, resize and every couple of seconds
+  useEffect(() => {
+    measureStreamStops();
+    const id = window.setInterval(measureStreamStops, 2000);
+    window.addEventListener("load", measureStreamStops);
+    window.addEventListener("resize", measureStreamStops);
+    return () => {
+      window.clearInterval(id);
+      window.removeEventListener("load", measureStreamStops);
+      window.removeEventListener("resize", measureStreamStops);
+    };
+  }, []);
   // the lens-optics pass is created here so the rig can feed it hero positions
   const optics = useMemo(() => (tier.optics ? new AstraOpticsEffect() : null), [tier.optics]);
   useEffect(() => () => optics?.dispose(), [optics]);
@@ -1406,7 +1511,9 @@ export default function HeroStage() {
   return (
     <div
       ref={wrap}
-      className="h-full w-full cursor-grab touch-pan-y active:cursor-grabbing"
+      // fixed and page-wide: the rig dissolves into a stream that rides the
+      // scroll down the whole page (later sections paint over it, translucent)
+      className="fixed inset-0 cursor-grab touch-pan-y active:cursor-grabbing"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={endDrag}
@@ -1426,13 +1533,14 @@ export default function HeroStage() {
         }}
         frameloop={running ? "always" : "never"}
       >
+        <ScrollDriver />
         <ResponsiveCamera />
         <color attach="background" args={[BG]} />
         {/* sky and brand backwall stay outside the orbit group so they always read */}
         <StarField animate={!reduced} />
         <LogoWall animate={!reduced} />
         <OrbitGroup autoRotate={!reduced}>
-          <polarGridHelper args={[32, 16, 8, 64, "#1a1f2b", "#0f1219"]} />
+          <FloorGrid />
           <MorphRig animate={!reduced} keep={tier.keep} optics={optics} />
         </OrbitGroup>
         {/* Astra's chain: restrained mipmap bloom → lens optics → ACES */}

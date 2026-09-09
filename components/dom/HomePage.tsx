@@ -7,7 +7,6 @@ import type { Locale } from "@/content";
 import SmoothScrollProvider from "@/components/dom/SmoothScrollProvider";
 import Header from "@/components/dom/Header";
 import ScrollProgress from "@/components/dom/ui/ScrollProgress";
-import ScrollParticles from "@/components/dom/ScrollParticles";
 import HeroSection from "@/components/dom/sections/HeroSection";
 import AboutSection from "@/components/dom/sections/AboutSection";
 import PrinciplesSection from "@/components/dom/sections/PrinciplesSection";
@@ -35,7 +34,6 @@ export default function HomePage({ locale }: { locale: Locale }) {
         <SkipLink />
         <Header />
         <ScrollProgress />
-        <ScrollParticles />
         <main className="relative">
           <HeroSection />
           <AboutSection />

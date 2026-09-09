@@ -150,6 +150,10 @@ const vertexShader = /* glsl */ `
   uniform float uDrift;
   uniform vec2 uScatterSize;
   uniform vec2 uScatterCenter;
+  uniform float uScatter;
+  uniform float uScrollY;
+  uniform vec2 uViewport;
+  uniform float uStreamDim;
 
   varying float vBrightness;
   varying vec3 vColor;
@@ -223,15 +227,43 @@ const vertexShader = /* glsl */ `
 
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     float depth = -mv.z;
+    vec4 clip = projectionMatrix * mv;
+
+    // --- scroll stream: as the page scrolls, 8 % of the rig's dots leave the
+    // sketch and ride a braided ribbon that sweeps across the viewport and
+    // travels down with the scroll (screen space, so orbit and camera do not
+    // matter); the rest of the rig and the sky/logo layers dissolve.
+    float member = step(fract(aTwinkle.x * 0.1591549), 0.08) * (1.0 - uBackground);
+    float W = max(uViewport.x, 1.0);
+    float H = max(uViewport.y, 1.0);
+    float strand = aSeed.x * 2.0 - 1.0;               // -1..1 across the bundle
+    float speed = 0.25 + 0.5 * aSeed.y;                // how fast it rides the scroll
+    float fy = fract(aSeed.z + uScrollY * speed / H);  // screen y, wraps as it travels
+    float lag = strand * H * 0.05;                     // strands sample the spine offset → they cross
+    float kSpine = 6.28318530718 / (2.4 * H);          // one left-right-left per 2.4 screens
+    float swing = min(0.42, max(0.08, 0.5 - 130.0 / W));
+    float spineX = 0.5 + swing * sin((uScrollY + fy * H + lag) * kSpine);
+    float edge = clamp((abs(fy - 0.5) / 0.5 - 0.3) / 0.7, 0.0, 1.0);
+    float fan = 1.0 + edge * 1.7;                      // the ends fan wider as they dissolve
+    float spread = min(W * 0.022, 30.0);
+    float across = (strand + (aSeed.y - 0.5) * 0.1) * spread * fan;
+    vec2 streamNdc = vec2((spineX * W + across) / W * 2.0 - 1.0, 1.0 - fy * 2.0);
+    float endFade = fy < 0.26 ? fy / 0.26 : (fy > 0.74 ? (1.0 - fy) / 0.26 : 1.0);
+    float streamBlend = uScatter * member;
+
     // the old fog, as a brightness cue instead of a colour mix
-    float depthDim = mix(1.0, 0.45, smoothstep(uDepthDimNear, uDepthDimFar, depth));
+    float depthDim = mix(mix(1.0, 0.45, smoothstep(uDepthDimNear, uDepthDimFar, depth)), 1.0, streamBlend);
     // Astra has no size attenuation; keep a mild one so the orbit still reads 3-D
-    float attenuation = clamp(uRefZ / max(depth, 0.001), 0.75, 1.25);
+    float attenuation = mix(clamp(uRefZ / max(depth, 0.001), 0.75, 1.25), 1.0, streamBlend);
     float reveal = mix(astraParticleRevealProgress(intro, aSeed.z), 1.0, uBackground);
 
-    vBrightness = uIntensity * aBrightness * weight * twinkle * depthDim;
+    float sketchBrightness = uIntensity * aBrightness * weight * twinkle * depthDim;
+    float streamBrightness = uIntensity * aBrightness * 0.55 * twinkle * endFade * uStreamDim;
+    vBrightness = mix(sketchBrightness, streamBrightness, streamBlend);
     vOpacity = aOpacity * (0.92 + 0.08 * twinkle) * smoothstep(0.0, 0.2, reveal);
-    vRayStrength = smoothstep(1.45, 2.8, aBrightness * max(weight, 0.35));
+    // everything that does not ride the stream dissolves with the scroll
+    vOpacity *= 1.0 - uScatter * (1.0 - member);
+    vRayStrength = smoothstep(1.45, 2.8, aBrightness * max(mix(weight, 1.0, streamBlend), 0.35));
 
     gl_PointSize = uPixelRatio
       * (0.35 + aScale * 3.8)
@@ -240,7 +272,12 @@ const vertexShader = /* glsl */ `
       * sqrt(max(reveal, 0.0));
     vParticleDiameter = gl_PointSize;
     gl_PointSize = max(gl_PointSize, 4.0);
-    gl_Position = projectionMatrix * mv;
+    float w = max(clip.w, 0.0001);
+    gl_Position = vec4(
+      mix(clip.xy / w, streamNdc, streamBlend),
+      mix(clip.z / w, 0.0, streamBlend),
+      1.0
+    );
   }
 `;
 
@@ -311,6 +348,10 @@ export function createAstraPointsMaterial(o: AstraMaterialOptions) {
       uDrift: { value: o.drift ?? 0 },
       uScatterSize: { value: new THREE.Vector2(18, 12) },
       uScatterCenter: { value: new THREE.Vector2(0, 3.6) },
+      uScatter: { value: 0 },
+      uScrollY: { value: 0 },
+      uViewport: { value: new THREE.Vector2(1440, 900) },
+      uStreamDim: { value: 1 },
     },
     vertexShader,
     fragmentShader,
@@ -341,6 +382,13 @@ export interface StarFrame {
   scatterH: number;
   scatterY: number;
   twinkleSpeed: number;
+  /** 0 = the sketch, 1 = dissolved into the page-wide scroll stream */
+  scatter: number;
+  scrollY: number;
+  viewportW: number;
+  viewportH: number;
+  /** per-section visibility of the stream */
+  streamDim: number;
 }
 
 export function updateStarUniforms(m: THREE.ShaderMaterial, f: StarFrame) {
@@ -355,4 +403,8 @@ export function updateStarUniforms(m: THREE.ShaderMaterial, f: StarFrame) {
   u.uTwinkleSpeed.value = f.twinkleSpeed;
   (u.uScatterSize.value as THREE.Vector2).set(f.scatterW, f.scatterH);
   (u.uScatterCenter.value as THREE.Vector2).set(0, f.scatterY);
+  u.uScatter.value = f.scatter;
+  u.uScrollY.value = f.scrollY;
+  (u.uViewport.value as THREE.Vector2).set(f.viewportW, f.viewportH);
+  u.uStreamDim.value = f.streamDim;
 }
