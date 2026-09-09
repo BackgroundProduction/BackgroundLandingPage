@@ -36,10 +36,12 @@ export default function HeroSection() {
       if (!ref.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const tl = gsap.timeline();
+      // opacity only: the WebGL rig runs its own converge intro, and scaling
+      // a live canvas would fight it
       tl.fromTo(
         "[data-stage]",
-        { opacity: 0, scale: 1.045 },
-        { opacity: 1, scale: 1, duration: 1.6, ease: "power2.out" },
+        { opacity: 0 },
+        { opacity: 1, duration: 1.0, ease: "power2.out" },
         0
       );
       tl.fromTo(

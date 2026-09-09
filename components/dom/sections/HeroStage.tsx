@@ -3,15 +3,42 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import { EffectComposer, Bloom, ToneMapping } from "@react-three/postprocessing";
+import { ToneMappingMode } from "postprocessing";
 import installationEdges from "@/lib/installation-edges.json";
+import {
+  attachStarAttributes,
+  createAstraPointsMaterial,
+  luminance,
+  makeStarAttributes,
+  updateStarUniforms,
+  weightsFromColors,
+  type StarAttributes,
+  type StarFrame,
+  type StarOptions,
+} from "./astra/astraPoints";
+import { AstraOpticsEffect, OPTICS_SECONDARY_SOURCES } from "./astra/AstraOpticsEffect";
 
-// cool blue-white monochrome — luminous points on black, the GPT/OpenAI
-// particle palette, rather than the warm cream the rest of the site uses
+// The sketch colours now only set each line's *weight* (how bright a dot on
+// it burns); the hue of every dot comes from the Astra palette per particle.
 const ACCENT = "#e4ecff";
 const WIRE = "#8494b3";
 const WIRE_DIM = "#3d465c";
-const BG = "#0a0a0a";
+// pure black ground, like the reference — the page's #0a0a0a takes over
+// under the scrim
+const BG = "#000000";
+
+// Astra star look: master size (reference stars.size 2.05) and HDR intensity
+// (reference 1.35) per pool. Structure lines carry lower weights, so they get
+// a touch more intensity to stay readable under the accent jewellery.
+const STRUCTURE_STAR_SIZE = 1.45;
+const ACCENT_STAR_SIZE = 1.85;
+const LOGO_STAR_SIZE = 1.6;
+const STRUCTURE_INTENSITY = 1.7;
+const ACCENT_INTENSITY = 1.35;
+const STAR_FIELD_DOTS = 600;
+// converge intro length in seconds (reference convergeDuration)
+const INTRO_S = 5.5;
 
 // arch truss span (feet at ±SPAN_X on the ground) and apex height
 const SPAN_X = 9;
@@ -688,12 +715,14 @@ function sortCloud(c: Cloud) {
 interface Pool {
   n: number;
   pos: Float32Array[]; // one buffer per scene, matched point-for-point
-  col: Float32Array[];
+  col: Float32Array[]; // baked sketch colour per scene (source of the weights)
+  wgt: Float32Array[]; // per-scene brightness weight, lerped by the morph loop
   delays: Float32Array;
+  stars: StarAttributes; // index-invariant Astra star attributes
 }
 
-// dot budgets per pool — fixed regardless of scene complexity. Dense on
-// purpose: many fine points read as luminous mist rather than a string of beads
+// dot budgets per pool — fixed regardless of scene complexity. Each dot is a
+// crisp star now, so density reads as beads along a line, not as mist.
 const STRUCTURE_DOTS = 9000;
 const ACCENT_DOTS = 3000;
 
@@ -801,20 +830,120 @@ async function buildPools(): Promise<{ structure: Pool; accent: Pool }> {
     }
   }
   for (const c of [...structureClouds, ...accentClouds]) sortCloud(c);
-  const poolOf = (clouds: Cloud[], count: number): Pool => {
+  // the brightest accent tone is weight 1; everything else scales down from it
+  const ref = tone(ACCENT, 0.55);
+  const refLum = luminance(ref.r, ref.g, ref.b);
+  const poolOf = (clouds: Cloud[], count: number, star: StarOptions): Pool => {
     const delays = new Float32Array(count);
     for (let i = 0; i < count; i++) delays[i] = rand();
     return {
       n: count,
       pos: clouds.map((c) => c.pos),
       col: clouds.map((c) => c.col),
+      wgt: clouds.map((c) => weightsFromColors(c.col, refLum)),
       delays,
+      stars: makeStarAttributes(count, rand, star),
     };
   };
   return {
-    structure: poolOf(structureClouds, STRUCTURE_DOTS),
-    accent: poolOf(accentClouds, ACCENT_DOTS),
+    // structure: a sea of tiny stars with a rare bright one (2 %)
+    structure: poolOf(structureClouds, STRUCTURE_DOTS, {
+      size: STRUCTURE_STAR_SIZE,
+      brightChance: 0.02,
+    }),
+    // accent: the jewellery — 9 % bright beads plus six ray-casting heroes
+    accent: poolOf(accentClouds, ACCENT_DOTS, {
+      size: ACCENT_STAR_SIZE,
+      brightChance: 0.065,
+      heroes: OPTICS_SECONDARY_SOURCES + 1,
+    }),
   };
+}
+
+/**
+ * Camera framing solved from the viewport: the distance at which the full
+ * scene width fits (the old fixed steps cropped the 12-unit-wide scenes on
+ * phone aspects), the aim point that parks the scene top under the header,
+ * the depth-dim range (the former fog offsets) and the world-space box the
+ * converge intro scatters into (1.12× the frustum at the sketch plane).
+ */
+function heroFraming(width: number, height: number, fovDeg: number) {
+  const aspect = width / Math.max(1, height);
+  const tanV = Math.tan(THREE.MathUtils.degToRad(fovDeg / 2));
+  // the widest thing on stage is the 15-unit logo backwall, plus margin
+  const targetW = 16;
+  const fitW = targetW / 2 / (tanV * aspect);
+  const z = Math.max(20.5, fitW);
+  // On tall viewports the distant camera sees far more vertical span than
+  // the ~10-unit scene, which parks a band of empty sky above the wall.
+  // Aim so the scene's top lands just under the header instead of centre.
+  const sceneTop = 10.2;
+  const lookY = Math.min(3.6, sceneTop - 0.72 * z * tanV);
+  const frustumH = 2 * z * tanV;
+  return {
+    z,
+    lookY,
+    aspect,
+    tanV,
+    scatterW: frustumH * aspect * 1.12,
+    scatterH: frustumH * 1.12,
+    dimNear: z - 4.5,
+    dimFar: z + 25.5,
+  };
+}
+
+/** The shared per-frame star uniforms for one frame of the hero. */
+function starFrame(
+  state: { size: { width: number; height: number }; camera: THREE.Camera; clock: THREE.Clock; gl: THREE.WebGLRenderer },
+  intro: number,
+  keep: number,
+  twinkleSpeed: number
+): StarFrame {
+  const fr = heroFraming(state.size.width, state.size.height, (state.camera as THREE.PerspectiveCamera).fov);
+  return {
+    time: state.clock.elapsedTime,
+    pixelRatio: state.gl.getPixelRatio(),
+    intro,
+    keep,
+    refZ: 20.5,
+    dimNear: fr.dimNear,
+    dimFar: fr.dimFar,
+    scatterW: fr.scatterW,
+    scatterH: fr.scatterH,
+    scatterY: fr.lookY,
+    twinkleSpeed,
+  };
+}
+
+/**
+ * Feed the lens-optics pass the screen positions of the accent heroes: read
+ * their live positions from the morph buffer, take them through the orbit
+ * group and the camera, and fade them out at the frame edge. Held back until
+ * the intro has landed, because the vertex shader displaces stars before that.
+ */
+function projectHeroes(
+  optics: AstraOpticsEffect,
+  cloud: THREE.Points,
+  heroes: number[],
+  camera: THREE.Camera,
+  v: THREE.Vector3,
+  reveal: number,
+  aspect: number
+) {
+  optics.setAspect(aspect);
+  cloud.updateWorldMatrix(true, false);
+  const P = (cloud.geometry.getAttribute("position") as THREE.BufferAttribute).array as Float32Array;
+  for (let k = 0; k < heroes.length && k <= OPTICS_SECONDARY_SOURCES; k++) {
+    const i = heroes[k] * 3;
+    v.set(P[i], P[i + 1], P[i + 2]).applyMatrix4(cloud.matrixWorld).project(camera);
+    const edge = Math.max(Math.abs(v.x), Math.abs(v.y));
+    const inFront = v.z > -1 && v.z < 1;
+    const vis = inFront ? (1 - THREE.MathUtils.smoothstep(edge, 0.88, 1.08)) * reveal : 0;
+    const x = v.x * 0.5 + 0.5;
+    const y = v.y * 0.5 + 0.5;
+    if (k === 0) optics.setPrimary(x, y, vis);
+    else optics.setSecondary(k - 1, x, y, vis);
+  }
 }
 
 /**
@@ -822,8 +951,20 @@ async function buildPools(): Promise<{ structure: Pool; accent: Pool }> {
  * glowing accent dots) whose positions ease between scenes on a
  * hold/morph/hold/morph cycle. Each dot gets a random start delay so the
  * picture dissolves organically rather than sliding as a block.
+ *
+ * On first load the dots run Astra's converge intro: they pop in scattered
+ * across the viewport, swirl and get pulled onto the first venue over 5.5 s;
+ * the morph cycle only starts once that has landed.
  */
-function MorphRig({ animate }: { animate: boolean }) {
+function MorphRig({
+  animate,
+  keep,
+  optics,
+}: {
+  animate: boolean;
+  keep: number;
+  optics: AstraOpticsEffect | null;
+}) {
   const [scenes, setScenes] = useState<{ structure: Pool; accent: Pool } | null>(null);
 
   // pools load async (photo scenes sample from image files)
@@ -839,32 +980,20 @@ function MorphRig({ animate }: { animate: boolean }) {
 
   const clouds = useMemo(() => {
     if (!scenes) return null;
-    const make = (pool: Pool, size: number, opacity: number) => {
+    const make = (pool: Pool, intensity: number) => {
       const g = new THREE.BufferGeometry();
       // slice: the morph loop writes into the live buffers, and the pristine
       // scene data must stay untouched
       g.setAttribute("position", new THREE.BufferAttribute(pool.pos[0].slice(), 3));
-      g.setAttribute("color", new THREE.BufferAttribute(pool.col[0].slice(), 3));
-      const m = new THREE.PointsMaterial({
-        vertexColors: true,
-        size,
-        sizeAttenuation: true,
-        map: getDotTexture(),
-        transparent: true,
-        opacity,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
-      m.fog = true;
-      const p = new THREE.Points(g, m);
+      g.setAttribute("weight", new THREE.BufferAttribute(pool.wgt[0].slice(), 1));
+      attachStarAttributes(g, pool.stars);
+      const p = new THREE.Points(g, createAstraPointsMaterial({ intensity }));
       p.frustumCulled = false;
       return p;
     };
-    // finer points than before — crisp specks of light with the glow coming
-    // from the sprite halo and bloom, not from a fat disc
     return {
-      structure: make(scenes.structure, 0.06, 0.85),
-      accent: make(scenes.accent, 0.12, 0.95),
+      structure: make(scenes.structure, STRUCTURE_INTENSITY),
+      accent: make(scenes.accent, ACCENT_INTENSITY),
     };
   }, [scenes]);
 
@@ -873,18 +1002,38 @@ function MorphRig({ animate }: { animate: boolean }) {
     return () => {
       for (const p of [clouds.structure, clouds.accent]) {
         p.geometry.dispose();
-        (p.material as THREE.PointsMaterial).dispose();
+        (p.material as THREE.Material).dispose();
       }
     };
   }, [clouds]);
 
-  const st = useRef({ t: 0, wasMorph: false });
+  const st = useRef({ t: 0, wasMorph: false, intro: 0 });
+  const scratch = useMemo(() => new THREE.Vector3(), []);
 
-  useFrame((_, dt) => {
-    if (!animate || !clouds || !scenes) return;
+  useFrame((state, dt) => {
+    if (!clouds || !scenes) return;
+    const s = st.current;
+    // a hitch slows the intro instead of jumping it (Astra clamps at 50 ms)
+    s.intro = animate ? Math.min(INTRO_S, s.intro + Math.min(dt, 0.05)) : INTRO_S;
+    const intro = s.intro / INTRO_S;
+    const frame = starFrame(state, intro, keep, animate ? 0.62 : 0);
+    updateStarUniforms(clouds.structure.material as THREE.ShaderMaterial, frame);
+    updateStarUniforms(clouds.accent.material as THREE.ShaderMaterial, frame);
+    if (optics) {
+      projectHeroes(
+        optics,
+        clouds.accent,
+        scenes.accent.stars.heroIndices,
+        state.camera,
+        scratch,
+        THREE.MathUtils.smoothstep(intro, 0.85, 1),
+        state.size.width / Math.max(1, state.size.height)
+      );
+    }
+    // the cycle waits for the intro to land on the first venue
+    if (!animate || intro < 1) return;
     const sceneCount = scenes.structure.pos.length;
     const cycle = SEG_T * sceneCount;
-    const s = st.current;
     s.t = (s.t + Math.min(dt, 0.1)) % cycle;
     const src = Math.floor(s.t / SEG_T);
     const dst = (src + 1) % sceneCount;
@@ -903,19 +1052,19 @@ function MorphRig({ animate }: { animate: boolean }) {
       [clouds.accent, scenes.accent],
     ] as const) {
       const posBuf = cloud.geometry.getAttribute("position") as THREE.BufferAttribute;
-      const colBuf = cloud.geometry.getAttribute("color") as THREE.BufferAttribute;
+      const wgtBuf = cloud.geometry.getAttribute("weight") as THREE.BufferAttribute;
       const P = posBuf.array as Float32Array;
-      const C = colBuf.array as Float32Array;
+      const W = wgtBuf.array as Float32Array;
       if (snap) {
         // snap exactly onto the held scene once the morph window closes
         P.set(pool.pos[src]);
-        C.set(pool.col[src]);
+        W.set(pool.wgt[src]);
       } else {
         const { delays, n } = pool;
         const pa = pool.pos[src];
         const pb = pool.pos[dst];
-        const ca = pool.col[src];
-        const cb = pool.col[dst];
+        const wa = pool.wgt[src];
+        const wb = pool.wgt[dst];
         for (let i = 0; i < n; i++) {
           let ti = (tm - delays[i] * STAGGER) / (1 - STAGGER);
           ti = ti < 0 ? 0 : ti > 1 ? 1 : ti;
@@ -923,12 +1072,12 @@ function MorphRig({ animate }: { animate: boolean }) {
           const b = i * 3;
           for (let k = 0; k < 3; k++) {
             P[b + k] = pa[b + k] + (pb[b + k] - pa[b + k]) * e;
-            C[b + k] = ca[b + k] + (cb[b + k] - ca[b + k]) * e;
           }
+          W[i] = wa[i] + (wb[i] - wa[i]) * e;
         }
       }
       posBuf.needsUpdate = true;
-      colBuf.needsUpdate = true;
+      wgtBuf.needsUpdate = true;
     }
     s.wasMorph = inMorph;
   });
@@ -940,37 +1089,6 @@ function MorphRig({ animate }: { animate: boolean }) {
       <primitive object={clouds.accent} />
     </>
   );
-}
-
-/** Soft round glow sprite shared by all particle systems (points render as
- *  hard squares without a map). Lazy singleton — client only. */
-let dotTexture: THREE.CanvasTexture | null = null;
-function getDotTexture() {
-  if (!dotTexture) {
-    // 128px with a smooth falloff — at 64px the gradient banded visibly once
-    // a point rendered larger than ~30px on screen. Profile is a star: a tight
-    // bright core with a long, soft halo tail, so dots glow like points of
-    // light rather than flat discs (the "galaxy" look) while the core keeps the
-    // sketched lines legible.
-    const S = 128;
-    const c = document.createElement("canvas");
-    c.width = c.height = S;
-    const ctx = c.getContext("2d")!;
-    const grad = ctx.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
-    grad.addColorStop(0, "rgba(255,255,255,1)");
-    grad.addColorStop(0.12, "rgba(255,255,255,0.92)");
-    grad.addColorStop(0.28, "rgba(255,255,255,0.45)");
-    grad.addColorStop(0.55, "rgba(255,255,255,0.14)");
-    grad.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, S, S);
-    dotTexture = new THREE.CanvasTexture(c);
-    // trilinear filtering so far-away (tiny) points stay smooth too
-    dotTexture.generateMipmaps = true;
-    dotTexture.minFilter = THREE.LinearMipmapLinearFilter;
-    dotTexture.magFilter = THREE.LinearFilter;
-  }
-  return dotTexture;
 }
 
 /**
@@ -1032,6 +1150,17 @@ function LogoWall({ animate }: { animate: boolean }) {
       }
       const g = new THREE.BufferGeometry();
       g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+      // one weight for the whole wall: a little under the rig's accent lines
+      g.setAttribute("weight", new THREE.BufferAttribute(new Float32Array(count).fill(0.7), 1));
+      attachStarAttributes(
+        g,
+        makeStarAttributes(count, rand, {
+          size: LOGO_STAR_SIZE,
+          brightChance: 0,
+          white: true,
+          opacity: 0.9,
+        })
+      );
       g.userData.base = pos.slice(); // pristine layout the shimmer offsets from
       setGeo(g);
     };
@@ -1054,25 +1183,14 @@ function LogoWall({ animate }: { animate: boolean }) {
     };
   }, []);
 
-  const mat = useMemo(
-    () =>
-      new THREE.PointsMaterial({
-        color: ACCENT,
-        size: 0.12,
-        sizeAttenuation: true,
-        map: getDotTexture(),
-        transparent: true,
-        opacity: 0.65,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        fog: false, // stays crisp behind the fogged rig
-      }),
-    []
-  );
+  // background material: no intro pull, no density cull, still twinkles
+  const mat = useMemo(() => createAstraPointsMaterial({ intensity: 1.15, background: true }), []);
+  useEffect(() => () => mat.dispose(), [mat]);
 
-  useFrame(({ clock }) => {
+  useFrame((state) => {
+    updateStarUniforms(mat, starFrame(state, 1, 1, animate ? 0.62 : 0));
     if (!animate || !ref.current || !geo) return;
-    const t = clock.elapsedTime;
+    const t = state.clock.elapsedTime;
     ref.current.position.y = Math.sin(t * 0.3) * 0.18;
     // gentle per-particle drift so the wall reads as living light, not a decal
     const attr = geo.getAttribute("position") as THREE.BufferAttribute;
@@ -1099,75 +1217,66 @@ function LogoWall({ animate }: { animate: boolean }) {
   );
 }
 
-/** Slow-drifting dust motes that catch the light around the rig. */
-function Dust({ animate }: { animate: boolean }) {
-  const ref = useRef<THREE.Points>(null);
+/**
+ * Astra's background star field: sparse tiny stars in the same palette,
+ * drifting slowly in a box behind the sketch. It sits outside the orbit
+ * group so it reads as sky, not as part of the set.
+ */
+function StarField({ animate }: { animate: boolean }) {
+  const { size, camera } = useThree();
+  const fr = heroFraming(size.width, size.height, (camera as THREE.PerspectiveCamera).fov);
+  // size the box to the frustum at its depth so it fills any viewport
+  const depth = fr.z + 12;
+  const boxH = 2 * depth * fr.tanV * 1.15;
+  const boxW = boxH * fr.aspect;
+  const centerY = fr.lookY;
   const geo = useMemo(() => {
     const rand = mulberry32(99);
-    // a denser, deeper starfield reads as galaxy dust around the rig
-    const n = 900;
+    const n = STAR_FIELD_DOTS;
     const p = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) {
-      const r = 2.5 + rand() * 15.5;
-      const ang = rand() * Math.PI * 2;
-      p[i * 3] = Math.cos(ang) * r;
-      p[i * 3 + 1] = rand() * 13;
-      p[i * 3 + 2] = Math.sin(ang) * r;
+      p[i * 3] = (rand() - 0.5) * boxW;
+      p[i * 3 + 1] = centerY + (rand() - 0.5) * boxH;
+      p[i * 3 + 2] = -4 - rand() * 16;
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.BufferAttribute(p, 3));
+    g.setAttribute("weight", new THREE.BufferAttribute(new Float32Array(n).fill(1), 1));
+    attachStarAttributes(
+      g,
+      makeStarAttributes(n, rand, {
+        size: ACCENT_STAR_SIZE * 0.5,
+        brightChance: 0.03,
+        opacity: 1,
+      })
+    );
     return g;
-  }, []);
+  }, [boxW, boxH, centerY]);
+  useEffect(() => () => geo.dispose(), [geo]);
   const mat = useMemo(
-    () =>
-      new THREE.PointsMaterial({
-        color: ACCENT,
-        size: 0.07,
-        sizeAttenuation: true,
-        map: getDotTexture(),
-        transparent: true,
-        opacity: 0.42,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      }),
+    () => createAstraPointsMaterial({ intensity: 1.0, background: true, drift: 1 }),
     []
   );
-  useFrame(({ clock }) => {
-    if (!animate || !ref.current) return;
-    ref.current.rotation.y = clock.elapsedTime * 0.014;
-    ref.current.position.y = Math.sin(clock.elapsedTime * 0.22) * 0.3;
+  useEffect(() => () => mat.dispose(), [mat]);
+  useFrame((state) => {
+    updateStarUniforms(mat, starFrame(state, 1, 1, animate ? 0.62 : 0));
   });
-  return <points ref={ref} geometry={geo} material={mat} frustumCulled={false} />;
+  return <points geometry={geo} material={mat} frustumCulled={false} />;
 }
 
-/** Pulls the camera back on narrow viewports so the venue stays framed.
- *  Solved continuously: given the vertical fov and current aspect, find the
- *  distance at which the full scene width fits — the old fixed steps still
- *  cropped the 12-unit-wide scenes on phone aspects (~0.45).
- *
- *  Also owns the scene fog: it was tuned for z=20.5 (near z-4.5, far z+25.5)
- *  and must keep those offsets or a distant camera puts the whole scene
- *  inside the fog. The distance is derived in render and fed to the `<fog>`
- *  element as props, so nothing mutates the objects handed out by useThree. */
+/** Pulls the camera back on narrow viewports so the venue stays framed
+ *  (see heroFraming). Derived in render; only method calls touch the camera,
+ *  so nothing mutates the objects handed out by useThree. The old fog is now
+ *  a brightness cue inside the star shader. */
 function ResponsiveCamera() {
   const { camera, size } = useThree();
   const cam = camera as THREE.PerspectiveCamera;
-  const aspect = size.width / size.height;
-  const halfV = THREE.MathUtils.degToRad(cam.fov / 2);
-  // the widest thing on stage is the 15-unit logo backwall, plus margin
-  const targetW = 16;
-  const fitW = targetW / 2 / (Math.tan(halfV) * aspect);
-  const z = Math.max(20.5, fitW);
-  // On tall viewports the distant camera sees far more vertical span than
-  // the ~10-unit scene, which parks a band of empty sky above the wall.
-  // Aim so the scene's top lands just under the header instead of centre.
-  const sceneTop = 10.2;
-  const lookY = Math.min(3.6, sceneTop - 0.72 * z * Math.tan(halfV));
+  const { z, lookY } = heroFraming(size.width, size.height, cam.fov);
   useEffect(() => {
     cam.position.set(0, 5.6, z);
     cam.lookAt(0, lookY, 0);
   }, [cam, z, lookY]);
-  return <fog attach="fog" args={[BG]} near={z - 4.5} far={z + 25.5} />;
+  return null;
 }
 
 /** Drag-to-orbit rig: inertia + damping, slow auto-rotate when idle. */
@@ -1200,6 +1309,24 @@ function OrbitGroup({
   return <group ref={g}>{children}</group>;
 }
 
+/** Astra's pixel-ratio policy: never above 1.5, and never more than a
+ *  2.4-megapixel drawing buffer — bloom cost scales with area, not dots. */
+function budgetDpr(w: number, h: number) {
+  const native = typeof window === "undefined" ? 1 : window.devicePixelRatio || 1;
+  const budget = w > 0 && h > 0 ? Math.sqrt(2.4e6 / (w * h)) : 1;
+  return Math.max(1, Math.floor(Math.min(1.5, native, budget) * 100) / 100);
+}
+
+/** Cheap device tier: the lens-optics pass and full density are for pointer
+ *  desktops; phones and small machines get bloom only and 60 % of the dots. */
+function detectTier() {
+  if (typeof window === "undefined") return { optics: false, keep: 1 };
+  const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const cores = navigator.hardwareConcurrency ?? 8;
+  const desktop = fine && window.innerWidth >= 900 && cores > 4;
+  return { optics: desktop, keep: desktop ? 1 : 0.6 };
+}
+
 export default function HeroStage() {
   const wrap = useRef<HTMLDivElement>(null);
   const [running, setRunning] = useState(true);
@@ -1209,6 +1336,23 @@ export default function HeroStage() {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     []
   );
+  const tier = useMemo(() => detectTier(), []);
+  const [dpr, setDpr] = useState(() =>
+    typeof window === "undefined" ? 1 : budgetDpr(window.innerWidth, window.innerHeight)
+  );
+  useEffect(() => {
+    const el = wrap.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      const r = entry.contentRect;
+      setDpr(budgetDpr(r.width, r.height));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  // the lens-optics pass is created here so the rig can feed it hero positions
+  const optics = useMemo(() => (tier.optics ? new AstraOpticsEffect() : null), [tier.optics]);
+  useEffect(() => () => optics?.dispose(), [optics]);
   // reset the shared orbit store; start behind the resting angle so the
   // rig swings into place on load (unless reduced motion)
   useEffect(() => {
@@ -1270,36 +1414,39 @@ export default function HeroStage() {
     >
       <Canvas
         camera={{ position: [0, 5.6, 20.5], fov: 31 }}
-        // render at native device resolution (capped at 2) — the old 1.5 cap
-        // meant every frame was upscaled ~33% on retina, which is exactly the
-        // soft/grainy look on the dots
-        dpr={[1, 2]}
+        // capped at 1.5 and a 2.4 MP buffer (budgetDpr): the analytic star
+        // sprite stays crisp at any ratio, so extra pixels only cost bloom time
+        dpr={dpr}
         gl={{
           antialias: false, // the composer owns AA; MSAA here would be paid twice
           alpha: false,
           stencil: false,
+          depth: false, // everything is additive points; no depth needed
           powerPreference: "high-performance",
         }}
         frameloop={running ? "always" : "never"}
       >
-        {/* frames the camera and renders the fog that tracks it */}
         <ResponsiveCamera />
         <color attach="background" args={[BG]} />
-        {/* brand backwall stays outside the orbit group so it always reads */}
+        {/* sky and brand backwall stay outside the orbit group so they always read */}
+        <StarField animate={!reduced} />
         <LogoWall animate={!reduced} />
         <OrbitGroup autoRotate={!reduced}>
-          <polarGridHelper args={[32, 16, 8, 64, "#2a2822", "#171613"]} />
-          <MorphRig animate={!reduced} />
-          <Dust animate={!reduced} />
+          <polarGridHelper args={[32, 16, 8, 64, "#1a1f2b", "#0f1219"]} />
+          <MorphRig animate={!reduced} keep={tier.keep} optics={optics} />
         </OrbitGroup>
-        <EffectComposer multisampling={2}>
+        {/* Astra's chain: restrained mipmap bloom → lens optics → ACES */}
+        <EffectComposer multisampling={2} depthBuffer={false}>
           <Bloom
             mipmapBlur
-            intensity={1.6}
-            luminanceThreshold={0.18}
-            luminanceSmoothing={0.35}
-            radius={0.95}
+            levels={5}
+            radius={0.72}
+            intensity={0.7}
+            luminanceThreshold={0.08}
+            luminanceSmoothing={0.18}
           />
+          {optics ? <primitive object={optics} /> : <></>}
+          <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
         </EffectComposer>
       </Canvas>
     </div>
