@@ -1513,7 +1513,11 @@ export default function HeroStage() {
       ref={wrap}
       // fixed and page-wide: the rig dissolves into a stream that rides the
       // scroll down the whole page (later sections paint over it, translucent)
+      // painted in tree order before <main>, which isolates its own stack, so
+      // every section (even plain text) paints over the rig while the rig still
+      // sits above <body> for hit-testing
       className="fixed inset-0 cursor-grab touch-pan-y active:cursor-grabbing"
+      aria-hidden="true"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={endDrag}

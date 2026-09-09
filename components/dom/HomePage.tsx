@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { LocaleProvider, useContent } from "@/components/dom/LocaleProvider";
 import type { Locale } from "@/content";
 // statically imported so the whole page server-renders (SEO, both locales);
@@ -18,6 +19,12 @@ import ProcessSection from "@/components/dom/sections/ProcessSection";
 import FaqSection from "@/components/dom/sections/FaqSection";
 import ContactSection from "@/components/dom/sections/ContactSection";
 
+// The WebGL rig is client-only. It is mounted here, outside every section,
+// as a fixed backdrop at a negative z-index: inside the hero section it sat
+// in that section's stacking context and painted over the plain text of
+// later sections while its stars ride the scroll.
+const HeroStage = dynamic(() => import("@/components/dom/sections/HeroStage"), { ssr: false });
+
 function SkipLink() {
   const { t } = useContent();
   return (
@@ -34,17 +41,22 @@ export default function HomePage({ locale }: { locale: Locale }) {
         <SkipLink />
         <Header />
         <ScrollProgress />
-        <main className="relative">
+        <HeroStage />
+        {/* main lets pointer events fall through to the rig over the hero;
+            every other section opts back in through the wrapper */}
+        <main className="pointer-events-none relative isolate">
           <HeroSection />
-          <AboutSection />
-          <PrinciplesSection />
-          {/* <MarqueeStrip /> */}
-          <SuccessStoriesSection />
-          <PortfolioSection />
-          <ServicesSection />
-          <ProcessSection />
-          <FaqSection />
-          <ContactSection />
+          <div className="pointer-events-auto">
+            <AboutSection />
+            <PrinciplesSection />
+            {/* <MarqueeStrip /> */}
+            <SuccessStoriesSection />
+            <PortfolioSection />
+            <ServicesSection />
+            <ProcessSection />
+            <FaqSection />
+            <ContactSection />
+          </div>
         </main>
       </SmoothScrollProvider>
     </LocaleProvider>

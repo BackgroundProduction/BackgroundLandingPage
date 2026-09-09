@@ -1,14 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { useContent } from "@/components/dom/LocaleProvider";
 import MagneticButton from "@/components/dom/ui/MagneticButton";
-
-// WebGL scene is client-only; until it loads the hero is just type on ink
-const HeroStage = dynamic(() => import("./HeroStage"), { ssr: false });
 
 /**
  * Hero — a full-viewport interactive 3D venue (cobloc.archi-style): the
@@ -36,14 +32,8 @@ export default function HeroSection() {
       if (!ref.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const tl = gsap.timeline();
-      // opacity only: the WebGL rig runs its own converge intro, and scaling
-      // a live canvas would fight it
-      tl.fromTo(
-        "[data-stage]",
-        { opacity: 0 },
-        { opacity: 1, duration: 1.0, ease: "power2.out" },
-        0
-      );
+      // the WebGL rig lives behind the page (HomePage) and runs its own
+      // converge intro; only the copy animates in here
       tl.fromTo(
         "[data-reveal]",
         { opacity: 0, y: 40 },
@@ -69,12 +59,10 @@ export default function HeroSection() {
       ref={ref}
       id="top"
       aria-label="Introduction"
-      className="relative isolate min-h-svh overflow-hidden"
+      // pointer-events-none: drags fall through to the rig behind the page;
+      // the CTAs opt back in
+      className="pointer-events-none relative isolate min-h-svh overflow-hidden"
     >
-      {/* the venue — drag to orbit */}
-      <div data-stage className="absolute inset-0 z-0" aria-hidden="true">
-        <HeroStage />
-      </div>
 
       {/* scrim so the headline stays readable over the rig */}
       <div
