@@ -222,7 +222,8 @@ export const en = {
         slug: "tour-of-armenia-2026",
         badge: "2026",
         result: "An international road race turned into a national show",
-        detail: "",
+        detail:
+          "The multi-stage cycling race carried across the country, with starts, finishes and ceremonies produced as one moving event.",
         video: null as string | null,
         youtube: "4KBebPes33U" as string | null,
         youtubeStart: 159 as number | null,
