@@ -189,9 +189,11 @@ export default function SuccessStoriesSection() {
                 >
                   {story.entry!.title}
                 </h3>
-                <p className="mt-4 max-w-md text-sm leading-relaxed text-text-dim">
-                  {story.detail}
-                </p>
+                {story.detail && (
+                  <p className="mt-4 max-w-md text-sm leading-relaxed text-text-dim">
+                    {story.detail}
+                  </p>
+                )}
                 <div className="mt-8 md:mt-auto md:pt-8">
                   <span
                     className="inline-block rounded-sm px-3 py-1.5 font-display text-lg font-medium"

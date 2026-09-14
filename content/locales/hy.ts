@@ -211,8 +211,7 @@ export const hy: Content = {
         slug: "tour-of-armenia-2026",
         badge: "2026",
         result: "Միջազգային հեծանվային մրցաշարքը՝ դարձած համազգային շոու",
-        detail:
-          "Tour of Armenia՝ բազմափուլ հեծանվային մրցաշարք ամբողջ երկրում՝ մեկնարկները, եզրագծերն ու արարողությունները՝ որպես մեկ շարժվող միջոցառում։",
+        detail: "",
         video: null,
         youtube: "4KBebPes33U",
         youtubeStart: 159,
