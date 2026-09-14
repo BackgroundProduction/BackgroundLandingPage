@@ -219,6 +219,16 @@ export const en = {
         youtubeStart: 291 as number | null,
       },
       {
+        slug: "tour-of-armenia-2026",
+        badge: "2026",
+        result: "An international road race turned into a national show",
+        detail:
+          "Tour of Armenia — the multi-stage cycling race carried across the country, with starts, finishes and ceremonies produced as one moving event.",
+        video: null as string | null,
+        youtube: "4KBebPes33U" as string | null,
+        youtubeStart: 159 as number | null,
+      },
+      {
         slug: "european-shooting-championship-2026",
         badge: "2026",
         result: "Europe’s marksmen on Armenian ground",
@@ -589,6 +599,22 @@ export const en = {
         }
     */
 ,
+    {
+      slug: "tour-of-armenia-2026",
+      video: null as string | null,
+      youtube: "4KBebPes33U" as string | null,
+      youtubeStart: 159 as number | null,
+      title: "Tour of Armenia",
+      category: "International Cycling Race",
+      location: "Armenia",
+      date: "2026",
+      image: {
+        src: "/images/portfolio/placeholder.svg",
+        alt: "Tour of Armenia 2026 international cycling race",
+        position: "center",
+        isPlaceholder: true,
+      },
+    },
     {
       slug: "european-shooting-championship-2026",
       video: "/images/portfolio/shoting-chempionshitp.mp4" as string | null,

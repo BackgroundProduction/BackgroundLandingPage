@@ -208,6 +208,16 @@ export const hy: Content = {
         youtubeStart: 291,
       },
       {
+        slug: "tour-of-armenia-2026",
+        badge: "2026",
+        result: "Միջազգային հեծանվային մրցաշարքը՝ դարձած համազգային շոու",
+        detail:
+          "Tour of Armenia՝ բազմափուլ հեծանվային մրցաշարք ամբողջ երկրում՝ մեկնարկները, եզրագծերն ու արարողությունները՝ որպես մեկ շարժվող միջոցառում։",
+        video: null,
+        youtube: "4KBebPes33U",
+        youtubeStart: 159,
+      },
+      {
         slug: "european-shooting-championship-2026",
         badge: "2026",
         result: "Եվրոպայի հրաձիգները հայկական հողի վրա",
@@ -571,6 +581,22 @@ export const hy: Content = {
         }
     */
 ,
+    {
+      slug: "tour-of-armenia-2026",
+      video: null,
+      youtube: "4KBebPes33U",
+      youtubeStart: 159,
+      title: "Tour of Armenia",
+      category: "Միջազգային հեծանվավազք",
+      location: "Հայաստան",
+      date: "2026",
+      image: {
+        src: "/images/portfolio/placeholder.svg",
+        alt: "Tour of Armenia 2026 միջազգային հեծանվավազք",
+        position: "center",
+        isPlaceholder: true,
+      },
+    },
     {
       slug: "european-shooting-championship-2026",
       video: "/images/portfolio/shoting-chempionshitp.mp4",
