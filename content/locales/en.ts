@@ -226,7 +226,7 @@ export const en = {
           "The multi-stage cycling race carried across the country, with starts, finishes and ceremonies produced as one moving event.",
         video: null as string | null,
         youtube: "4KBebPes33U" as string | null,
-        youtubeStart: 159 as number | null,
+        youtubeStart: 28 as number | null,
       },
       {
         slug: "european-shooting-championship-2026",
@@ -603,7 +603,7 @@ export const en = {
       slug: "tour-of-armenia-2026",
       video: null as string | null,
       youtube: "4KBebPes33U" as string | null,
-      youtubeStart: 159 as number | null,
+      youtubeStart: 28 as number | null,
       title: "Tour of Armenia",
       category: "International Cycling Race",
       location: "Armenia",

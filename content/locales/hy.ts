@@ -215,7 +215,7 @@ export const hy: Content = {
           "Բազմափուլ հեծանվային մրցաշարք ամբողջ երկրում՝ մեկնարկները, եզրագծերն ու արարողությունները՝ որպես մեկ շարժվող միջոցառում։",
         video: null,
         youtube: "4KBebPes33U",
-        youtubeStart: 159,
+        youtubeStart: 28,
       },
       {
         slug: "european-shooting-championship-2026",
@@ -585,7 +585,7 @@ export const hy: Content = {
       slug: "tour-of-armenia-2026",
       video: null,
       youtube: "4KBebPes33U",
-      youtubeStart: 159,
+      youtubeStart: 28,
       title: "Tour of Armenia",
       category: "Միջազգային հեծանվավազք",
       location: "Հայաստան",
