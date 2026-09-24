@@ -392,17 +392,7 @@ function buildRepublicStage(s: Sk, a: Sk) {
         seg(a, p.x, p.y, z + 0.1, q.x, q.y, z + 0.1, soft);
       }
     }
-    // The reference's luminous anniversary mark, drawn as a compact 35.
-    const digit = (paths: number[][][], offset: number) => {
-      for (const path of paths) for (let i = 1; i < path.length; i++) {
-        const [x1, y1] = path[i - 1];
-        const [x2, y2] = path[i];
-        seg(a, cx + offset + x1 * 0.55, cy + y1 * 0.65, z + 0.12,
-          cx + offset + x2 * 0.55, cy + y2 * 0.65, z + 0.12, light);
-      }
-    };
-    digit([[[0, 1], [1, 1], [0.4, 0.1], [0.9, -0.05], [1, -0.65], [0.6, -1], [0, -0.8]]], -0.65);
-    digit([[[1, 1], [0, 1], [0, 0.1], [0.75, 0.1], [1, -0.3], [0.9, -0.8], [0.4, -1], [0, -0.8]]], 0.12);
+
   }
 
   for (const side of [-1, 1]) {
