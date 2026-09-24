@@ -50,7 +50,7 @@ const ARRAY_X = [-5.2, 5.2];
 
 // scene cycle: hold each picture, then morph to the next (stage → film
 // camera → conference hall → gala/state event → photo scenes → back around).
-// The scene count is dynamic: 4 drawn venues + however many photos load.
+// The scene count is dynamic: 7 drawn venues + however many photos load.
 const HOLD = 5;
 const MORPH = 3;
 const SEG_T = HOLD + MORPH;
@@ -133,8 +133,8 @@ function streamDimAt(docY: number) {
   return last.dim;
 }
 
-// scenes 0..5 are the drawn venues; photo scenes are appended after
-const DRAWN_SCENES = 6;
+// scenes 0..6 are the drawn venues; photo scenes are appended after
+const DRAWN_SCENES = 7;
 
 /* ------------------------------------------------------------------ */
 /* Line-sketch builders: every scene is one flat list of segments      */
@@ -335,6 +335,90 @@ function buildStage(s: Sk, a: Sk) {
 
   // moving-head lamp bodies riding the arch
   for (const x of LAMP_X) octa(s, w8, x, archY(x) - 0.4, 0, 0.42);
+}
+
+/** Republic Square stage — the three-screen, peaked-roof rig in IMG_5709.
+ *  Built as real depth-bearing geometry in the existing particle pools. */
+function buildRepublicStage(s: Sk, a: Sk) {
+  const wire = tone(WIRE, 0.6);
+  const dim = tone(WIRE_DIM, 0.8);
+  const light = tone(ACCENT, 0.55);
+  const soft = tone(ACCENT, 0.35);
+
+  // Wide deck, shallow tiers and the projecting central apron.
+  box(s, wire, 0, 0.45, 0, 15, 0.9, 4.8);
+  box(s, wire, 0, 0.55, 3, 5.4, 1.1, 1.4);
+  for (let i = 0; i < 3; i++) {
+    const y = 0.25 + i * 0.22;
+    const z = 2.95 - i * 0.25;
+    for (const side of [-1, 1]) {
+      seg(a, side * 2.8, y, z, side * 7.5, y, z, soft);
+      seg(s, side * 7.5, y, z, side * 7.5, y, -1.8, dim);
+    }
+  }
+
+  // Deep central canopy: a low triangular roof with visible rear rafters.
+  for (const z of [-2.3, 1.2]) {
+    seg(s, -3.4, 6.7, z, 0, 7.4, z, wire);
+    seg(s, 0, 7.4, z, 3.4, 6.7, z, wire);
+    seg(s, -3.4, 6.7, z, 3.4, 6.7, z, wire);
+    for (const x of [-3.4, 3.4])
+      seg(s, x, 0.9, z, x, 6.7, z, wire);
+  }
+  for (const x of [-3.4, 0, 3.4])
+    seg(s, x, x === 0 ? 7.4 : 6.7, -2.3, x, x === 0 ? 7.4 : 6.7, 1.2, wire);
+  for (const z of [-1.8, -0.7, 0.4]) {
+    seg(s, -3.3, 6.45, z, 3.3, 6.45, z, dim);
+    for (const x of [-2.6, -1.3, 0, 1.3, 2.6])
+      box(a, soft, x, 6.3, z, 0.17, 0.08, 0.13);
+  }
+
+  // Three LED screens: broad wings and a recessed central screen.
+  for (const [cx, cy, z, width, height] of [
+    [-5.45, 3.1, 0.55, 3.8, 2.9],
+    [5.45, 3.1, 0.55, 3.8, 2.9],
+    [0, 2.8, -2.2, 6.1, 2.8],
+  ]) {
+    box(s, wire, cx, cy, z, width, height, 0.16);
+    // Flowing screen graphics, kept sparse so the silhouette stays clear.
+    for (let wave = 0; wave < 2; wave++) {
+      for (let i = 0; i < 32; i++) {
+        const point = (t: number) => ({
+          x: cx + (t - 0.5) * width,
+          y: cy - height * 0.35 + Math.sin(t * Math.PI * 1.6 + wave * 0.8) * height * 0.12,
+        });
+        const p = point(i / 32);
+        const q = point((i + 1) / 32);
+        seg(a, p.x, p.y, z + 0.1, q.x, q.y, z + 0.1, soft);
+      }
+    }
+    // The reference's luminous anniversary mark, drawn as a compact 35.
+    const digit = (paths: number[][][], offset: number) => {
+      for (const path of paths) for (let i = 1; i < path.length; i++) {
+        const [x1, y1] = path[i - 1];
+        const [x2, y2] = path[i];
+        seg(a, cx + offset + x1 * 0.55, cy + y1 * 0.65, z + 0.12,
+          cx + offset + x2 * 0.55, cy + y2 * 0.65, z + 0.12, light);
+      }
+    };
+    digit([[[0, 1], [1, 1], [0.4, 0.1], [0.9, -0.05], [1, -0.65], [0.6, -1], [0, -0.8]]], -0.65);
+    digit([[[1, 1], [0, 1], [0, 0.1], [0.75, 0.1], [1, -0.3], [0.9, -0.8], [0.4, -1], [0, -0.8]]], 0.12);
+  }
+
+  for (const side of [-1, 1]) {
+    // Tall tower and wing lattice, with hanging segmented line arrays.
+    trussBeam(s, wire, side * 3.8, 0.9, side * 3.8, 7.35, 0.28, 0.25, 10);
+    trussBeam(s, dim, side < 0 ? -7.4 : 4.1, 5.5, side < 0 ? -4.1 : 7.4, 5.5, 0.5, 0.25, 8);
+    for (let i = 0; i < 8; i++)
+      box(s, wire, side * 3.9, 6.7 - i * 0.29, 0.85 + i * 0.025, 0.46, 0.25, 0.42);
+    for (let i = 0; i < 6; i++) {
+      const x = side * (4.3 + i * 0.57);
+      octa(s, wire, x, 5.95, 0.05, 0.12);
+      ring(a, light, x, 5.35, 0.3, 0.07, "z", 8);
+    }
+    for (let i = 0; i < 5; i++)
+      box(s, dim, side * (3.1 + i * 0.9), 0.95, 2, 0.55, 0.32, 0.45);
+  }
 }
 
 /** Scene B — film production: cinema camera on a crane, dolly track, reticle. */
@@ -850,7 +934,7 @@ function photoClouds(
   });
 }
 
-/** Build every scene's clouds: 4 drawn venues + the photo scenes. */
+/** Build every scene's clouds: drawn venues + the photo scenes. */
 async function buildPools(): Promise<{ structure: Pool; accent: Pool }> {
   const builders = [
     buildStage,
@@ -859,6 +943,7 @@ async function buildPools(): Promise<{ structure: Pool; accent: Pool }> {
     buildGala,
     buildInstallation,
     buildFireworks,
+    buildRepublicStage,
   ];
   const structures: Sk[] = [];
   const accents: Sk[] = [];
