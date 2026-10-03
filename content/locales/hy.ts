@@ -71,6 +71,7 @@ export const hy: Content = {
     { value: "20+", label: "Տարածաշրջան՝ Հայաստան · ԱՊՀ · Եվրոպա" },
   ],
   clients: [
+    { name: "Հայաստանի անկախության 35-ամյակը", logo: "/assets/logos/armenia-independence-35.webp" },
     { name: "ՎԶԵԲ (EBRD)", logo: "/assets/logos/ebrd.svg" },
     { name: "Երևանի քաղաքապետարան", logo: "/assets/logos/yerevan-municipality.svg" },
     { name: "«Խազեր» մրցանակաբաշխություն", logo: "/assets/logos/khazer.svg" },
@@ -147,6 +148,17 @@ export const hy: Content = {
     eyebrow: "Մեր պատմությունը",
     heading: "Ինչպե՞ս ենք հնարավոր դարձնում անհնարինը",
     items: [
+      {
+        slug: "armenia-independence-35",
+        badge: "35-ամյակ",
+        result: "Ազգային տոնակատարություն Հանրապետության հրապարակում",
+        detail: "Հանրապետության հրապարակում կայացած գլխավոր ազգային տոնակատարությունը՝ սիրված հիթերի նոր մեկնաբանություններով՝ Հայաստանի պետական սիմֆոնիկ նվագախմբի, Կարեն Սևակ բենդի և հայտնի արտիստների կենդանի կատարմամբ։ Երեկոն ուղեկցվեց դրոնների շոուով, դինամիկ լուսային ձևավորմամբ և եզրափակիչ հրավառությամբ։",
+        video: null,
+        youtube: null,
+        youtubeStart: null,
+        facebook: "https://www.facebook.com/reel/1816530632861779/",
+        facebookLabel: "Դիտել տեսանյութը Facebook-ում",
+      },
       {
         slug: "ebrd-2024-annual-meeting",
         badge: "2024",
@@ -368,6 +380,22 @@ export const hy: Content = {
     { label: "YouTube", href: "https://www.youtube.com/@backgroundproduction1258" },
   ],
   portfolio: [
+    {
+      slug: "armenia-independence-35",
+      video: null,
+      youtube: null,
+      youtubeStart: null,
+      title: "Հայաստանի անկախության 35-ամյակը",
+      category: "Ազգային տոնակատարություն",
+      location: "Հանրապետության հրապարակ, Երևան, Հայաստան",
+      date: "2026",
+      image: {
+        src: "/assets/scrollimages/IMG_6384.webp",
+        alt: "Հայաստանի անկախության 35-ամյակը",
+        position: "center",
+        isPlaceholder: false,
+      },
+    },
     {
       slug: "vardavar-2026",
       video: "/images/portfolio/vardavar-intro.mp4",

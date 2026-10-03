@@ -73,6 +73,7 @@ export const en = {
   /* Client logo wall  only clients with real logo files are listed.
      To add one: drop the file in public/assets/logos/ and add { name, logo }. */
   clients: [
+    { name: "35th Independence Day of Armenia", logo: "/assets/logos/armenia-independence-35.webp" },
     { name: "EBRD", logo: "/assets/logos/ebrd.svg" },
     { name: "Yerevan Municipality", logo: "/assets/logos/yerevan-municipality.svg" },
     { name: "Khazer Music Awards", logo: "/assets/logos/khazer.svg" },
@@ -158,6 +159,17 @@ export const en = {
     eyebrow: "Success stories",
     heading: "How the big ones get made.",
     items: [
+      {
+        slug: "armenia-independence-35",
+        badge: "35th anniversary",
+        result: "A national celebration at Republic Square",
+        detail: "The main national celebration at Republic Square, featuring reimagined hits performed live by the Armenian State Symphony Orchestra, Karen Sevak band and famous artists, highlighted by a drone show, dynamic lighting, and finale fireworks.",
+        video: null,
+        youtube: null,
+        youtubeStart: null,
+        facebook: "https://www.facebook.com/reel/1816530632861779/",
+        facebookLabel: "Watch video on Facebook",
+      },
       {
         slug: "ebrd-2024-annual-meeting",
         badge: "2024",
@@ -386,6 +398,22 @@ export const en = {
     { label: "YouTube", href: "https://www.youtube.com/@backgroundproduction1258" },
   ],
   portfolio: [
+    {
+      slug: "armenia-independence-35",
+      video: null,
+      youtube: null,
+      youtubeStart: null,
+      title: "35th Independence Day of Armenia",
+      category: "National Celebration",
+      location: "Republic Square, Yerevan, Armenia",
+      date: "2026",
+      image: {
+        src: "/assets/scrollimages/IMG_6384.webp",
+        alt: "35th Independence Day of Armenia",
+        position: "center",
+        isPlaceholder: false,
+      },
+    },
     {
       slug: "vardavar-2026",
       video: "/images/portfolio/vardavar-intro.mp4" as string | null,

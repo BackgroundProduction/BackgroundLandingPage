@@ -15,6 +15,8 @@ const HEADING_CLAMP = "clamp(3rem, 13.5vw, 15rem)";
 /* One gradient per success story, applied to its title in order.
    Swap these hex stops for the brand colours you want per title —
    any number of stops works, they're spread evenly left to right. */
+const INDEPENDENCE_GRADIENT = ["#F0BE5D", "#FCCB49", "#F40D1E", "#0138C4", "#00245E"];
+
 const TITLE_GRADIENTS: string[][] = [
   ["#F6D365", "#F5A623", "#E8615A"], // gold → amber → rose
   ["#A8EDEA", "#5BC0EB", "#4A7DE8"], // ice → cyan → blue
@@ -133,9 +135,30 @@ export default function SuccessStoriesSection() {
             >
               {/* media — video when provided, image otherwise; parallaxed */}
               <div
-                className="relative aspect-[16/10] overflow-hidden rounded-sm"
+                className={`relative overflow-hidden rounded-sm ${"facebook" in story ? "aspect-video" : "aspect-[16/10]"}`}
                 style={{ border: "1px solid var(--color-line-soft)" }}
               >
+                {"facebook" in story && story.facebook ? (
+                  <a
+                    href={story.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group absolute inset-0 block focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-white"
+                    aria-label={`${story.facebookLabel}: ${story.entry!.title}`}
+                  >
+                    <Image
+                      src={story.entry!.image.src}
+                      alt={story.entry!.image.alt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 60vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <span className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black/25 text-white">
+                      <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/70 bg-black/40 text-2xl" aria-hidden="true">▶</span>
+                      <span className="rounded-sm bg-black/70 px-4 py-2 text-sm font-medium">{story.facebookLabel} ↗</span>
+                    </span>
+                  </a>
+                ) : (
                 <div data-parallax className="absolute inset-x-0 -top-[10%] h-[120%]">
                   {story.youtube ? (
                     // parallax layer is 120% tall, so the 16:9 iframe needs
@@ -165,6 +188,7 @@ export default function SuccessStoriesSection() {
                     />
                   )}
                 </div>
+                )}
               </div>
 
               {/* text column */}
@@ -179,7 +203,9 @@ export default function SuccessStoriesSection() {
                     // narrow screens so long titles can't overflow the column
                     fontSize: "clamp(2.25rem, 7vw, 6rem)",
                     backgroundImage: `linear-gradient(100deg, ${(
-                      TITLE_GRADIENTS[i % TITLE_GRADIENTS.length]
+                      story.slug === "armenia-independence-35"
+                        ? INDEPENDENCE_GRADIENT
+                        : TITLE_GRADIENTS[(i - 1 + TITLE_GRADIENTS.length) % TITLE_GRADIENTS.length]
                     ).join(", ")})`,
                     WebkitBackgroundClip: "text",
                     backgroundClip: "text",
